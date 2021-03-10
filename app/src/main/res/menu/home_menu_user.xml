@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_notifications"
+        android:title="Notifications"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_shift"
+        android:title="Shift"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_user_info"
+        android:title="My Info"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_shiftexchange_list"
+        android:title="Shift Exchange List"
+        app:showAsAction="never" />
+
+</menu>

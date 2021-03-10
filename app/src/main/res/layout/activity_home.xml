@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/logged_in_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="logged in user"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_margin="24dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/monday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/rectangle"
+            android:padding="10dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="14dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/mon_date"
+                tools:text="1.jan.21'"
+                android:gravity="left"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/mon_time"
+                tools:text="08:00 - 16:00"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/mon_role"
+                tools:text="Waiter"
+                android:gravity="right"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tuesday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/rectangle"
+            android:padding="10dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="14dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tue_date"
+                tools:text="1.jan.21'"
+                android:gravity="left"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tue_time"
+                tools:text="08:00 - 16:00"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tue_role"
+                tools:text="Waiter"
+                android:gravity="right"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wednesday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/rectangle"
+            android:padding="10dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="14dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/wed_date"
+                tools:text="1.jan.21'"
+                android:gravity="left"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/wed_time"
+                tools:text="08:00 - 16:00"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/wed_role"
+                tools:text="Waiter"
+                android:gravity="right"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/thursday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/rectangle"
+            android:padding="10dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="14dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/thu_date"
+                tools:text="1.jan.21'"
+                android:gravity="left"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/thu_time"
+                tools:text="08:00 - 16:00"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/thu_role"
+                tools:text="Waiter"
+                android:gravity="right"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/friday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/rectangle"
+            android:padding="10dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="14dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fri_date"
+                tools:text="1.jan.21'"
+                android:gravity="left"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fri_time"
+                tools:text="08:00 - 16:00"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fri_role"
+                tools:text="Waiter"
+                android:gravity="right"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/saturday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/rectangle"
+            android:padding="10dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="14dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sat_date"
+                tools:text="1.jan.21'"
+                android:gravity="left"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sat_time"
+                tools:text="08:00 - 16:00"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sat_role"
+                tools:text="Waiter"
+                android:gravity="right"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sunday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/rectangle"
+            android:padding="10dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="14dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sun_date"
+                tools:text="1.jan.21'"
+                android:gravity="left"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sun_time"
+                tools:text="08:00 - 16:00"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sun_role"
+                tools:text="Waiter"
+                android:gravity="right"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal|bottom">
+
+        <Button
+            android:id="@+id/button_week_last"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_week_last"
+            android:layout_margin="30dp"
+            android:layout_gravity="left"/>
+
+        <Button
+            android:id="@+id/button_week_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_week_next"
+            android:layout_margin="30dp"
+            android:layout_gravity="right"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Finnbogi</string>
+    <string name="button_week_last">Last Week</string>
+    <string name="button_week_next">Next Week</string>
+</resources>
