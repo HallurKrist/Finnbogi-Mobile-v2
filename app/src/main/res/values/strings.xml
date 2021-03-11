@@ -2,4 +2,8 @@
     <string name="app_name">Finnbogi</string>
     <string name="button_week_last">Last Week</string>
     <string name="button_week_next">Next Week</string>
+    <string name="app_description">Vaktaskipurlags kerfi</string>
+    <string name="login_username">Notandanafn</string>
+    <string name="login_password">Lykilorð</string>
+    <string name="login_submit">Innskrá</string>
 </resources>

@@ -22,4 +22,9 @@
         android:title="Shift Exchange List"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/menu_logout"
+        android:title="Log out"
+        app:showAsAction="never" />
+
 </menu>

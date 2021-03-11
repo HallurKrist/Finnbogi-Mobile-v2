@@ -9,6 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinnbogiMobile">
+        <activity android:name=".ShiftExchangeListActivity"></activity>
+        <activity android:name=".ShiftexchangeActivity" />
+        <activity android:name=".MakeUserActivity" />
+        <activity android:name=".UserInfoActivity" />
+        <activity android:name=".UserListActivity" />
+        <activity android:name=".MakeShiftActivity" />
+        <activity android:name=".ShiftActivity" />
+        <activity android:name=".NotificationsActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
