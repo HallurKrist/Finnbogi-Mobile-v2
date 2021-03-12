@@ -1,9 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShiftActivity">
+    tools:context=".ShiftActivity"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_weight="0.2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32dp"
+            android:text="@string/shift_title" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.4"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/shift_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Dags: 01. Jan. 21'"
+            android:textSize="24dp"/>
+
+        <TextView
+            android:id="@+id/shift_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="08:00 - 16:00"
+            android:textSize="24dp"/>
+
+        <TextView
+            android:id="@+id/shift_employee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Starfsmaður: Jón Jónsson"
+            android:textSize="24dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.4"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/shift_offer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shift_offer"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:padding="12dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

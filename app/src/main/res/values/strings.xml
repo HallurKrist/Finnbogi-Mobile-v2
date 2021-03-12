@@ -6,4 +6,22 @@
     <string name="login_username">Notandanafn</string>
     <string name="login_password">Lykilorð</string>
     <string name="login_submit">Innskrá</string>
+    <string name="shift_make_title">Ný Vakt</string>
+    <string name="shift_make_cancel">Hætta við</string>
+    <string name="shift_make_confirm">Staðfesta</string>
+    <string name="shift_make_date">Dagsetning</string>
+    <string name="shift_make_startTime">Upphafstími</string>
+    <string name="shift_make_endTime">Lokatími</string>
+    <string name="shift_make_roleText">Tegund vaktar</string>
+    <string name="shift_make_employeeText">Starfsmaður</string>
+    <string name="shift_title">Vakt</string>
+    <string name="shift_offer">Bjóða vakt</string>
+    <string name="user_info_title">Persónuupplýsingar</string>
+    <string name="user_info_apply_changes">Staðfesta</string>
+    <string name="user_make_title">Nýr starfsmaður</string>
+    <string name="user_make_cancel">Hætta við</string>
+    <string name="user_make_confirm">Staðfesta</string>
+    <string name="logo_desc">Finnbogi logo</string>
+    <string name="user_list_title">Starfsmenn</string>
+    <string name="notification_list_title">Tilkynningar</string>
 </resources>
