@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 
 import is.hi.finnbogi_mobile.entities.Shift;
+import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.entities.UserInfo;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
@@ -28,6 +30,7 @@ import is.hi.finnbogi_mobile.networking.NetworkManager;
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
+    private static final String EXTRA_USER_ID = "is.hi.finnbogi_mobile.userId";
 
     private TextView mLoggedInUser;
     private LinearLayout mMonday;
@@ -46,6 +49,12 @@ public class HomeActivity extends AppCompatActivity {
     private boolean mUserLoggedIn = false;
 
     private Shift[] mThisWeek;
+
+    public static Intent newIntent(Context packageContext, int userId) {
+        Intent intent = new Intent(packageContext, HomeActivity.class);
+        intent.putExtra(EXTRA_USER_ID, userId);
+        return intent;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
