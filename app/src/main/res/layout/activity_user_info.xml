@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserInfoActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_weight="0.2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32dp"
+            android:text="@string/user_info_title" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.7"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/user_info_firstname"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_marginVertical="6sp"
+            android:background="@drawable/week_border"/>
+
+        <EditText
+            android:id="@+id/user_info_surname"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_marginVertical="6sp"
+            android:background="@drawable/week_border"/>
+
+        <EditText
+            android:id="@+id/user_info_address"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_marginVertical="6sp"
+            android:background="@drawable/week_border"/>
+
+        <EditText
+            android:id="@+id/user_info_phone"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_marginVertical="6sp"
+            android:background="@drawable/week_border"/>
+
+        <EditText
+            android:id="@+id/user_info_email"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_marginVertical="6sp"
+            android:background="@drawable/week_border"/>
+
+        <TextView
+            android:id="@+id/user_info_ssn"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_marginVertical="6sp"
+            android:background="@drawable/black_white_border"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/user_info_applyChanges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_info_apply_changes"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="32dp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
