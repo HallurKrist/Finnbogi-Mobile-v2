@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import is.hi.finnbogi_mobile.entities.User;
-import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.LoginService;
 
@@ -39,6 +38,12 @@ public class LoginActivity extends AppCompatActivity {
         mEditTextPassword = (EditText) findViewById(R.id.user_password);
         mButtonLogin = (Button) findViewById(R.id.button_login);
         mButtonLogin.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Þegar ýtt er á innskráningartakka.
+             * Reynir að innskrá notanda, ef tekst þá er HomeActivity opnað,
+             * annars eru birt skilaboð um að innskráning hafi ekki tekist.
+             * @param v
+             */
             @Override
             public void onClick(View v) {
                 mUserName = mEditTextUserName.getText().toString();

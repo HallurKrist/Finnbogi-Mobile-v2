@@ -18,6 +18,9 @@ public class LoginService {
     }
 
     /**
+     * Kallar á network fall til að reyna að innskrá notanda, ef það tekst
+     * þá er skilað User hlut með notanda sem verið var að skrá inn, annars
+     * er skilað Null.
      *
      * @param userName - Notendanafn þess sem er að reyna að logga inn
      * @param password - Lykilorð þess sem er að reyna að logga inn

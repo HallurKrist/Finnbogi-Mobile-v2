@@ -124,6 +124,14 @@ public class NetworkManager {
         mQueue.add(request);
     }
 
+    /**
+     * Network kall til að reyna að innskrá notanda. Býr til User hlut ef það gekk.
+     *
+     * @param callback - callback fall
+     * @param path - url á endpoint fyrir server kall
+     * @param userName - notendanafn þess sem verið er að reyna að innskrá
+     * @param password - lykilorð þess sem verið er að reyna að innskrá
+     */
     public void loginPost(final NetworkCallback<User> callback, String path, String userName, String password) {
         Log.d(TAG, "inn í login network kalli: ");
         String url = Uri.parse(BASE_URL)
