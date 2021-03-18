@@ -126,14 +126,10 @@ public class NetworkManager {
 
     public void loginPost(final NetworkCallback<User> callback, String path, String userName, String password) {
         Log.d(TAG, "inn í login network kalli: ");
-        /*
         String url = Uri.parse(BASE_URL)
                 .buildUpon()
                 .appendPath(path)
                 .build().toString();
-
-         */
-        String url = BASE_URL + "path";
 
         Log.d(TAG, "url: " + url);
 
@@ -152,7 +148,8 @@ public class NetworkManager {
                 new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                System.out.println(response);
+                Log.d(TAG, "gekk upp " + response.toString());
+                // TODO: API skilar öllum users þegar það er kallað á þetta url, það væri betra að fá bara userinn sem er verið að logga inn
                 Gson gson = new Gson();
                 User user = gson.fromJson(String.valueOf(response), User.class);
                 callback.onSuccess(user);
@@ -160,6 +157,7 @@ public class NetworkManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "gekk ekki upp ");
                 error.printStackTrace();
                 callback.onFailure(error.toString());
             }

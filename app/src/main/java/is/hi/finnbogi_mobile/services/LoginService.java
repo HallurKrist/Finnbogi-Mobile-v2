@@ -25,6 +25,7 @@ public class LoginService {
      */
     public User login(String userName, String password) {
         Log.d(TAG, "inn í login falli: ");
+        String path = new String("users/login");
         mNetworkManager.loginPost(new NetworkCallback<User>() {
             @Override
             public void onSuccess(User result) {
@@ -37,7 +38,7 @@ public class LoginService {
                 mUserLoggingIn = null;
                 Log.e(TAG, "Failed to log in: " + errorString);
             }
-        }, "users/login", userName, password);
+        }, "users\\/login", userName, password);
 
         return mUserLoggingIn;
     }
