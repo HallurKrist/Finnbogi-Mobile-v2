@@ -47,7 +47,7 @@ public class ShiftexchangeActivity extends AppCompatActivity {
         originShiftDate.setText("01.01.2021");
         originShiftTime.setText("08:00 - 16:00");
 
-        boolean UFG = false;
+        boolean UFG = true;
 
         if (UFG) {
             Log.d(TAG, "onCreate: in if");
