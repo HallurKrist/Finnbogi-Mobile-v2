@@ -44,11 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     private LinearLayout mSunday;
     private Button mLastWeek;
     private Button mNextWeek;
-
-
-
-    private boolean adminUser = false;
-    private boolean mUserLoggedIn = false;
+    
 
     private Shift[] mThisWeek;
 
