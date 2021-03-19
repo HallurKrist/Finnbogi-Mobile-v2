@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,6 +16,12 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.List;
+
+import is.hi.finnbogi_mobile.entities.User;
+import is.hi.finnbogi_mobile.networking.NetworkCallback;
+import is.hi.finnbogi_mobile.networking.NetworkManager;
+import is.hi.finnbogi_mobile.services.MakeShiftService;
 
 public class MakeShiftActivity extends AppCompatActivity {
     private static final String TAG = "MakeShiftActivity";
@@ -31,10 +38,15 @@ public class MakeShiftActivity extends AppCompatActivity {
     private Button mCancel;
     private Button mConfirm;
 
+    private List<User> mAllUsers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_shift);
+
+        NetworkManager networkManager = NetworkManager.getInstance(this);
+        MakeShiftService makeShiftService = new MakeShiftService(networkManager);
 
         // get all view interactables
         mDateEditText = (EditText) findViewById(R.id.shift_make_date);
@@ -46,7 +58,22 @@ public class MakeShiftActivity extends AppCompatActivity {
         mConfirm = (Button) findViewById(R.id.shift_make_confirm);
 
         //set lists in spinners
-        //TODO: make spinners correct
+        // TODO: make spinners correct
+        // ná í alla users til að geta birt í select boxinu
+
+         makeShiftService.getAllUsers(new NetworkCallback<List<User>>() {
+            @Override
+            public void onSuccess(List<User> result) {
+               mAllUsers = result;
+               Log.d(TAG, String.valueOf(mAllUsers));
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                mAllUsers = null;
+                Log.e(TAG, errorString);
+            }
+        });
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"string1", "string2", "string3", "string4", "string5"});
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -114,6 +141,5 @@ public class MakeShiftActivity extends AppCompatActivity {
                 mEndTimePicker.show();
             }
         });
-
     }
 }

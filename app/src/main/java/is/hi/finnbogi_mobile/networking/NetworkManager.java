@@ -12,15 +12,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.util.List;
 
 import is.hi.finnbogi_mobile.entities.User;
 
@@ -156,7 +161,7 @@ public class NetworkManager {
                 new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(TAG, "gekk upp " + response.toString());
+                Log.d(TAG, "gekk upp að logga inn " + response.toString());
                 // TODO: API skilar öllum users þegar það er kallað á þetta url, það væri betra að fá bara userinn sem er verið að logga inn
                 Gson gson = new Gson();
                 User user = gson.fromJson(String.valueOf(response), User.class);
@@ -165,13 +170,45 @@ public class NetworkManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "gekk ekki upp ");
+                Log.d(TAG, "gekk ekki upp að logga inn ");
                 error.printStackTrace();
                 callback.onFailure(error.toString());
             }
         });
 
         mQueue.add(jsonObjectRequest);
+    }
+
+    public void getUsers(final NetworkCallback<List<User>> callback, String path) {
+        Log.d(TAG, "inn í getUsers network kalli: ");
+        String url = Uri.parse(BASE_URL)
+                .buildUpon()
+                .appendPath(path)
+                .build().toString();
+
+        Log.d(TAG, "url: " + url);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, "gekk upp að sækja users " + response.toString());
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<User>>(){}.getType();
+                List<User> allUsers = gson.fromJson(String.valueOf(response), listType);
+                callback.onSuccess(allUsers);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "gekk ekki upp að sækja users ");
+                error.printStackTrace();
+                callback.onFailure(error.toString());
+            }
+        });
+
+        mQueue.add(jsonArrayRequest);
     }
 
     public void clearCache() {

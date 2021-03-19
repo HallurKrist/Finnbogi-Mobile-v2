@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import is.hi.finnbogi_mobile.entities.User;
+import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.LoginService;
 
@@ -59,18 +60,23 @@ public class LoginActivity extends AppCompatActivity {
                 mUserName = mEditTextUserName.getText().toString();
                 mPassword = mEditTextPassword.getText().toString();
                 // Reynum að logga inn með þessu username og password
-                mUserLoggingIn = loginService.login(mUserName, mPassword);
-                // Ef user er null þá gekk það ekki og við sýnum toast - annars færum við user í home
-                if (mUserLoggingIn == null) {
-                    Toast.makeText(LoginActivity.this, "Notendanafn eða lykilorð rangt", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Set hér userId, á user sem var að logga sig inn, í session
-                    SharedPreferences.Editor editor = mSharedPreferences.edit();
-                    editor.putInt("userId", mUserLoggingIn.getUserId());
-                    editor.commit();
-                    Intent intent = HomeActivity.newIntent(LoginActivity.this, mUserLoggingIn.getUserId());
-                    startActivity(intent);
-                }
+                loginService.login(new NetworkCallback<User>() {
+                    @Override
+                    public void onSuccess(User result) {
+                        mUserLoggingIn = result;
+                        SharedPreferences.Editor editor = mSharedPreferences.edit();
+                        editor.putString("user", String.valueOf(mUserLoggingIn));
+                        //editor.putInt("userId", mUserLoggingIn.getUserId());
+                        editor.commit();
+                        Intent intent = HomeActivity.newIntent(LoginActivity.this, mUserLoggingIn.getUserId());
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Toast.makeText(LoginActivity.this, "Notendanafn eða lykilorð rangt", Toast.LENGTH_SHORT).show();
+                    }
+                }, mUserName, mPassword);
             }
         });
     }
