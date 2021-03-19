@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Set hér userId, á user sem var að logga sig inn, í session
                     SharedPreferences.Editor editor = mSharedPreferences.edit();
                     editor.putInt("userId", mUserLoggingIn.getUserId());
+                    editor.commit();
                     Intent intent = HomeActivity.newIntent(LoginActivity.this, mUserLoggingIn.getUserId());
                     startActivity(intent);
                 }
