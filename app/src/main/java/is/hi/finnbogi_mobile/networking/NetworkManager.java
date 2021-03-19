@@ -2,6 +2,7 @@ package is.hi.finnbogi_mobile.networking;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -11,13 +12,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+import is.hi.finnbogi_mobile.entities.User;
+
 public class NetworkManager {
 
+    private static final String TAG = "NetworkManager";
     private static final String BASE_URL = "https://finnbogi-api.herokuapp.com/";
 
     private static NetworkManager mInstance;
@@ -113,6 +122,56 @@ public class NetworkManager {
             }
         };
         mQueue.add(request);
+    }
+
+    /**
+     * Network kall til að reyna að innskrá notanda. Býr til User hlut ef það gekk.
+     *
+     * @param callback - callback fall
+     * @param path - url á endpoint fyrir server kall
+     * @param userName - notendanafn þess sem verið er að reyna að innskrá
+     * @param password - lykilorð þess sem verið er að reyna að innskrá
+     */
+    public void loginPost(final NetworkCallback<User> callback, String path, String userName, String password) {
+        Log.d(TAG, "inn í login network kalli: ");
+        String url = Uri.parse(BASE_URL)
+                .buildUpon()
+                .appendPath(path)
+                .build().toString();
+
+        Log.d(TAG, "url: " + url);
+
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("userName", userName);
+            postData.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, postData.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, url, postData,
+                new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, "gekk upp " + response.toString());
+                // TODO: API skilar öllum users þegar það er kallað á þetta url, það væri betra að fá bara userinn sem er verið að logga inn
+                Gson gson = new Gson();
+                User user = gson.fromJson(String.valueOf(response), User.class);
+                callback.onSuccess(user);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "gekk ekki upp ");
+                error.printStackTrace();
+                callback.onFailure(error.toString());
+            }
+        });
+
+        mQueue.add(jsonObjectRequest);
     }
 
     public void clearCache() {
