@@ -18,8 +18,7 @@ import is.hi.finnbogi_mobile.services.LoginService;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
-    private static final String MY_PREFERENCES = "MyPrefs";
-    private static final int REQUEST_CODE_HOME = 0;
+    private static final String MY_PREFERENCES = "Session";
 
     private EditText mEditTextUserName;
     private EditText mEditTextPassword;
@@ -30,6 +29,11 @@ public class LoginActivity extends AppCompatActivity {
     private User mUserLoggingIn;
 
     private SharedPreferences mSharedPreferences;
+
+    public static Intent newIntent(Context packageContext) {
+        Intent intent = new Intent(packageContext, LoginActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = mSharedPreferences.edit();
                     editor.putInt("userId", mUserLoggingIn.getUserId());
                     Intent intent = HomeActivity.newIntent(LoginActivity.this, mUserLoggingIn.getUserId());
-                    startActivityForResult(intent, REQUEST_CODE_HOME);
+                    startActivity(intent);
                 }
             }
         });

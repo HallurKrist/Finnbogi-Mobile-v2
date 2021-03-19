@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
     private static final String EXTRA_USER_ID = "is.hi.finnbogi_mobile.userId";
+    private static final String MY_PREFERENCES = "Session";
 
     private TextView mLoggedInUser;
     private LinearLayout mMonday;
@@ -249,8 +251,12 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(this, "Shift Exchange List", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_logout:
-                //TODO: changeActivity
-                Intent logoutIntent = new Intent(HomeActivity.this, LoginActivity.class);
+                // Tek hér user úr session
+                SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+                Intent logoutIntent = LoginActivity.newIntent(HomeActivity.this);
                 startActivity(logoutIntent);
                 Toast.makeText(this, "Log out", Toast.LENGTH_SHORT).show();
                 return true;
