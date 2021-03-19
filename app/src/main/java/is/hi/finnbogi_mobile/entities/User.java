@@ -1,21 +1,31 @@
 package is.hi.finnbogi_mobile.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
 
+    @SerializedName("id")
     private int mUserId;
+    @SerializedName("userName")
     private String mUserName;
-    private String[] mRoles;
-    private UserInfo mUserInfo;
-    private Shift[] mShifts;
+    @SerializedName("role")
+    private String mRole;
+
+    //private UserInfo mUserInfo;
+
+    //private Shift[] mShifts;
+    @SerializedName("password")
     private String mPassword;
-    private Notification[] mNotifications;
+
+    //private Notification[] mNotifications;
+    @SerializedName("admin")
     private Boolean mAdmin;
 
     /**
      *
      * @param userId int > 0
      * @param userName String (Non empty)
-     * @param roles String (Non empty)
+     * @param role String (Non empty)
      * @param userInfo UserInfo / null
      * @param shifts Shift[]
      * @param password String
@@ -23,19 +33,19 @@ public class User {
      */
     public User(int userId,
                 String userName,
-                String[] roles,
-                UserInfo userInfo,
-                Shift[] shifts,
+                String role,
+                //UserInfo userInfo,
+                //Shift[] shifts,
                 String password,
-                Notification[] notifications,
+                //Notification[] notifications,
                 Boolean admin) {
         mUserId = userId;
         mUserName = userName;
-        mRoles = roles;
-        mUserInfo = userInfo;
-        mShifts = shifts;
+        mRole = role;
+        //mUserInfo = userInfo;
+        //mShifts = shifts;
         mPassword = password;
-        mNotifications = notifications;
+        //mNotifications = notifications;
         mAdmin = admin;
     }
 
@@ -51,29 +61,38 @@ public class User {
         mUserName = userName;
     }
 
-    public String[] getRoles() {
-        return mRoles;
+    public String getRoles() {
+        return mRole;
     }
 
-    public void setRoles(String[] roles) {
-        mRoles = roles;
+    public void setRoles(String role) {
+        mRole = role;
     }
 
+    /*
     public UserInfo getUserInfo() {
         return mUserInfo;
     }
 
+     */
+
+    /*
     public void setUserInfo(UserInfo userInfo) {
         mUserInfo = userInfo;
     }
+     */
 
+    /*
     public Shift[] getShifts() {
         return mShifts;
     }
+     */
 
+    /*
     public void setShifts(Shift[] shifts) {
         mShifts = shifts;
     }
+     */
 
     public String getPassword() {
         return mPassword;
@@ -83,13 +102,17 @@ public class User {
         mPassword = password;
     }
 
+    /*
     public Notification[] getNotifications() {
         return mNotifications;
     }
+     */
 
+    /*
     public void setNotifications(Notification[] notifications) {
         mNotifications = notifications;
     }
+     */
 
     public Boolean getAdmin() {
         return mAdmin;

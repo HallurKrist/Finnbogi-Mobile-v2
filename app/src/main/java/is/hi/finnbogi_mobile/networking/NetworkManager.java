@@ -25,8 +25,10 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
 
 public class NetworkManager {
@@ -209,6 +211,48 @@ public class NetworkManager {
         });
 
         mQueue.add(jsonArrayRequest);
+    }
+
+    public void createShift(final NetworkCallback<Shift> callback, String path, LocalDateTime startTime, LocalDateTime endTime, int userId) {
+        Log.d(TAG, "inn í getUsers network kalli: ");
+        String url = Uri.parse(BASE_URL)
+                .buildUpon()
+                .appendPath(path)
+                .build().toString();
+
+        Log.d(TAG, "url: " + url);
+
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("startTime", startTime);
+            postData.put("endTime", endTime);
+            postData.put("userId", userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, postData.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, url, postData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "gekk upp að búa til vakt " + response.toString());
+                        Gson gson = new Gson();
+                        Shift shiftCreated = gson.fromJson(String.valueOf(response), Shift.class);
+                        callback.onSuccess(shiftCreated);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "gekk ekki upp að búa til vakt ");
+                error.printStackTrace();
+                callback.onFailure(error.toString());
+            }
+        });
+
+        mQueue.add(jsonObjectRequest);
     }
 
     public void clearCache() {

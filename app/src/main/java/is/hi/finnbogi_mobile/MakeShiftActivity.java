@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -14,7 +16,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 
@@ -61,11 +65,21 @@ public class MakeShiftActivity extends AppCompatActivity {
         // TODO: make spinners correct
         // ná í alla users til að geta birt í select boxinu
 
-         makeShiftService.getAllUsers(new NetworkCallback<List<User>>() {
+        makeShiftService.getAllUsers(new NetworkCallback<List<User>>() {
             @Override
             public void onSuccess(List<User> result) {
                mAllUsers = result;
                Log.d(TAG, String.valueOf(mAllUsers));
+               String[] users = new String[mAllUsers.size()];
+               int i = 0;
+               for (User user : mAllUsers) {
+                   users[i] = String.valueOf(user.getUserId());
+                   i++;
+               }
+               ArrayAdapter<String> usersAdapter =
+                       new ArrayAdapter<String>(MakeShiftActivity.this, android.R.layout.simple_list_item_1, users);
+               usersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+               mEmployees.setAdapter(usersAdapter);
             }
 
             @Override
@@ -74,11 +88,13 @@ public class MakeShiftActivity extends AppCompatActivity {
                 Log.e(TAG, errorString);
             }
         });
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"string1", "string2", "string3", "string4", "string5"});
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mRoles.setAdapter(adapter);
-        mEmployees.setAdapter(adapter);
+
+        // Setja select box með roles
+        String[] roles = new String[]{"Chef", "Chefs Assistant", "Bartender", "Waiter", "Busboy", "ShiftManager", "Employer"};
+        ArrayAdapter<String> rolesAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, roles);
+        rolesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mRoles.setAdapter(rolesAdapter);
 
 
         //set onclicklisteners on EditText and button
@@ -139,6 +155,30 @@ public class MakeShiftActivity extends AppCompatActivity {
                             }
                         }, hour, minutes, true);
                 mEndTimePicker.show();
+            }
+        });
+
+        mCancel = (Button) findViewById(R.id.shift_make_cancel);
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MakeShiftActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                Intent intent = HomeActivity.newIntent(MakeShiftActivity.this);
+                startActivity(intent);
+            }
+        });
+
+        mConfirm = (Button) findViewById(R.id.shift_make_confirm);
+        mConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String day = mDateEditText.getText().toString();
+                String startTime = mStartTimeEditText.getText().toString();
+                String endTime = mEndTimeEditText.getText().toString();
+                Log.d(TAG, "day: " + day);
+                Log.d(TAG, "startTime: " + startTime);
+                Log.d(TAG, "endTime: " + endTime);
+                // TODO: Búa til LocalDateTime hluti úr þessu, og kalla svo á fall í service með callbacki
             }
         });
     }

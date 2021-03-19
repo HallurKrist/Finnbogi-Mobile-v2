@@ -52,7 +52,12 @@ public class HomeActivity extends AppCompatActivity {
 
     private Shift[] mThisWeek;
 
-    public static Intent newIntent(Context packageContext, int userId) {
+    public static Intent newIntent(Context packageContext) {
+        Intent intent = new Intent(packageContext, HomeActivity.class);
+        return intent;
+    }
+
+    public static Intent newIntentWithExtra(Context packageContext, int userId) {
         Intent intent = new Intent(packageContext, HomeActivity.class);
         intent.putExtra(EXTRA_USER_ID, userId);
         return intent;

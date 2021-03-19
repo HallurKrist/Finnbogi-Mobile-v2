@@ -1,28 +1,35 @@
 package is.hi.finnbogi_mobile.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.time.LocalDateTime;
 
 public class Shift {
+
+    @SerializedName("id")
     private int mShiftId;
+    @SerializedName("startTime")
     private LocalDateTime mStartTime;
+    @SerializedName("endTime")
     private LocalDateTime mEndTime;
-    private User mUser;
-    private String mRole;
+    @SerializedName("userId")
+    private int mUserId;
+    //private String mRole;
 
     /**
      *
      * @param shiftId int > 0
      * @param startTime LocalDateTime
      * @param endTime LocalDateTime
-     * @param user User
-     * @param role String TODO: maybe enum
+     * @param userId UserId
+     * //@param role String TODO: maybe enum
      */
-    public Shift(int shiftId, LocalDateTime startTime, LocalDateTime endTime, User user, String role) {
+    public Shift(int shiftId, LocalDateTime startTime, LocalDateTime endTime, int userId) {
         mShiftId = shiftId;
         mStartTime = startTime;
         mEndTime = endTime;
-        mUser = user;
-        mRole = role;
+        mUserId = userId;
+        //mRole = role;
     }
 
     public int getShiftId() {
@@ -45,14 +52,15 @@ public class Shift {
         mEndTime = endTime;
     }
 
-    public User getUser() {
-        return mUser;
+    public int getUserId() {
+        return mUserId;
     }
 
-    public void setUser(User user) {
-        mUser = user;
+    public void setUser(int userId) {
+        mUserId = userId;
     }
 
+    /*
     public String getRole() {
         return mRole;
     }
@@ -60,4 +68,5 @@ public class Shift {
     public void setRole(String role) {
         mRole = role;
     }
+     */
 }

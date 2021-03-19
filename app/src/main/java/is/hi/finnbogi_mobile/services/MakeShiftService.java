@@ -2,8 +2,10 @@ package is.hi.finnbogi_mobile.services;
 
 import android.util.Log;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
@@ -26,7 +28,6 @@ public class MakeShiftService {
             public void onSuccess(List<User> result) {
                 Log.d(TAG, "Successfully fetched all users: ");
                 callback.onSuccess(result);
-                Log.d(TAG, String.valueOf(result));
             }
 
             @Override
@@ -35,5 +36,23 @@ public class MakeShiftService {
                 Log.e(TAG, "Failed to fetch all users: " + errorString);
             }
         }, path);
+    }
+
+    public void createShift(NetworkCallback<Shift> callback, LocalDateTime startTime, LocalDateTime endTime, int userId) {
+        Log.d(TAG, "búa til vakt: ");
+        String path = new String("shifts");
+        mNetworkManager.createShift(new NetworkCallback<Shift>() {
+            @Override
+            public void onSuccess(Shift result) {
+                Log.d(TAG, "Successfully created shift: ");
+                callback.onSuccess(result);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                callback.onFailure(errorString);
+                Log.e(TAG, "Failed to create shift: " + errorString);
+            }
+        }, path, startTime, endTime, userId);
     }
 }
