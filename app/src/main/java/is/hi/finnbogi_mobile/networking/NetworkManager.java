@@ -11,7 +11,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpClientStack;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -21,6 +23,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.CookieStore;
 
 import is.hi.finnbogi_mobile.entities.User;
 
@@ -42,6 +48,7 @@ public class NetworkManager {
 
     private NetworkManager(Context context) {
         mContext = context;
+
         mQueue = getRequestQueue();
     }
 
@@ -57,11 +64,13 @@ public class NetworkManager {
      * @param callback
      * @param path string of path after BASE_URL, e.g. BASE_URL/users/id -> path = "users/id"
      */
-    public void GET(final NetworkCallback<String> callback, String path){
-        String url = Uri.parse(BASE_URL)
-                .buildUpon()
-                .appendPath(path)
-                .build().toString();
+    public void GET(final NetworkCallback<String> callback, String[] path){
+        Uri.Builder urlBuilder = Uri.parse(BASE_URL)
+                .buildUpon();
+        for (int i = 0; i < path.length; i++) {
+            urlBuilder.appendPath(path[i]);
+        }
+        String url = urlBuilder.build().toString();
 
         StringRequest request = new StringRequest(
                 Request.Method.GET, url, new Response.Listener<String>() {
@@ -78,11 +87,13 @@ public class NetworkManager {
         mQueue.add(request);
     }
 
-    public void POST(final NetworkCallback<String> callback, String path, String requestBody){
-        String url = Uri.parse(BASE_URL)
-                .buildUpon()
-                .appendPath(path)
-                .build().toString();
+    public void POST(final NetworkCallback<String> callback, String[] path, String requestBody){
+        Uri.Builder urlBuilder = Uri.parse(BASE_URL)
+                .buildUpon();
+        for (int i = 0; i < path.length; i++) {
+            urlBuilder.appendPath(path[i]);
+        }
+        String url = urlBuilder.build().toString();
 
         StringRequest request = new StringRequest(
                 Request.Method.GET, url, new Response.Listener<String>() {
