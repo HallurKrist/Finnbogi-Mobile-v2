@@ -2,7 +2,9 @@ package is.hi.finnbogi_mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,7 @@ import is.hi.finnbogi_mobile.services.LoginService;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
+    private static final String MY_PREFERENCES = "MyPrefs";
     private static final int REQUEST_CODE_HOME = 0;
 
     private EditText mEditTextUserName;
@@ -26,6 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     private String mPassword;
     private User mUserLoggingIn;
 
+    private SharedPreferences mSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         NetworkManager networkManager = NetworkManager.getInstance(this);
         LoginService loginService = new LoginService(networkManager);
 
+        mSharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         mEditTextUserName = (EditText) findViewById(R.id.user_name);
         mEditTextPassword = (EditText) findViewById(R.id.user_password);
         mButtonLogin = (Button) findViewById(R.id.button_login);
@@ -54,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (mUserLoggingIn == null) {
                     Toast.makeText(LoginActivity.this, "Notendanafn eða lykilorð rangt", Toast.LENGTH_SHORT).show();
                 } else {
+                    // Set hér userId, á user sem var að logga sig inn, í session
+                    SharedPreferences.Editor editor = mSharedPreferences.edit();
+                    editor.putInt("userId", mUserLoggingIn.getUserId());
                     Intent intent = HomeActivity.newIntent(LoginActivity.this, mUserLoggingIn.getUserId());
                     startActivityForResult(intent, REQUEST_CODE_HOME);
                 }

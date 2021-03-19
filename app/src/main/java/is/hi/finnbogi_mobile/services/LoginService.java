@@ -32,7 +32,6 @@ public class LoginService {
         mNetworkManager.loginPost(new NetworkCallback<User>() {
             @Override
             public void onSuccess(User result) {
-                // TODO: Bæta við að setja user í session
                 mUserLoggingIn = result;
             }
 
