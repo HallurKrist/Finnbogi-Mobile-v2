@@ -134,7 +134,7 @@ public class NetworkManager {
      */
     public void loginPost(final NetworkCallback<User> callback, String path, String userName, String password) {
         Log.d(TAG, "inn í login network kalli: ");
-        String url = Uri.parse(BASE_URL)
+        String url = Uri.parse(BASE_URL + "users")
                 .buildUpon()
                 .appendPath(path)
                 .build().toString();

@@ -40,7 +40,7 @@ public class LoginService {
                 mUserLoggingIn = null;
                 Log.e(TAG, "Failed to log in: " + errorString);
             }
-        }, "users\\/login", userName, password);
+        }, "login", userName, password);
 
         return mUserLoggingIn;
     }
