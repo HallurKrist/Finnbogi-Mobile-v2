@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -22,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 
+import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
@@ -61,10 +61,7 @@ public class MakeShiftActivity extends AppCompatActivity {
         mCancel = (Button) findViewById(R.id.shift_make_cancel);
         mConfirm = (Button) findViewById(R.id.shift_make_confirm);
 
-        //set lists in spinners
-        // TODO: make spinners correct
-        // ná í alla users til að geta birt í select boxinu
-
+        // Hér erum við að ná í alla users til að setja í selectlist
         makeShiftService.getAllUsers(new NetworkCallback<List<User>>() {
             @Override
             public void onSuccess(List<User> result) {
@@ -73,6 +70,8 @@ public class MakeShiftActivity extends AppCompatActivity {
                String[] users = new String[mAllUsers.size()];
                int i = 0;
                for (User user : mAllUsers) {
+                   // TODO: Eitthvað vesen að fá username
+                   //       Það er tengt því að User entity og user taflan í gagnagrunni eru ekki eins
                    users[i] = String.valueOf(user.getUserId());
                    i++;
                }
@@ -89,16 +88,12 @@ public class MakeShiftActivity extends AppCompatActivity {
             }
         });
 
-        // Setja select box með roles
+        // Setja selectlist fyrir roles
         String[] roles = new String[]{"Chef", "Chefs Assistant", "Bartender", "Waiter", "Busboy", "ShiftManager", "Employer"};
         ArrayAdapter<String> rolesAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, roles);
         rolesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mRoles.setAdapter(rolesAdapter);
-
-
-        //set onclicklisteners on EditText and button
-        //TODO: make sure onclick events are correct
 
         mDateEditText.setInputType(InputType.TYPE_NULL);
         mDateEditText.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +155,11 @@ public class MakeShiftActivity extends AppCompatActivity {
 
         mCancel = (Button) findViewById(R.id.shift_make_cancel);
         mCancel.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Þegar ýtt er á hætta við takka er farið til baka í HomeActivity.
+             *
+             * @param v
+             */
             @Override
             public void onClick(View v) {
                 Toast.makeText(MakeShiftActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
@@ -170,6 +170,11 @@ public class MakeShiftActivity extends AppCompatActivity {
 
         mConfirm = (Button) findViewById(R.id.shift_make_confirm);
         mConfirm.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Þegar ýtt er á staðfesta takka er búin til ný vakt.
+             *
+             * @param v
+             */
             @Override
             public void onClick(View v) {
                 String day = mDateEditText.getText().toString();
@@ -178,7 +183,23 @@ public class MakeShiftActivity extends AppCompatActivity {
                 Log.d(TAG, "day: " + day);
                 Log.d(TAG, "startTime: " + startTime);
                 Log.d(TAG, "endTime: " + endTime);
-                // TODO: Búa til LocalDateTime hluti úr þessu, og kalla svo á fall í service með callbacki
+                //TODO: Búa til LocalDateTime hluti úr þessu, og kalla svo á fall í service með callbacki
+                //      það fall er tilbúið og það gerir network kallið, sjá kall í fall að neðan
+                /*
+                makeShiftService.createShift(new NetworkCallback<Shift>() {
+                    @Override
+                    public void onSuccess(Shift result) {
+                        // TODO: líklegast endurstilla viewið og sýna að það gekk upp að búa til vakt
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Toast.makeText(MakeShiftActivity.this, "Villa við að búa til vakt", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Failed to create shift: " + errorString);
+                    }
+                }, startTime, endTime, userId);
+
+                 */
             }
         });
     }

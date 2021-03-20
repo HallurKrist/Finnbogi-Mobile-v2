@@ -134,7 +134,7 @@ public class NetworkManager {
     /**
      * Network kall til að reyna að innskrá notanda. Býr til User hlut ef það gekk.
      *
-     * @param callback - callback fall
+     * @param callback - fall sem tekur við þegar network kall er búið
      * @param path - url á endpoint fyrir server kall
      * @param userName - notendanafn þess sem verið er að reyna að innskrá
      * @param password - lykilorð þess sem verið er að reyna að innskrá
@@ -181,6 +181,12 @@ public class NetworkManager {
         mQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * Network kall til þess að ná í alla users.
+     *
+     * @param callback - fall sem tekur við þegar network kall er búið
+     * @param path - url á endpoint fyrir server kall
+     */
     public void getUsers(final NetworkCallback<List<User>> callback, String path) {
         Log.d(TAG, "inn í getUsers network kalli: ");
         String url = Uri.parse(BASE_URL)
@@ -213,6 +219,15 @@ public class NetworkManager {
         mQueue.add(jsonArrayRequest);
     }
 
+    /**
+     * Network kall til þess að búa til nýja vakt.
+     *
+     * @param callback - fall sem tekur við þegar network kall er búið
+     * @param path - url á endpoint fyrir server kall
+     * @param startTime - upphafstími fyrir vakt
+     * @param endTime - lokatími fyrir vakt
+     * @param userId - userId fyrir þann sem á að vinna vaktina
+     */
     public void createShift(final NetworkCallback<Shift> callback, String path, LocalDateTime startTime, LocalDateTime endTime, int userId) {
         Log.d(TAG, "inn í getUsers network kalli: ");
         String url = Uri.parse(BASE_URL)

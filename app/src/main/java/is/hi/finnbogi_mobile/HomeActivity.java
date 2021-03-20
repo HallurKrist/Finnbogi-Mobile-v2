@@ -52,11 +52,25 @@ public class HomeActivity extends AppCompatActivity {
 
     private Shift[] mThisWeek;
 
+    /**
+     * Aðferð fyrir aðra klasa að búa til nýtt intent fyrir þetta activity.
+     *
+     * @param packageContext - Gamli activity klasinn
+     * @return intent
+     */
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, HomeActivity.class);
         return intent;
     }
 
+    /**
+     * Aðferð fyrir aðra klasa að búa til nýtt intent fyrir þetta activity,
+     * með extra fyrir userId.
+     *
+     * @param packageContext - Gamli activity klasinn
+     * @param userId - userId fyrir extra
+     * @return intent
+     */
     public static Intent newIntentWithExtra(Context packageContext, int userId) {
         Intent intent = new Intent(packageContext, HomeActivity.class);
         intent.putExtra(EXTRA_USER_ID, userId);

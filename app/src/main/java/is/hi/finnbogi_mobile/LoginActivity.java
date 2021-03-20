@@ -32,6 +32,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences mSharedPreferences;
 
+    /**
+     * Aðferð fyrir aðra klasa að búa til nýtt intent fyrir þetta activity.
+     *
+     * @param packageContext - Gamli activity klasinn
+     * @return intent
+     */
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, LoginActivity.class);
         return intent;

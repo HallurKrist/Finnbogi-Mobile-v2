@@ -20,6 +20,11 @@ public class MakeShiftService {
         mNetworkManager = networkManager;
     }
 
+    /**
+     * Býr til path og kallar á network fall.
+     *
+     * @param callback - fall sem tekur við þegar network kall er búið
+     */
     public void getAllUsers(NetworkCallback<List<User>> callback) {
         Log.d(TAG, "ná í alla users: ");
         String path = new String("users");
@@ -38,6 +43,14 @@ public class MakeShiftService {
         }, path);
     }
 
+    /**
+     * Býr til path og kallar á network fall.
+     *
+     * @param callback - fall sem tekur við þegar network kall er búið
+     * @param startTime - upphafstími fyrir vakt
+     * @param endTime - lokatími fyrir vakt
+     * @param userId - userId fyrir þann sem á að vinna vaktina
+     */
     public void createShift(NetworkCallback<Shift> callback, LocalDateTime startTime, LocalDateTime endTime, int userId) {
         Log.d(TAG, "búa til vakt: ");
         String path = new String("shifts");
