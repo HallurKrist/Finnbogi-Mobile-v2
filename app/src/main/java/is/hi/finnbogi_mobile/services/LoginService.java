@@ -11,7 +11,6 @@ public class LoginService {
     private static final String TAG = "LoginService";
 
     private NetworkManager mNetworkManager;
-    private User mUserLoggingIn;
 
     public LoginService(NetworkManager networkManager) {
         mNetworkManager = networkManager;
@@ -26,22 +25,21 @@ public class LoginService {
      * @param password - Lykilorð þess sem er að reyna að logga inn
      * @return User ef tókst að logga inn - Null ef ekki tókst að logga inn
      */
-    public User login(String userName, String password) {
+    public void login(NetworkCallback<User> callback, String userName, String password) {
         Log.d(TAG, "inn í login falli: ");
-        String path = new String("users/login");
+        String path = new String("login");
         mNetworkManager.loginPost(new NetworkCallback<User>() {
             @Override
             public void onSuccess(User result) {
-                mUserLoggingIn = result;
+                Log.d(TAG, "Successfully logged in user: ");
+                callback.onSuccess(result);
             }
 
             @Override
             public void onFailure(String errorString) {
-                mUserLoggingIn = null;
                 Log.e(TAG, "Failed to log in: " + errorString);
+                callback.onFailure(errorString);
             }
-        }, "login", userName, password);
-
-        return mUserLoggingIn;
+        }, path, userName, password);
     }
 }
