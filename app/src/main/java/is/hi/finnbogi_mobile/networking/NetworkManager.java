@@ -13,21 +13,26 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpClientStack;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.HttpStack;
+
+import com.android.volley.toolbox.JsonArrayRequest;
+
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.CookieStore;
 
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
 
 public class NetworkManager {
@@ -138,7 +143,7 @@ public class NetworkManager {
     /**
      * Network kall til að reyna að innskrá notanda. Býr til User hlut ef það gekk.
      *
-     * @param callback - callback fall
+     * @param callback - fall sem tekur við þegar network kall er búið
      * @param path - url á endpoint fyrir server kall
      * @param userName - notendanafn þess sem verið er að reyna að innskrá
      * @param password - lykilorð þess sem verið er að reyna að innskrá
@@ -167,7 +172,7 @@ public class NetworkManager {
                 new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(TAG, "gekk upp " + response.toString());
+                Log.d(TAG, "gekk upp að logga inn " + response.toString());
                 // TODO: API skilar öllum users þegar það er kallað á þetta url, það væri betra að fá bara userinn sem er verið að logga inn
                 Gson gson = new Gson();
                 User user = gson.fromJson(String.valueOf(response), User.class);
@@ -176,7 +181,96 @@ public class NetworkManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "gekk ekki upp ");
+                Log.d(TAG, "gekk ekki upp að logga inn ");
+                error.printStackTrace();
+                callback.onFailure(error.toString());
+            }
+        });
+
+        mQueue.add(jsonObjectRequest);
+    }
+
+    /**
+     * Network kall til þess að ná í alla users.
+     *
+     * @param callback - fall sem tekur við þegar network kall er búið
+     * @param path - url á endpoint fyrir server kall
+     */
+    public void getUsers(final NetworkCallback<List<User>> callback, String path) {
+        Log.d(TAG, "inn í getUsers network kalli: ");
+        String url = Uri.parse(BASE_URL)
+                .buildUpon()
+                .appendPath(path)
+                .build().toString();
+
+        Log.d(TAG, "url: " + url);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, "gekk upp að sækja users " + response.toString());
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<User>>(){}.getType();
+                List<User> allUsers = gson.fromJson(String.valueOf(response), listType);
+                callback.onSuccess(allUsers);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "gekk ekki upp að sækja users ");
+                error.printStackTrace();
+                callback.onFailure(error.toString());
+            }
+        });
+
+        mQueue.add(jsonArrayRequest);
+    }
+
+    /**
+     * Network kall til þess að búa til nýja vakt.
+     *
+     * @param callback - fall sem tekur við þegar network kall er búið
+     * @param path - url á endpoint fyrir server kall
+     * @param startTime - upphafstími fyrir vakt
+     * @param endTime - lokatími fyrir vakt
+     * @param userId - userId fyrir þann sem á að vinna vaktina
+     */
+    public void createShift(final NetworkCallback<Shift> callback, String path, LocalDateTime startTime, LocalDateTime endTime, int userId) {
+        Log.d(TAG, "inn í getUsers network kalli: ");
+        String url = Uri.parse(BASE_URL)
+                .buildUpon()
+                .appendPath(path)
+                .build().toString();
+
+        Log.d(TAG, "url: " + url);
+
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("startTime", startTime);
+            postData.put("endTime", endTime);
+            postData.put("userId", userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, postData.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, url, postData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "gekk upp að búa til vakt " + response.toString());
+                        Gson gson = new Gson();
+                        Shift shiftCreated = gson.fromJson(String.valueOf(response), Shift.class);
+                        callback.onSuccess(shiftCreated);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "gekk ekki upp að búa til vakt ");
                 error.printStackTrace();
                 callback.onFailure(error.toString());
             }
