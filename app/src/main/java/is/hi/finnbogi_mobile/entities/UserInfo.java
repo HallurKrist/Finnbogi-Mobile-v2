@@ -1,16 +1,26 @@
 package is.hi.finnbogi_mobile.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.time.LocalDate;
 
 public class UserInfo {
 
+    @SerializedName("id")
     private int mUserInfoId;
+    @SerializedName("firstName")
     private String mFirstName;
+    @SerializedName("surName")
     private String mSurName;
+    @SerializedName("address")
     private String mAddress;
+    @SerializedName("phoneNumber")
     private String mPhoneNumber;
+    @SerializedName("ssn")
     private String mSSN;
+    @SerializedName("startDate")
     private LocalDate mStartDate;
+    @SerializedName("email")
     private String mEmail;
 
     /**

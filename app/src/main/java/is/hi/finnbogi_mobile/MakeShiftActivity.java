@@ -1,10 +1,12 @@
 package is.hi.finnbogi_mobile;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -70,9 +72,7 @@ public class MakeShiftActivity extends AppCompatActivity {
                String[] users = new String[mAllUsers.size()];
                int i = 0;
                for (User user : mAllUsers) {
-                   // TODO: Eitthvað vesen að fá username
-                   //       Það er tengt því að User entity og user taflan í gagnagrunni eru ekki eins
-                   users[i] = String.valueOf(user.getUserId());
+                   users[i] = String.valueOf(user.getUserName());
                    i++;
                }
                ArrayAdapter<String> usersAdapter =
@@ -89,7 +89,8 @@ public class MakeShiftActivity extends AppCompatActivity {
         });
 
         // Setja selectlist fyrir roles
-        String[] roles = new String[]{"Chef", "Chefs Assistant", "Bartender", "Waiter", "Busboy", "ShiftManager", "Employer"};
+        // TODO: Maybe enum for roles
+        String[] roles = new String[]{"Chef", "Bartender", "Waiter", "Busboy", "ShiftManager", "Employer"};
         ArrayAdapter<String> rolesAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, roles);
         rolesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -175,31 +176,68 @@ public class MakeShiftActivity extends AppCompatActivity {
              *
              * @param v
              */
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                String day = mDateEditText.getText().toString();
-                String startTime = mStartTimeEditText.getText().toString();
-                String endTime = mEndTimeEditText.getText().toString();
-                Log.d(TAG, "day: " + day);
-                Log.d(TAG, "startTime: " + startTime);
-                Log.d(TAG, "endTime: " + endTime);
-                //TODO: Búa til LocalDateTime hluti úr þessu, og kalla svo á fall í service með callbacki
-                //      það fall er tilbúið og það gerir network kallið, sjá kall í fall að neðan
-                /*
-                makeShiftService.createShift(new NetworkCallback<Shift>() {
+                String[] day = mDateEditText.getText().toString().split("/");
+                String[] startTimeString = mStartTimeEditText.getText().toString().split(":");
+                String[] endTimeString = mEndTimeEditText.getText().toString().split(":");
+                String role = mRoles.getSelectedItem().toString();
+
+                LocalDateTime startTime = LocalDateTime.of(
+                        Integer.parseInt(day[2]),
+                        Integer.parseInt(day[1]),
+                        Integer.parseInt(day[0]),
+                        Integer.parseInt(startTimeString[0]),
+                        Integer.parseInt(startTimeString[1]),
+                        0,
+                        0);
+                LocalDateTime endTime = LocalDateTime.of(
+                        Integer.parseInt(day[2]),
+                        Integer.parseInt(day[1]),
+                        Integer.parseInt(day[0]),
+                        Integer.parseInt(endTimeString[0]),
+                        Integer.parseInt(endTimeString[1]),
+                        0,
+                        0);
+
+                makeShiftService.getAllUsers(new NetworkCallback<List<User>>() {
                     @Override
-                    public void onSuccess(Shift result) {
-                        // TODO: líklegast endurstilla viewið og sýna að það gekk upp að búa til vakt
+                    public void onSuccess(List<User> result) {
+                        int userId = -1;
+                        for (int i = 0; i < result.size(); i++) {
+                            String selectedEmployee = mEmployees.getSelectedItem().toString();
+                            String userNameI = result.get(i).getUserName();
+                            if (userNameI.equals(selectedEmployee)) {
+                                userId = result.get(i).getUserId();
+                            }
+                        }
+
+                        makeShiftService.createShift(new NetworkCallback<Shift>() {
+                            @Override
+                            public void onSuccess(Shift result) {
+
+                                Toast.makeText(MakeShiftActivity.this, "Tókst að búa til vakt", Toast.LENGTH_SHORT).show();
+                                mDateEditText.setText("");
+                                mStartTimeEditText.setText("");
+                                mEndTimeEditText.setText("");
+
+                            }
+
+                            @Override
+                            public void onFailure(String errorString) {
+                                Toast.makeText(MakeShiftActivity.this, "Villa við að búa til vakt", Toast.LENGTH_SHORT).show();
+                                Log.e(TAG, "Failed to create shift: " + errorString);
+                            }
+                        }, startTime, endTime, userId, role);
+
                     }
 
                     @Override
                     public void onFailure(String errorString) {
-                        Toast.makeText(MakeShiftActivity.this, "Villa við að búa til vakt", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Failed to create shift: " + errorString);
+                        Log.e(TAG, "Error getting all users");
                     }
-                }, startTime, endTime, userId);
-
-                 */
+                });
             }
         });
     }

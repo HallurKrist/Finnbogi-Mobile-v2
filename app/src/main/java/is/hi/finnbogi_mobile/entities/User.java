@@ -6,51 +6,39 @@ public class User {
 
     @SerializedName("id")
     private int mUserId;
-    @SerializedName("userName")
+    @SerializedName("username")
     private String mUserName;
     @SerializedName("role")
     private String mRole;
-
-    //private UserInfo mUserInfo;
-
-    //private Shift[] mShifts;
+    @SerializedName("admin")
+    private Boolean mAdmin;
     @SerializedName("password")
     private String mPassword;
 
-    //private Notification[] mNotifications;
-    @SerializedName("admin")
-    private Boolean mAdmin;
+    private int mUserInfoId = -1;
 
-    /**
-     *
-     * @param userId int > 0
-     * @param userName String (Non empty)
-     * @param role String (Non empty)
-     * @param userInfo UserInfo / null
-     * @param shifts Shift[]
-     * @param password String
-     * @param notifications Notification[]
-     */
-    public User(int userId,
-                String userName,
-                String role,
-                //UserInfo userInfo,
-                //Shift[] shifts,
-                String password,
-                //Notification[] notifications,
-                Boolean admin) {
+    public User(int userId, String userName, String role, Boolean admin, String password) {
         mUserId = userId;
         mUserName = userName;
         mRole = role;
-        //mUserInfo = userInfo;
-        //mShifts = shifts;
-        mPassword = password;
-        //mNotifications = notifications;
         mAdmin = admin;
+        mPassword = password;
     }
 
     public int getUserId() {
         return mUserId;
+    }
+
+    public void setUserId(int userId) {
+        mUserId = userId;
+    }
+
+    public int getUserInfoId() {
+        return mUserInfoId;
+    }
+
+    public void setUserInfoId(int userInfoId) {
+        mUserInfoId = userInfoId;
     }
 
     public String getUserName() {
@@ -61,38 +49,21 @@ public class User {
         mUserName = userName;
     }
 
-    public String getRoles() {
+    public String getRole() {
         return mRole;
     }
 
-    public void setRoles(String role) {
+    public void setRole(String role) {
         mRole = role;
     }
 
-    /*
-    public UserInfo getUserInfo() {
-        return mUserInfo;
+    public Boolean getAdmin() {
+        return mAdmin;
     }
 
-     */
-
-    /*
-    public void setUserInfo(UserInfo userInfo) {
-        mUserInfo = userInfo;
+    public void setAdmin(Boolean admin) {
+        mAdmin = admin;
     }
-     */
-
-    /*
-    public Shift[] getShifts() {
-        return mShifts;
-    }
-     */
-
-    /*
-    public void setShifts(Shift[] shifts) {
-        mShifts = shifts;
-    }
-     */
 
     public String getPassword() {
         return mPassword;
@@ -100,21 +71,5 @@ public class User {
 
     public void setPassword(String password) {
         mPassword = password;
-    }
-
-    /*
-    public Notification[] getNotifications() {
-        return mNotifications;
-    }
-     */
-
-    /*
-    public void setNotifications(Notification[] notifications) {
-        mNotifications = notifications;
-    }
-     */
-
-    public Boolean getAdmin() {
-        return mAdmin;
     }
 }

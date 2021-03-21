@@ -1,7 +1,6 @@
 package is.hi.finnbogi_mobile;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,27 +19,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.CookieStore;
-import java.net.HttpCookie;
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.google.gson.Gson;
+
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
-import is.hi.finnbogi_mobile.entities.UserInfo;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.HomeService;
-import is.hi.finnbogi_mobile.services.LoginService;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -59,7 +46,6 @@ public class HomeActivity extends AppCompatActivity {
     private LinearLayout mSunday;
     private Button mLastWeek;
     private Button mNextWeek;
-    
 
     private Shift[] mCurrWeek;
     private int mCurrWeekNr = 0;
@@ -98,11 +84,13 @@ public class HomeActivity extends AppCompatActivity {
 
         // Ef engin notandi er skráður in þá er sent notanda á login síðuna
         SharedPreferences sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
-//        if (!sharedPref.contains("userId")) {
-//            Log.d(TAG, "No user logged in");
-//            Intent loginIntent = LoginActivity.newIntent(HomeActivity.this);
-//            startActivity(loginIntent);
-//        }
+        Log.d(TAG, "checking if logged in: " + sharedPref.contains("userId"));
+        if (!sharedPref.contains("userId")) {
+            Log.d(TAG, "No user logged in");
+            Intent loginIntent = LoginActivity.newIntent(HomeActivity.this);
+            startActivity(loginIntent);
+            return;
+        }
 
         setContentView(R.layout.activity_home);
 
@@ -110,137 +98,39 @@ public class HomeActivity extends AppCompatActivity {
         NetworkManager networkManager = NetworkManager.getInstance(this);
         mHomeService = new HomeService(networkManager);
 
-//        CookieManager cookieManager = new CookieManager();
-//        CookieHandler.setDefault(cookieManager);
-
-        CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
-
-//// this should be done at the beginning of an HTTP session
-//        CookieHandler.setDefault(new CookieManager());
-//// this can be done at any point of an HTTP session
-//        ((CookieManager)CookieHandler.getDefault()).setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-
-
-        networkManager.POST(new NetworkCallback<String>() {
+        // Ná í rétta notanda og réttu viku miðað við hann
+        Gson gson = new Gson();
+        mHomeService.getUserById(new NetworkCallback<User>() {
             @Override
-            public void onSuccess(String result) {
-
-                networkManager.GET(new NetworkCallback<String>() {
+            public void onSuccess(User result) {
+                mCurrentUser = result;
+                mHomeService.getWeek(new NetworkCallback<Shift[]>() {
                     @Override
-                    public void onSuccess(String result) {
-                        Log.d(TAG, "onSuccess: " + result);
+                    public void onSuccess(Shift[] result) {
+                        mCurrWeek = result;
+                        // uppfæra viðmót þegar búið er að sækja notanda og vikuna
+                        initView();
+                        updateDays();
                     }
 
                     @Override
                     public void onFailure(String errorString) {
-                        Log.e(TAG, "onFailure: " + errorString );
+                        Log.e(TAG, "onFailure: " + errorString);
                     }
-                }, new String[] {"users", "me"});
-//                try {
-////                    Map<String, List<String>> tmp = cookieManager.get(new URI("https://finnbogi-api.herokuapp.com/users/login"), new Map<String, List<String>>() {
-////                        @Override
-////                        public int size() {
-////                            return 0;
-////                        }
-////
-////                        @Override
-////                        public boolean isEmpty() {
-////                            return false;
-////                        }
-////
-////                        @Override
-////                        public boolean containsKey(@Nullable Object key) {
-////                            return false;
-////                        }
-////
-////                        @Override
-////                        public boolean containsValue(@Nullable Object value) {
-////                            return false;
-////                        }
-////
-////                        @Nullable
-////                        @Override
-////                        public List<String> get(@Nullable Object key) {
-////                            return null;
-////                        }
-////
-////                        @Nullable
-////                        @Override
-////                        public List<String> put(String key, List<String> value) {
-////                            return null;
-////                        }
-////
-////                        @Nullable
-////                        @Override
-////                        public List<String> remove(@Nullable Object key) {
-////                            return null;
-////                        }
-////
-////                        @Override
-////                        public void putAll(@NonNull Map<? extends String, ? extends List<String>> m) {
-////
-////                        }
-////
-////                        @Override
-////                        public void clear() {
-////
-////                        }
-////
-////                        @NonNull
-////                        @Override
-////                        public Set<String> keySet() {
-////                            return null;
-////                        }
-////
-////                        @NonNull
-////                        @Override
-////                        public Collection<List<String>> values() {
-////                            return null;
-////                        }
-////
-////                        @NonNull
-////                        @Override
-////                        public Set<Entry<String, List<String>>> entrySet() {
-////                            return null;
-////                        }
-////                    });
-////                    List<HttpCookie> tmp2 = cookieManager.getCookieStore().getCookies();
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } catch (URISyntaxException e) {
-//                    e.printStackTrace();
-//                }
-                    Log.d(TAG, "onSuccess: " + result);
-
+                }, mCurrentUser.getUserId(), mCurrWeekNr);
             }
-
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "onFailure: " + errorString);
+                Log.e(TAG, "Error in finding signed inn user");
             }
-        }, new String[] {"users", "login"}, "username=admin&password=123");
+        }, sharedPref.getInt("userId", -1));
+    }
 
-        networkManager.GET(new NetworkCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.d(TAG, "onSuccess: " + result);
-            }
-
-            @Override
-            public void onFailure(String errorString) {
-                Log.e(TAG, "onFailure: " + errorString );
-            }
-        }, new String[] {"users", "me"});
-
-        // Ná í rétta notanda og réttu viku miðað við hann
-        int currUserId = sharedPref.getInt("userId", -1);
-        currUserId = 1; //TODO: take this out
-
-        mCurrentUser = mHomeService.getUserById(currUserId);
-        mCurrWeek = mHomeService.getWeek(currUserId,mCurrWeekNr);
-        updateDays();
-
+    /**
+     * Upphafsstillr viðmót og setur onclick listener-a
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void initView() {
         // Upphafsstilla alla viðeigandi hluti í viðmóti
         mLoggedInUser = (TextView) findViewById(R.id.logged_in_user);
         mLoggedInUser.setText(mCurrentUser.getUserName());
@@ -305,8 +195,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mCurrWeek[5] != null) {
-                        Intent saturdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[5].getShiftId());
-                        startActivity(saturdayIntent);
+                    Intent saturdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[5].getShiftId());
+                    startActivity(saturdayIntent);
                 }
             }
         });
@@ -327,8 +217,18 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrWeekNr = mCurrWeekNr + 1;
-                mCurrWeek = mHomeService.getWeek(mCurrentUser.getUserId(),mCurrWeekNr);
-                updateDays();
+                mHomeService.getWeek(new NetworkCallback<Shift[]>() {
+                    @Override
+                    public void onSuccess(Shift[] result) {
+                        mCurrWeek = result;
+                        updateDays();
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, "error in udating week");
+                    }
+                }, mCurrentUser.getUserId(), mCurrWeekNr);
             }
         });
 
@@ -337,8 +237,18 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrWeekNr = mCurrWeekNr - 1;
-                mCurrWeek = mHomeService.getWeek(mCurrentUser.getUserId(),mCurrWeekNr);
-                updateDays();
+                mHomeService.getWeek(new NetworkCallback<Shift[]>() {
+                    @Override
+                    public void onSuccess(Shift[] result) {
+                        mCurrWeek = result;
+                        updateDays();
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, "error in udating week");
+                    }
+                }, mCurrentUser.getUserId(), mCurrWeekNr);
             }
         });
     }
@@ -390,25 +300,55 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    // Passar að rétt menubar sé sýnt miðað við hvort það sé almennur notandi eða admin innskráður.
+    /**
+     * Passar að rétt menubar sé sýnt miðað við hvort það sé almennur notandi eða admin innskráður.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        //TODO: make different menu for regular user and admin
-        inflater.inflate(R.menu.home_menu_admin, menu);
+
+        SharedPreferences sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        NetworkManager networkManager = NetworkManager.getInstance(this);
+        HomeService tmpHomeService = new HomeService(networkManager);
+
+        if (sharedPref.contains("userId")) {
+            tmpHomeService.getUserById(new NetworkCallback<User>() {
+                @Override
+                public void onSuccess(User result) {
+                    if (result.getAdmin() == true) {
+                        inflater.inflate(R.menu.home_menu_admin, menu);
+                    } else {
+                        inflater.inflate(R.menu.home_menu_user, menu);
+                    }
+                }
+
+                @Override
+                public void onFailure(String errorString) {
+                    Log.e(TAG, "Error in getting logged in user");
+                }
+            }, sharedPref.getInt("userId", -1));
+        }
         return true;
     }
 
+    /**
+     * onclick listener fyrir menubar-ið
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        //TODO: take out Shift and put inn shifts list view for admin
+        //TODO: make sure all navigation is correct
         switch (item.getItemId()) {
             case R.id.menu_notifications:
                 Intent notificationIntent = new Intent(HomeActivity.this, NotificationsActivity.class);
                 startActivity(notificationIntent);
                 return true;
             case R.id.menu_shift:
-                Intent shiftIntent = new Intent(HomeActivity.this, ShiftActivity.class);
-                startActivity(shiftIntent);
+                Toast.makeText(HomeActivity.this, "TODO", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_make_shift:
                 Intent makeShiftIntent = new Intent(HomeActivity.this, MakeShiftActivity.class);

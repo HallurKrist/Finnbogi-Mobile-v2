@@ -2,6 +2,8 @@ package is.hi.finnbogi_mobile.services;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
@@ -27,12 +29,15 @@ public class LoginService {
      */
     public void login(NetworkCallback<User> callback, String userName, String password) {
         Log.d(TAG, "inn í login falli: ");
-        String path = new String("login");
-        mNetworkManager.loginPost(new NetworkCallback<User>() {
+        mNetworkManager.POST(new NetworkCallback<String>() {
             @Override
-            public void onSuccess(User result) {
+            public void onSuccess(String result) {
                 Log.d(TAG, "Successfully logged in user: ");
-                callback.onSuccess(result);
+
+                Gson gson = new Gson();
+                User user = gson.fromJson(result, User.class);
+
+                callback.onSuccess(user);
             }
 
             @Override
@@ -40,6 +45,6 @@ public class LoginService {
                 Log.e(TAG, "Failed to log in: " + errorString);
                 callback.onFailure(errorString);
             }
-        }, path, userName, password);
+        }, new String[] {"users", "login"}, new String[][] {{"username", userName},{"password", password}});
     }
 }

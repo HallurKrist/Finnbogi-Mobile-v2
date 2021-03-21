@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import is.hi.finnbogi_mobile.entities.Shift;
+import is.hi.finnbogi_mobile.entities.User;
+import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.ShiftService;
 
@@ -25,6 +27,7 @@ public class ShiftActivity extends AppCompatActivity {
 
     private ShiftService mShiftService;
     private Shift mShift;
+    private User mUser;
 
     private TextView mDate;
     private TextView mTime;
@@ -33,12 +36,10 @@ public class ShiftActivity extends AppCompatActivity {
 
     public static Intent newIntent(Context packageContext, int shiftId) {
         Intent intent = new Intent(packageContext, ShiftActivity.class);
-        Gson gson = new Gson();
         intent.putExtra(SHIFT_KEY, shiftId);
         return intent;
     }
 
-    //TODO: this class
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +56,30 @@ public class ShiftActivity extends AppCompatActivity {
 
         int shiftId = getIntent().getIntExtra(SHIFT_KEY, -1);
 
-        mShift = mShiftService.getShiftById(shiftId);
+        mShiftService.getShiftById(new NetworkCallback<Shift>() {
+            @Override
+            public void onSuccess(Shift result) {
+                mShift = result;
+                mShiftService.getUserById(new NetworkCallback<User>() {
+                    @Override
+                    public void onSuccess(User result) {
+                        mUser = result;
+                        mDate.setText(mShiftService.dateString(mShift.getStartTime()));
+                        mTime.setText(mShiftService.shiftTimeString(mShift.getStartTime(), mShift.getEndTime()));
+                        mEmployee.setText(mShiftService.employeeString(mUser.getUserName()));
+                    }
 
-        mDate.setText(mShiftService.dateString(mShift.getStartTime()));
-        mTime.setText(mShiftService.shiftTimeString(mShift.getStartTime(), mShift.getEndTime()));
-        mEmployee.setText(mShiftService.employeeString(mShift.getUser().getUserName()));
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, "Error in getting user by id");
+                    }
+                }, mShift.getUserId());
+            }
 
-
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, "Error in finding shift by id");
+            }
+        }, shiftId);
     }
 }

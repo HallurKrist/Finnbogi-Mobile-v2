@@ -6,9 +6,15 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 
 import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
@@ -20,80 +26,102 @@ public class HomeService {
     private final String TAG = "HomeService";
 
     NetworkManager mNetworkManager;
-    String mUserJson;
+    User mUser;
 
     public HomeService(NetworkManager networkManager) {
         mNetworkManager = networkManager;
     }
 
     /**
-     * tekur inn notandalykil og skilar User hlut með upplýsingum um notanda
+     * tekur inn notandalykil og skilar User hlut með upplýsingum um notanda.
+     * @param callback fallðið sem er notað til að skila user tilbaka.
      * @param userId
-     * @return User
      */
-    public User getUserById(int userId) {
-        String[] path = {"users", ""+userId};
+    public void getUserById(final NetworkCallback<User> callback, int userId) {
+        String[] path = {"users", String.valueOf(userId)};
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                mUserJson = result;
+                Gson gson = new Gson();
+                mUser = gson.fromJson(result, User.class);
+                callback.onSuccess(mUser);
             }
 
             @Override
             public void onFailure(String errorString) {
-                mUserJson = null;
+                mUser = null;
                 Log.e(TAG, "Failed to find user: " + errorString);
+                callback.onFailure(errorString);
             }
         }, path
         );
-
-        Gson gson = new Gson();
-        User user = gson.fromJson(String.valueOf(mUserJson), User.class);
-
-        // TODO: make sure getting user works
-
-        user = new User(
-                userId,
-                "Hallur Kristinn",
-                new String[] {"Kokkur"},
-                null,
-                null,
-                null,
-                null,
-                true
-        );
-        return user;
     }
 
     /**
      * Tekur inn tölu sem skilgreinir númer viku frá núverandi viku og notandalykil.
      * þ.e.a.s. 0 = núverandi vika, 1 = næsta vika, -1 síðasta vika o.s.frv.
      * Skilar þeim vöktum sem eiga við tilgreinda viku, með null ef engin vakt á skilgreindum degi.
-     * dæmi: { Shift, Shift, null, null, Shift, Shift, Shift } = í þessari viku er notandi með 5 vaktir.
+     * dæmi: { Shift, Shift, null, null, Shift, Shift, Shift } <- í þessari viku er notandi með 5 vaktir.
+     * @param callback fallið sem er notað til að skila vikunni tilbaka.
      * @param weekNr
      * @param userId
-     * @return Shift[]
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Shift[] getWeek(int userId, int weekNr) {
+    public void getWeek(final NetworkCallback<Shift[]> callback, int userId, int weekNr) {
         LocalDateTime weekstart = findWeekStartDay(weekNr);
+        Shift[] week = new Shift[] {null, null, null, null, null, null, null};
 
-        Shift[] week = new Shift[7];
-        for (int i = 0; i < 7; i++) {
-            LocalDateTime tmp = weekstart;
-            week[i] = new Shift(1,
-                    tmp.plusDays(i),
-                    tmp.plusHours(8).plusDays(i),
-                    null,
-                    "Kokkur");
-        }
+        mNetworkManager.GET(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                final ArrayList<?> jsonArray = gson.fromJson(result, ArrayList.class);
 
-        week[2] = null;
-        week[3] = null;
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
-        return week; //TODO: correct user and week
+                Shift[] shifts = new Shift[jsonArray.size()];
+                for ( int i = 0; i < jsonArray.size(); i++) {
+                    int shiftId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("id")).intValue();
+
+                    LocalDateTime startTime = null;
+                    LocalDateTime endTime = null;
+                    try {
+                        Date parsedStart = inputFormat.parse((String)((LinkedTreeMap)jsonArray.get(i)).get("starttime"));
+                        startTime = parsedStart.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                        Date parsedEnd = inputFormat.parse((String)((LinkedTreeMap)jsonArray.get(i)).get("endtime"));
+                        endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "Could not parse dates from DB");
+                    }
+
+                    int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
+                    String role = ((String)((LinkedTreeMap)jsonArray.get(i)).get("role"));
+                    shifts[i] = new Shift(shiftId, startTime, endTime, userId, role);
+                }
+
+                for (int i = 0; i < shifts.length; i++) {
+                    LocalDateTime shiftDate = shifts[i].getStartTime();
+                    if ((weekstart.isBefore(shiftDate) || weekstart.isEqual(shiftDate)) && weekstart.plusDays(7).isAfter(shiftDate)) {
+                        int dayOfWeek = shiftDate.getDayOfMonth() - weekstart.getDayOfMonth();
+                        week[dayOfWeek] = shifts[i];
+                    }
+                }
+                callback.onSuccess(week);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"shifts", "user", String.valueOf(userId)});
     }
 
+    /**
+     * Finnur hvaða dagur er mánudagurinn sem passar við núverandi vika + weekNr.
+     * @param weekNr int sem segir til um hvaða viku verið er að leita í.
+     * @return LocalDateTime sem er mánudagurinn í viðeigandi viku.
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LocalDateTime findWeekStartDay(int weekNr) {
         DayOfWeek correctMonday = LocalDateTime.now().getDayOfWeek();
@@ -104,7 +132,11 @@ public class HomeService {
             correctMonday = LocalDateTime.now().minusDays(offset).getDayOfWeek();
         }
 
-        return LocalDateTime.now().minusDays(offset).plusWeeks(weekNr);
+        return LocalDateTime.now()
+                .minusDays(offset)
+                .plusWeeks(weekNr)
+                .minusHours(LocalDateTime.now().getHour())
+                .minusMinutes(LocalDateTime.now().getMinute());
     }
 
     /**
