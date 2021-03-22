@@ -71,9 +71,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(User result) {
                         mUserLoggingIn = result;
+                        Log.d(TAG, "User that was logged in: " + mUserLoggingIn.getUserName());
                         SharedPreferences.Editor editor = mSharedPreferences.edit();
-                        editor.putString("user", String.valueOf(mUserLoggingIn));
-                        //editor.putInt("userId", mUserLoggingIn.getUserId());
+                        editor.putInt("userId", mUserLoggingIn.getUserId());
                         editor.commit();
                         Intent intent = HomeActivity.newIntentWithExtra(LoginActivity.this, mUserLoggingIn.getUserId());
                         startActivity(intent);

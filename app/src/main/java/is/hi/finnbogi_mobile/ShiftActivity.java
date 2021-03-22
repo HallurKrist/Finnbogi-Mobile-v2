@@ -1,36 +1,85 @@
 package is.hi.finnbogi_mobile;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import is.hi.finnbogi_mobile.entities.Shift;
+import is.hi.finnbogi_mobile.entities.User;
+import is.hi.finnbogi_mobile.networking.NetworkCallback;
+import is.hi.finnbogi_mobile.networking.NetworkManager;
+import is.hi.finnbogi_mobile.services.ShiftService;
 
 public class ShiftActivity extends AppCompatActivity {
 
     private static final String TAG = "ShiftActivity";
+    private static final String SHIFT_KEY = "currentShift";
+
+    private ShiftService mShiftService;
+    private Shift mShift;
+    private User mUser;
 
     private TextView mDate;
     private TextView mTime;
     private TextView mEmployee;
     private Button mOffer;
 
-    //TODO: this class
+    public static Intent newIntent(Context packageContext, int shiftId) {
+        Intent intent = new Intent(packageContext, ShiftActivity.class);
+        intent.putExtra(SHIFT_KEY, shiftId);
+        return intent;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift);
+
+        NetworkManager networkManager = NetworkManager.getInstance(this);
+        mShiftService = new ShiftService(networkManager);
 
         mDate = (TextView) findViewById(R.id.shift_date);
         mTime = (TextView) findViewById(R.id.shift_time);
         mEmployee = (TextView) findViewById(R.id.shift_employee);
         mOffer = (Button) findViewById(R.id.shift_offer);
 
-        // mock shift
-        mDate.setText("Dags: 01.01.2021");
-        mTime.setText("08:00 - 16:00");
-        mEmployee.setText("Starfsmaður: Jón Jónsson");
+        int shiftId = getIntent().getIntExtra(SHIFT_KEY, -1);
 
+        mShiftService.getShiftById(new NetworkCallback<Shift>() {
+            @Override
+            public void onSuccess(Shift result) {
+                mShift = result;
+                mShiftService.getUserById(new NetworkCallback<User>() {
+                    @Override
+                    public void onSuccess(User result) {
+                        mUser = result;
+                        mDate.setText(mShiftService.dateString(mShift.getStartTime()));
+                        mTime.setText(mShiftService.shiftTimeString(mShift.getStartTime(), mShift.getEndTime()));
+                        mEmployee.setText(mShiftService.employeeString(mUser.getUserName()));
+                    }
 
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, "Error in getting user by id");
+                    }
+                }, mShift.getUserId());
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, "Error in finding shift by id");
+            }
+        }, shiftId);
     }
 }

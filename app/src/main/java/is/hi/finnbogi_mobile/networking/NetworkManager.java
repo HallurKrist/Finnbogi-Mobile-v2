@@ -11,8 +11,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpClientStack;
 import com.android.volley.toolbox.HttpHeaderParser;
+
 import com.android.volley.toolbox.JsonArrayRequest;
+
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -24,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,6 +53,7 @@ public class NetworkManager {
 
     private NetworkManager(Context context) {
         mContext = context;
+
         mQueue = getRequestQueue();
     }
 
@@ -59,17 +64,25 @@ public class NetworkManager {
         return mQueue;
     }
 
-    /**
-     *
-     * @param callback
-     * @param path string of path after BASE_URL, e.g. BASE_URL/users/id -> path = "users/id"
-     */
-    public void GET(final NetworkCallback<String> callback, String path){
-        String url = Uri.parse(BASE_URL)
-                .buildUpon()
-                .appendPath(path)
-                .build().toString();
+    //TODO: hreinsa til föll
 
+    /**
+     * Fall sem gerir Get request á path og skilar streng response
+     *
+     * @param callback callback sem skilar response
+     * @param path String[] {path1, path2} = BASE_URL/path1/path2
+     */
+    public void GET(final NetworkCallback<String> callback, String[] path){
+
+        // Make correct path
+        Uri.Builder urlBuilder = Uri.parse(BASE_URL)
+                .buildUpon();
+        for (int i = 0; i < path.length; i++) {
+            urlBuilder.appendPath(path[i]);
+        }
+        String url = urlBuilder.build().toString();
+
+        // Send get request and handle response
         StringRequest request = new StringRequest(
                 Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -85,16 +98,44 @@ public class NetworkManager {
         mQueue.add(request);
     }
 
-    public void POST(final NetworkCallback<String> callback, String path, String requestBody){
-        String url = Uri.parse(BASE_URL)
-                .buildUpon()
-                .appendPath(path)
-                .build().toString();
+    /**
+     * Fall sem tekur gerir post request á path með request body og skilar json Streng við response
+     *
+     * @param callback callback sem skilar response
+     * @param path String[] {path1, path2} = /path1/path2
+     * @param requestBody String[][] {{key1 , value1}, {key2, value2}} = key1=value1&key2=value2
+     */
+    public void POST(final NetworkCallback<String> callback, String[] path, String[][] requestBody){
 
+        // Make path
+        Uri.Builder urlBuilder = Uri.parse(BASE_URL)
+                .buildUpon();
+        for (int i = 0; i < path.length; i++) {
+            urlBuilder.appendPath(path[i]);
+        }
+        String url = urlBuilder.build().toString();
+
+        // Make correct request body ( key1=value1&key2=value2 ... )
+        String requestBodyString = null;
+        if (requestBody.length != 0) {
+            requestBodyString = "";
+            for (int i = 0; i < requestBody.length; i++) {
+                if (i == 0) {
+                    requestBodyString = requestBodyString + requestBody[i][0] + "=" + requestBody[i][1];
+                } else {
+                    requestBodyString = requestBodyString + "&" + requestBody[i][0] + "=" + requestBody[i][1];
+                }
+            }
+        }
+        String finalRequestBodyString = requestBodyString;
+        Log.d(TAG, "request body string: " + finalRequestBodyString);
+
+        // Make post request and send String response back
         StringRequest request = new StringRequest(
-                Request.Method.GET, url, new Response.Listener<String>() {
+                Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d(TAG, "onResponse: " + response);;
                 callback.onSuccess(response);
             }
         }, new Response.ErrorListener() {
@@ -105,15 +146,15 @@ public class NetworkManager {
         }){
             @Override
             public String getBodyContentType() {
-                return "application/json; charset=utf-8";
+                return "application/x-www-form-urlencoded; charset=utf-8";
             }
 
             @Override
             public byte[] getBody() throws AuthFailureError {
                 try {
-                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    return finalRequestBodyString == null ? null : finalRequestBodyString.getBytes("utf-8");
                 } catch (UnsupportedEncodingException uee) {
-                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", finalRequestBodyString, "utf-8");
                     return null;
                 }
             }
@@ -122,8 +163,12 @@ public class NetworkManager {
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 String responseString = "";
                 if (response != null) {
-                    responseString = String.valueOf(response.statusCode);
-                    // can get more details such as response.headers
+                    try {
+                        responseString = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
                 return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
             }
@@ -150,7 +195,7 @@ public class NetworkManager {
 
         JSONObject postData = new JSONObject();
         try {
-            postData.put("userName", userName);
+            postData.put("username", userName);
             postData.put("password", password);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -164,7 +209,6 @@ public class NetworkManager {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, "gekk upp að logga inn " + response.toString());
-                // TODO: API skilar öllum users þegar það er kallað á þetta url, það væri betra að fá bara userinn sem er verið að logga inn
                 Gson gson = new Gson();
                 User user = gson.fromJson(String.valueOf(response), User.class);
                 callback.onSuccess(user);

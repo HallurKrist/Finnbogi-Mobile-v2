@@ -19,20 +19,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
+import com.google.gson.Gson;
+
+import java.time.LocalDateTime;
 
 import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
-import is.hi.finnbogi_mobile.entities.UserInfo;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
+import is.hi.finnbogi_mobile.services.HomeService;
 
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
     private static final String EXTRA_USER_ID = "is.hi.finnbogi_mobile.userId";
     private static final String MY_PREFERENCES = "Session";
+
 
     private TextView mLoggedInUser;
     private LinearLayout mMonday;
@@ -44,9 +46,11 @@ public class HomeActivity extends AppCompatActivity {
     private LinearLayout mSunday;
     private Button mLastWeek;
     private Button mNextWeek;
-    
 
-    private Shift[] mThisWeek;
+    private Shift[] mCurrWeek;
+    private int mCurrWeekNr = 0;
+    private User mCurrentUser;
+    private HomeService mHomeService;
 
     /**
      * Aðferð fyrir aðra klasa að búa til nýtt intent fyrir þetta activity.
@@ -73,63 +77,72 @@ public class HomeActivity extends AppCompatActivity {
         return intent;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO: make sure user is logged in, relocate to login if not logged in.
+
+        // Ef engin notandi er skráður in þá er sent notanda á login síðuna
+        SharedPreferences sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        Log.d(TAG, "checking if logged in: " + sharedPref.contains("userId"));
+        if (!sharedPref.contains("userId")) {
+            Log.d(TAG, "No user logged in");
+            Intent loginIntent = LoginActivity.newIntent(HomeActivity.this);
+            startActivity(loginIntent);
+            return;
+        }
+
         setContentView(R.layout.activity_home);
 
-        //trying networking
-        Log.d(TAG, "starting networking test");
-
-        CookieHandler.setDefault(new CookieManager());
-
+        // Búa til HomeService hlut
         NetworkManager networkManager = NetworkManager.getInstance(this);
-//        networkManager.GET(new NetworkCallback<String>() {
-//            @Override
-//            public void onSuccess(String result) {
-//                Log.d(TAG, "GET: " + result);
-//            }
-//
-//            @Override
-//            public void onFailure(String errorString) {
-//                Log.e(TAG, "GET: " + errorString);
-//            }
-//        }, "users");
+        mHomeService = new HomeService(networkManager);
 
-        networkManager.POST(new NetworkCallback<String>() {
+        // Ná í rétta notanda og réttu viku miðað við hann
+        Gson gson = new Gson();
+        mHomeService.getUserById(new NetworkCallback<User>() {
             @Override
-            public void onSuccess(String result) {
-                Log.d(TAG, "POST login: " + result);
-                networkManager.GET(new NetworkCallback<String>() {
+            public void onSuccess(User result) {
+                mCurrentUser = result;
+                mHomeService.getWeek(new NetworkCallback<Shift[]>() {
                     @Override
-                    public void onSuccess(String result) {
-                        Log.d(TAG, "GET me2: " + result);
+                    public void onSuccess(Shift[] result) {
+                        mCurrWeek = result;
+                        // uppfæra viðmót þegar búið er að sækja notanda og vikuna
+                        initView();
+                        updateDays();
                     }
 
                     @Override
                     public void onFailure(String errorString) {
-                        Log.e(TAG, "GET me2: " + errorString);
+                        Log.e(TAG, "onFailure: " + errorString);
                     }
-                }, "users/me");
+                }, mCurrentUser.getUserId(), mCurrWeekNr);
             }
-
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "POST login: " + errorString);
+                Log.e(TAG, "Error in finding signed inn user");
             }
-        }, "/user/login", "username=admin&password=123");
+        }, sharedPref.getInt("userId", -1));
+    }
 
+    /**
+     * Upphafsstillr viðmót og setur onclick listener-a
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void initView() {
+        // Upphafsstilla alla viðeigandi hluti í viðmóti
         mLoggedInUser = (TextView) findViewById(R.id.logged_in_user);
-        mLoggedInUser.setText("Jon Jonsson");  //TODO: set correct username
+        mLoggedInUser.setText(mCurrentUser.getUserName());
 
         mMonday = (LinearLayout) findViewById(R.id.monday);
         mMonday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: redirect to correct shift according to clicked layout
-                Toast.makeText(HomeActivity.this, "monday clicked", Toast.LENGTH_SHORT).show();
+                if (mCurrWeek[0] != null) {
+                    Intent mondayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[0].getShiftId());
+                    startActivity(mondayIntent);
+                }
             }
         });
 
@@ -137,17 +150,21 @@ public class HomeActivity extends AppCompatActivity {
         mTuesday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: redirect to correct shift according to clicked layout
-                Toast.makeText(HomeActivity.this, "tuesday clicked", Toast.LENGTH_SHORT).show();
+                if (mCurrWeek[1] != null) {
+                    Intent tuesdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[1].getShiftId());
+                    startActivity(tuesdayIntent);
+                }
             }
         });
 
         mWednesday = (LinearLayout) findViewById(R.id.wednesday);
         mWednesday.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //TODO: redirect to correct shift according to clicked layout
-                Toast.makeText(HomeActivity.this, "wednesday clicked", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) { ;
+                if (mCurrWeek[2] != null) {
+                    Intent wednesdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[2].getShiftId());
+                    startActivity(wednesdayIntent);
+                }
             }
         });
 
@@ -155,8 +172,10 @@ public class HomeActivity extends AppCompatActivity {
         mThursday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: redirect to correct shift according to clicked layout
-                Toast.makeText(HomeActivity.this, "thursday clicked", Toast.LENGTH_SHORT).show();
+                if (mCurrWeek[3] != null) {
+                    Intent thursdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[3].getShiftId());
+                    startActivity(thursdayIntent);
+                }
             }
         });
 
@@ -164,8 +183,10 @@ public class HomeActivity extends AppCompatActivity {
         mFriday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: redirect to correct shift according to clicked layout
-                Toast.makeText(HomeActivity.this, "friday clicked", Toast.LENGTH_SHORT).show();
+                if (mCurrWeek[4] != null) {
+                    Intent fridayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[4].getShiftId());
+                    startActivity(fridayIntent);
+                }
             }
         });
 
@@ -173,8 +194,10 @@ public class HomeActivity extends AppCompatActivity {
         mSaturday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: redirect to correct shift according to clicked layout
-                Toast.makeText(HomeActivity.this, "saturday clicked", Toast.LENGTH_SHORT).show();
+                if (mCurrWeek[5] != null) {
+                    Intent saturdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[5].getShiftId());
+                    startActivity(saturdayIntent);
+                }
             }
         });
 
@@ -182,8 +205,10 @@ public class HomeActivity extends AppCompatActivity {
         mSunday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: redirect to correct shift according to clicked layout
-                Toast.makeText(HomeActivity.this, "sunday clicked", Toast.LENGTH_SHORT).show();
+                if (mCurrWeek[6] != null) {
+                    Intent sundayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[6].getShiftId());
+                    startActivity(sundayIntent);
+                }
             }
         });
 
@@ -191,7 +216,19 @@ public class HomeActivity extends AppCompatActivity {
         mNextWeek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: change week
+                mCurrWeekNr = mCurrWeekNr + 1;
+                mHomeService.getWeek(new NetworkCallback<Shift[]>() {
+                    @Override
+                    public void onSuccess(Shift[] result) {
+                        mCurrWeek = result;
+                        updateDays();
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, "error in udating week");
+                    }
+                }, mCurrentUser.getUserId(), mCurrWeekNr);
             }
         });
 
@@ -199,71 +236,139 @@ public class HomeActivity extends AppCompatActivity {
         mLastWeek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: change week
+                mCurrWeekNr = mCurrWeekNr - 1;
+                mHomeService.getWeek(new NetworkCallback<Shift[]>() {
+                    @Override
+                    public void onSuccess(Shift[] result) {
+                        mCurrWeek = result;
+                        updateDays();
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, "error in udating week");
+                    }
+                }, mCurrentUser.getUserId(), mCurrWeekNr);
             }
         });
-
-        //TODO: get correct week
-        //TODO: write correct days in the linearLayouts
-        // filling monday
-        ((TextView) mMonday.getChildAt(0)).setText("Date");
-        ((TextView) mMonday.getChildAt(1)).setText("Time");
-        ((TextView) mMonday.getChildAt(2)).setText("Role");
     }
 
+    /**
+     * Breytir viku sem birt er í viðmóti eftir því hvað mCurrWeekNr er.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void updateDays() {
+        int[] idList = {R.id.monday,
+                R.id.tuesday,
+                R.id.wednesday,
+                R.id.thursday,
+                R.id.friday,
+                R.id.saturday,
+                R.id.sunday};
+
+        // Fer í gegnum alla vikuna og stillir hvern dag
+        for (int i = 0; i < 7; i++) {
+            Shift shift = mCurrWeek[i];
+            LinearLayout day = (LinearLayout) findViewById(idList[i]);
+
+            // Athugar hvort það sé vakt á tilteknum degi og birtir viðeigandi í viðmót
+            if (shift != null) {
+                LocalDateTime startTime = shift.getStartTime();
+                LocalDateTime endTime = shift.getEndTime();
+
+                ((TextView) day.getChildAt(0)).setText(mHomeService.prettyDate(
+                        startTime.getDayOfMonth(),
+                        startTime.getMonth().toString(),
+                        startTime.getYear()
+                ));
+                ((TextView) day.getChildAt(1)).setText(mHomeService.prettyTime(
+                        startTime.getHour(), startTime.getMinute(), endTime.getHour(), endTime.getMinute()
+                ));
+                ((TextView) day.getChildAt(2)).setText(shift.getRole());
+            } else {
+                LocalDateTime weekStart = mHomeService.findWeekStartDay(mCurrWeekNr);
+                LocalDateTime dayDateTime = weekStart.plusDays(i);
+
+                ((TextView) day.getChildAt(0)).setText(mHomeService.prettyDate(
+                        dayDateTime.getDayOfMonth(),
+                        dayDateTime.getMonth().toString(),
+                        dayDateTime.getYear()
+                ));
+                ((TextView) day.getChildAt(1)).setText("Engin vakt");
+                ((TextView) day.getChildAt(2)).setText("______");
+            }
+        }
+    }
+
+    /**
+     * Passar að rétt menubar sé sýnt miðað við hvort það sé almennur notandi eða admin innskráður.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        //TODO: make different menu for regular user and admin
-        inflater.inflate(R.menu.home_menu_admin, menu);
+
+        SharedPreferences sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        NetworkManager networkManager = NetworkManager.getInstance(this);
+        HomeService tmpHomeService = new HomeService(networkManager);
+
+        if (sharedPref.contains("userId")) {
+            tmpHomeService.getUserById(new NetworkCallback<User>() {
+                @Override
+                public void onSuccess(User result) {
+                    if (result.getAdmin() == true) {
+                        inflater.inflate(R.menu.home_menu_admin, menu);
+                    } else {
+                        inflater.inflate(R.menu.home_menu_user, menu);
+                    }
+                }
+
+                @Override
+                public void onFailure(String errorString) {
+                    Log.e(TAG, "Error in getting logged in user");
+                }
+            }, sharedPref.getInt("userId", -1));
+        }
         return true;
     }
 
+    /**
+     * onclick listener fyrir menubar-ið
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
+        //TODO: take out Shift and put inn shifts list view for admin
+        //TODO: make sure all navigation is correct
         switch (item.getItemId()) {
             case R.id.menu_notifications:
-                //TODO: changeActivity
                 Intent notificationIntent = new Intent(HomeActivity.this, NotificationsActivity.class);
                 startActivity(notificationIntent);
-                Toast.makeText(this, "notifications", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_shift:
-                //TODO: changeActivity
-                Intent shiftIntent = new Intent(HomeActivity.this, ShiftActivity.class);
-                startActivity(shiftIntent);
-                Toast.makeText(this, "Shift", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "TODO", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_make_shift:
-                //TODO: changeActivity
                 Intent makeShiftIntent = new Intent(HomeActivity.this, MakeShiftActivity.class);
                 startActivity(makeShiftIntent);
-                Toast.makeText(this, "Make Shift", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_user_list:
-                //TODO: changeActivity
                 Intent userListIntent = new Intent(HomeActivity.this, UserListActivity.class);
                 startActivity(userListIntent);
-                Toast.makeText(this, "User List", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_user_info:
-                //TODO: changeActivity
                 Intent userInfoIntent = new Intent(HomeActivity.this, UserInfoActivity.class);
                 startActivity(userInfoIntent);
-                Toast.makeText(this, "My Info", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_make_user:
-                //TODO: changeActivity
                 Intent makeUserIntent = new Intent(HomeActivity.this, MakeUserActivity.class);
                 startActivity(makeUserIntent);
-                Toast.makeText(this, "Make New User", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_shiftexchange_list:
-                //TODO: changeActivity
                 Intent shiftexchangeListIntent = new Intent(HomeActivity.this, ShiftExchangeListActivity.class);
                 startActivity(shiftexchangeListIntent);
-                Toast.makeText(this, "Shift Exchange List", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_logout:
                 // Tek hér user úr session
@@ -273,24 +378,9 @@ public class HomeActivity extends AppCompatActivity {
                 editor.commit();
                 Intent logoutIntent = LoginActivity.newIntent(HomeActivity.this);
                 startActivity(logoutIntent);
-                Toast.makeText(this, "Log out", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void getMe() {
-        NetworkManager networkManager = NetworkManager.getInstance(this);
-        networkManager.GET(new NetworkCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.d(TAG, "GET me: " + result);
-            }
-
-            @Override
-            public void onFailure(String errorString) {
-                Log.e(TAG, "GET me: " + errorString);
-            }
-        }, "users/me");
-    }
 }
