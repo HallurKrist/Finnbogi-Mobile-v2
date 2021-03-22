@@ -12,3 +12,5 @@ login virkni er alveg tilbúin.
 home virkni er að mestu leiti tilbúin, erum búnir að reyna að merkja það sem er eftir með TODO skilaboðum.  
 shift virkni er alveg tilbúin.  
 make shift virkni er ekki alveg tilbúin, ekki er settur réttur notandi á vaktina þegar hún er gerð.  
+
+Við erum enn að smíða og fínpússa bakendann en hann er https://finnbogi-api.herokuapp.com/ 
