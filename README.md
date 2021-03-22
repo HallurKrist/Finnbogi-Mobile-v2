@@ -1,6 +1,6 @@
 # Finnbogi-Mobile-v2
 
-Í þessu verkefni erum við að míða vaktaskipulegs kerfi þar sem verið er að halda utan um vaktir starfsmanna.  
+Í þessu verkefni erum við að smíða vaktaskipulegs kerfi þar sem verið er að halda utan um vaktir starfsmanna.  
 
 Í code review vikunni þá náðum við að klára login, home, shift og make shift virknina að mestu leiti.  
 
