@@ -14,3 +14,8 @@ shift virkni er alveg tilbúin.
 make shift virkni er ekki alveg tilbúin, ekki er settur réttur notandi á vaktina þegar hún er gerð.  
 
 Við erum enn að smíða og fínpússa bakendann en hann er https://finnbogi-api.herokuapp.com/ 
+
+Hópmeðlimir:  
+Árni Elmar Hrafnsson - aeh25@hi.is  
+Guðmundur Garðar Árnason - gga3@hi.is  
+Hallur Kristinn Hallsson - hkh32@hi.is  
