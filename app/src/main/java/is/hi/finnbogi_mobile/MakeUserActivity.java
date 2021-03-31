@@ -112,11 +112,8 @@ public class MakeUserActivity extends AppCompatActivity {
                         Log.d(TAG, "User that was created: " + result.getUserName());
                         Log.d(TAG, "UserInfoId: " + result.getUserInfoId());
                         Toast.makeText(MakeUserActivity.this, "Tókst að búa til user", Toast.LENGTH_SHORT).show();
-                        mEditTextUserName.setText("");
-                        mEditTextPassword.setText("");
-                        mEditTextSsn.setText("");
-                        mCheckBoxAdmin.setChecked(false);
-                        mIsAdmin = false;
+                        Intent intent = UserInfoActivity.newIntent(MakeUserActivity.this, result.getUserInfoId());
+                        startActivity(intent);
                     }
 
                     @Override

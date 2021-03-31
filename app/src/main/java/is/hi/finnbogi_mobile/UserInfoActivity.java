@@ -18,13 +18,13 @@ import is.hi.finnbogi_mobile.services.UserInfoService;
 public class UserInfoActivity extends AppCompatActivity {
 
     private static final String TAG = "UserInfoActivity";
-    private static final String USERID_KEY = "is.hi.finnbogi_mobile.userId";
+    private static final String USERINFOID_KEY = "is.hi.finnbogi_mobile.userId";
 
     UserInfoService mUserInfoService; //TODO: make UserInfoService class
 
-    public static Intent newIntent(Context packageContext, int userId) {
-        Intent intent = new Intent(packageContext, ShiftActivity.class);
-        intent.putExtra(USERID_KEY, userId);
+    public static Intent newIntent(Context packageContext, int userInfoId) {
+        Intent intent = new Intent(packageContext, UserInfoActivity.class);
+        intent.putExtra(USERINFOID_KEY, userInfoId);
         return intent;
     }
 
@@ -36,7 +36,7 @@ public class UserInfoActivity extends AppCompatActivity {
         NetworkManager networkManager = NetworkManager.getInstance(this);
         mUserInfoService = new UserInfoService(networkManager);
 
-        int userId = getIntent().getIntExtra(USERID_KEY, -1);
+        int userId = getIntent().getIntExtra(USERINFOID_KEY, -1);
 
         mUserInfoService.getUserInfoByUserId(
                 new NetworkCallback<UserInfo>(
