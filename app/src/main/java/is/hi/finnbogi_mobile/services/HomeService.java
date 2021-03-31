@@ -103,8 +103,36 @@ public class HomeService {
                 for (int i = 0; i < shifts.length; i++) {
                     LocalDateTime shiftDate = shifts[i].getStartTime();
                     if ((weekstart.isBefore(shiftDate) || weekstart.isEqual(shiftDate)) && weekstart.plusDays(7).isAfter(shiftDate)) {
-                        int dayOfWeek = shiftDate.getDayOfMonth() - weekstart.getDayOfMonth();
-                        week[dayOfWeek] = shifts[i];
+                        DayOfWeek dayOfWeek = shiftDate.getDayOfWeek();
+
+                        int dayOfWeekInt;
+                        switch(dayOfWeek) {
+                            case MONDAY:
+                                dayOfWeekInt = 0;
+                                break;
+                            case TUESDAY:
+                                dayOfWeekInt = 1;
+                                break;
+                            case WEDNESDAY:
+                                dayOfWeekInt = 2;
+                                break;
+                            case THURSDAY:
+                                dayOfWeekInt = 3;
+                                break;
+                            case FRIDAY:
+                                dayOfWeekInt = 4;
+                                break;
+                            case SATURDAY:
+                                dayOfWeekInt = 5;
+                                break;
+                            case SUNDAY:
+                                dayOfWeekInt = 6;
+                                break;
+                            default:
+                                dayOfWeekInt = -1;
+                        }
+
+                        week[dayOfWeekInt] = shifts[i];
                     }
                 }
                 callback.onSuccess(week);
