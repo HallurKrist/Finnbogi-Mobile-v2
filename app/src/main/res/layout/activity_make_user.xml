@@ -29,49 +29,36 @@
         android:layout_gravity="center"
         android:orientation="vertical"
         android:layout_weight="0.7"
-        android:gravity="center">
+        android:gravity="center_vertical">
 
         <EditText
-            android:id="@+id/user_make_firstname"
+            android:id="@+id/user_make_userName"
             android:layout_width="200dp"
             android:layout_height="30dp"
-            android:hint="Fornafn"
+            android:hint="Notendanafn"
+            android:background="@drawable/black_white_border"
+            android:gravity="center"
+            android:layout_marginVertical="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/make_user_role"
+            android:layout_marginTop="8dp"/>
+
+        <Spinner
+            android:id="@+id/user_make_role"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
             android:background="@drawable/black_white_border"
             android:gravity="center"
             android:layout_marginVertical="8dp"/>
 
         <EditText
-            android:id="@+id/user_make_surname"
+            android:id="@+id/user_make_password"
             android:layout_width="200dp"
             android:layout_height="30dp"
-            android:hint="Eftirnafn"
-            android:background="@drawable/black_white_border"
-            android:gravity="center"
-            android:layout_marginVertical="8dp"/>
-
-        <EditText
-            android:id="@+id/user_make_address"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:hint="Heimilisfang"
-            android:background="@drawable/black_white_border"
-            android:gravity="center"
-            android:layout_marginVertical="8dp"/>
-
-        <EditText
-            android:id="@+id/user_make_phone"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:hint="Sími"
-            android:background="@drawable/black_white_border"
-            android:gravity="center"
-            android:layout_marginVertical="8dp"/>
-
-        <EditText
-            android:id="@+id/user_make_email"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:hint="Netfang"
+            android:hint="Lykilorð"
             android:background="@drawable/black_white_border"
             android:gravity="center"
             android:layout_marginVertical="8dp"/>
@@ -84,6 +71,28 @@
             android:background="@drawable/black_white_border"
             android:gravity="center"
             android:layout_marginVertical="8dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:textSize="16dp"
+                android:text="@string/make_user_admin"/>
+
+            <CheckBox
+                android:id="@+id/user_make_admin"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:layout_marginVertical="8dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -31,4 +31,6 @@
     <string name="shiftexchange_get_rid_off">Vill losna við vakt</string>
     <string name="shiftexchange_offer">Bjóða</string>
     <string name="shiftexhange_to_offer">Vakt til að bjóða</string>
+    <string name="make_user_role">Starfsheiti:</string>
+    <string name="make_user_admin">Admin:</string>
 </resources>
