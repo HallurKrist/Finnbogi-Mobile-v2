@@ -97,6 +97,17 @@ public class MakeShiftService {
                 );
 
                 //TODO: make network patch call to set userId on shift in API
+                mNetworkManager.PATCH(new NetworkCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Log.d(TAG, "Successfully put userId on shift in DB");
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, "Error when putting userId on shift");
+                    }
+                }, new String[] {"shifts", ""+shiftCreated.getShiftId(), "set", ""+userId}, new String[][] {});
 
                 callback.onSuccess(shiftCreated);
             }
