@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -20,10 +24,20 @@ public class UserInfoActivity extends AppCompatActivity {
     private static final String TAG = "UserInfoActivity";
     private static final String USERID_KEY = "is.hi.finnbogi_mobile.userId";
 
-    UserInfoService mUserInfoService; //TODO: make UserInfoService class
+    private EditText mFirstName;
+    private EditText mSurName;
+    private EditText mAddress;
+    private EditText mPhoneNr;
+    private EditText mEmail;
+    private TextView mSSN;
+    private Button mSubmitChanges;
+
+    private int mUserId;
+
+    UserInfoService mUserInfoService;
 
     public static Intent newIntent(Context packageContext, int userId) {
-        Intent intent = new Intent(packageContext, ShiftActivity.class);
+        Intent intent = new Intent(packageContext, UserInfoActivity.class);
         intent.putExtra(USERID_KEY, userId);
         return intent;
     }
@@ -36,15 +50,32 @@ public class UserInfoActivity extends AppCompatActivity {
         NetworkManager networkManager = NetworkManager.getInstance(this);
         mUserInfoService = new UserInfoService(networkManager);
 
-        int userId = getIntent().getIntExtra(USERID_KEY, -1);
+        mFirstName = (EditText) findViewById(R.id.user_info_firstname);
+        mSurName = (EditText) findViewById(R.id.user_info_surname);
+        mAddress = (EditText) findViewById(R.id.user_info_address);
+        mPhoneNr = (EditText) findViewById(R.id.user_info_phone);
+        mEmail = (EditText) findViewById(R.id.user_info_email);
+        mSSN = (TextView) findViewById(R.id.user_info_ssn);
+        mSubmitChanges = (Button) findViewById(R.id.user_info_applyChanges);
+        mSubmitChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changesSubmited();
+            }
+        });
+
+        mUserId = getIntent().getIntExtra(USERID_KEY, -1);
 
         mUserInfoService.getUserInfoByUserId(
-                new NetworkCallback<UserInfo>(
-
-                ) {
+                new NetworkCallback<UserInfo>() {
                     @Override
                     public void onSuccess(UserInfo result) {
-                        //TODO: put userinfo into view
+                        mFirstName.setText(result.getFirstName());
+                        mSurName.setText(result.getSurName());
+                        mAddress.setText(result.getAddress());
+                        mPhoneNr.setText(result.getPhoneNumber());
+                        mEmail.setText(result.getEmail());
+                        mSSN.setText(result.getSSN());
                     }
 
                     @Override
@@ -52,7 +83,20 @@ public class UserInfoActivity extends AppCompatActivity {
                         Log.e(TAG, "Error when getting userinfo for user");
                     }
                 },
-                userId
+                mUserId
         );
+    }
+
+    private void changesSubmited() {
+        String FN = mFirstName.getText().toString();
+        String SN = mSurName.getText().toString();
+        String ADD = mAddress.getText().toString();
+        String PH = mPhoneNr.getText().toString();
+        String EM = mEmail.getText().toString();
+        String SSN = mSSN.getText().toString();
+
+        UserInfo info = new UserInfo(mUserId, FN, SN, ADD, PH, SSN, null, EM);
+
+        mUserInfoService.patchUserInfo(info);
     }
 }
