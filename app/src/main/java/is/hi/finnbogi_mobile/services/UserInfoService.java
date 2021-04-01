@@ -53,7 +53,18 @@ public class UserInfoService {
 
     public void patchUserInfo(UserInfo info) {
         // TODO: implement this class
-        // mNetworkManager.Patch()
+        mNetworkManager.PATCH(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                String tmp = result;
+                // TODO: kl'ara fall
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+
+            }
+        }, new String[] {"users", "info", "1"}, new String[][] {{"firstname", "tester"}});
 
     }
 }
