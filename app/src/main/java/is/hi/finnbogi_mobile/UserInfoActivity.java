@@ -22,7 +22,7 @@ import is.hi.finnbogi_mobile.services.UserInfoService;
 public class UserInfoActivity extends AppCompatActivity {
 
     private static final String TAG = "UserInfoActivity";
-    private static final String USERINFOID_KEY = "is.hi.finnbogi_mobile.userId";
+    private static final String USERID_KEY = "is.hi.finnbogi_mobile.userId";
 
     private EditText mFirstName;
     private EditText mSurName;
