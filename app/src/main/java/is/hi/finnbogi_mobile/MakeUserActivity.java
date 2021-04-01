@@ -21,7 +21,7 @@ import is.hi.finnbogi_mobile.services.MakeUserService;
 
 public class MakeUserActivity extends AppCompatActivity {
 
-    private static final String TAG = "MakeShiftActivity";
+    private static final String TAG = "MakeUserActivity";
 
     private EditText mEditTextUserName;
     private Spinner mSpinnerRole;
@@ -110,9 +110,8 @@ public class MakeUserActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(User result) {
                         Log.d(TAG, "User that was created: " + result.getUserName());
-                        Log.d(TAG, "UserInfoId: " + result.getUserInfoId());
                         Toast.makeText(MakeUserActivity.this, "Tókst að búa til user", Toast.LENGTH_SHORT).show();
-                        Intent intent = UserInfoActivity.newIntent(MakeUserActivity.this, result.getUserInfoId());
+                        Intent intent = UserInfoActivity.newIntent(MakeUserActivity.this, result.getUserId());
                         startActivity(intent);
                     }
 

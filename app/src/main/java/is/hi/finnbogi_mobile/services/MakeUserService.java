@@ -10,7 +10,7 @@ import is.hi.finnbogi_mobile.networking.NetworkManager;
 
 public class MakeUserService {
 
-    private static final String TAG = "MakeShiftService";
+    private static final String TAG = "MakeUserService";
 
     private NetworkManager mNetworkManager;
 
