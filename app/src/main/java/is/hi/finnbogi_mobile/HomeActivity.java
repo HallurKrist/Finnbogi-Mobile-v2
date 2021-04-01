@@ -359,7 +359,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(userListIntent);
                 return true;
             case R.id.menu_user_info:
-                Intent userInfoIntent = new Intent(HomeActivity.this, UserInfoActivity.class);
+                Intent userInfoIntent = UserInfoActivity.newIntent(HomeActivity.this, mCurrentUser.getUserId());
                 startActivity(userInfoIntent);
                 return true;
             case R.id.menu_make_user:

@@ -30,7 +30,9 @@ import java.io.UnsupportedEncodingException;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
@@ -63,8 +65,6 @@ public class NetworkManager {
         }
         return mQueue;
     }
-
-    //TODO: hreinsa til föll
 
     /**
      * Fall sem gerir Get request á path og skilar streng response
@@ -148,7 +148,6 @@ public class NetworkManager {
             public String getBodyContentType() {
                 return "application/x-www-form-urlencoded; charset=utf-8";
             }
-
             @Override
             public byte[] getBody() throws AuthFailureError {
                 try {
@@ -158,7 +157,6 @@ public class NetworkManager {
                     return null;
                 }
             }
-
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 String responseString = "";
@@ -176,146 +174,75 @@ public class NetworkManager {
         mQueue.add(request);
     }
 
-    /**
-     * Network kall til að reyna að innskrá notanda. Býr til User hlut ef það gekk.
-     *
-     * @param callback - fall sem tekur við þegar network kall er búið
-     * @param path - url á endpoint fyrir server kall
-     * @param userName - notendanafn þess sem verið er að reyna að innskrá
-     * @param password - lykilorð þess sem verið er að reyna að innskrá
-     */
-    public void loginPost(final NetworkCallback<User> callback, String path, String userName, String password) {
-        Log.d(TAG, "inn í login network kalli: ");
-        String url = Uri.parse(BASE_URL + "users")
-                .buildUpon()
-                .appendPath(path)
-                .build().toString();
+    public void PATCH(final NetworkCallback<String> callback, String[] path, String[][] requestBody){
 
-        Log.d(TAG, "url: " + url);
-
-        JSONObject postData = new JSONObject();
-        try {
-            postData.put("username", userName);
-            postData.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        // Make path
+        Uri.Builder urlBuilder = Uri.parse(BASE_URL)
+                .buildUpon();
+        for (int i = 0; i < path.length; i++) {
+            urlBuilder.appendPath(path[i]);
         }
+        String url = urlBuilder.build().toString();
 
-        Log.d(TAG, postData.toString());
+        // Make correct request body ( key1=value1&key2=value2 ... )
+        String requestBodyString = null;
+        if (requestBody.length != 0) {
+            requestBodyString = "";
+            for (int i = 0; i < requestBody.length; i++) {
+                if (i == 0) {
+                    requestBodyString = requestBodyString + requestBody[i][0] + "=" + requestBody[i][1];
+                } else {
+                    requestBodyString = requestBodyString + "&" + requestBody[i][0] + "=" + requestBody[i][1];
+                }
+            }
+        }
+        String finalRequestBodyString = requestBodyString;
+        Log.d(TAG, "request body string: " + finalRequestBodyString);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, url, postData,
-                new Response.Listener<JSONObject>() {
+        // Make patch request and send String response back
+        StringRequest request = new StringRequest(
+                Request.Method.PATCH, url, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
-                Log.d(TAG, "gekk upp að logga inn " + response.toString());
-                Gson gson = new Gson();
-                User user = gson.fromJson(String.valueOf(response), User.class);
-                callback.onSuccess(user);
+            public void onResponse(String response) {
+                Log.d(TAG, "onResponse: " + response);;
+                callback.onSuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "gekk ekki upp að logga inn ");
-                error.printStackTrace();
                 callback.onFailure(error.toString());
             }
-        });
-
-        mQueue.add(jsonObjectRequest);
-    }
-
-    /**
-     * Network kall til þess að ná í alla users.
-     *
-     * @param callback - fall sem tekur við þegar network kall er búið
-     * @param path - url á endpoint fyrir server kall
-     */
-    public void getUsers(final NetworkCallback<List<User>> callback, String path) {
-        Log.d(TAG, "inn í getUsers network kalli: ");
-        String url = Uri.parse(BASE_URL)
-                .buildUpon()
-                .appendPath(path)
-                .build().toString();
-
-        Log.d(TAG, "url: " + url);
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+        }){
             @Override
-            public void onResponse(JSONArray response) {
-                Log.d(TAG, "gekk upp að sækja users " + response.toString());
-                Gson gson = new Gson();
-                Type listType = new TypeToken<List<User>>(){}.getType();
-                List<User> allUsers = gson.fromJson(String.valueOf(response), listType);
-                callback.onSuccess(allUsers);
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=utf-8";
             }
-        }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "gekk ekki upp að sækja users ");
-                error.printStackTrace();
-                callback.onFailure(error.toString());
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return finalRequestBodyString == null ? null : finalRequestBodyString.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", finalRequestBodyString, "utf-8");
+                    return null;
+                }
             }
-        });
-
-        mQueue.add(jsonArrayRequest);
-    }
-
-    /**
-     * Network kall til þess að búa til nýja vakt.
-     *
-     * @param callback - fall sem tekur við þegar network kall er búið
-     * @param path - url á endpoint fyrir server kall
-     * @param startTime - upphafstími fyrir vakt
-     * @param endTime - lokatími fyrir vakt
-     * @param userId - userId fyrir þann sem á að vinna vaktina
-     */
-    public void createShift(final NetworkCallback<Shift> callback, String path, LocalDateTime startTime, LocalDateTime endTime, int userId) {
-        Log.d(TAG, "inn í getUsers network kalli: ");
-        String url = Uri.parse(BASE_URL)
-                .buildUpon()
-                .appendPath(path)
-                .build().toString();
-
-        Log.d(TAG, "url: " + url);
-
-        JSONObject postData = new JSONObject();
-        try {
-            postData.put("startTime", startTime);
-            postData.put("endTime", endTime);
-            postData.put("userId", userId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.d(TAG, postData.toString());
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, url, postData,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "gekk upp að búa til vakt " + response.toString());
-                        Gson gson = new Gson();
-                        Shift shiftCreated = gson.fromJson(String.valueOf(response), Shift.class);
-                        callback.onSuccess(shiftCreated);
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                String responseString = "";
+                if (response != null) {
+                    try {
+                        responseString = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "gekk ekki upp að búa til vakt ");
-                error.printStackTrace();
-                callback.onFailure(error.toString());
+                }
+                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
             }
-        });
 
-        mQueue.add(jsonObjectRequest);
-    }
 
-    public void clearCache() {
-        mQueue.getCache().clear();
+        };
+        mQueue.add(request);
     }
 
 }
