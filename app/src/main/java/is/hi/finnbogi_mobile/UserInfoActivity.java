@@ -22,7 +22,7 @@ import is.hi.finnbogi_mobile.services.UserInfoService;
 public class UserInfoActivity extends AppCompatActivity {
 
     private static final String TAG = "UserInfoActivity";
-    private static final String USERID_KEY = "is.hi.finnbogi_mobile.userId";
+    private static final String USERINFOID_KEY = "is.hi.finnbogi_mobile.userId";
 
     private EditText mFirstName;
     private EditText mSurName;
@@ -49,7 +49,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
         NetworkManager networkManager = NetworkManager.getInstance(this);
         mUserInfoService = new UserInfoService(networkManager);
-
+      
         mFirstName = (EditText) findViewById(R.id.user_info_firstname);
         mSurName = (EditText) findViewById(R.id.user_info_surname);
         mAddress = (EditText) findViewById(R.id.user_info_address);
