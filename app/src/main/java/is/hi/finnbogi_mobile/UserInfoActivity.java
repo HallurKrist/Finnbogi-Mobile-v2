@@ -65,7 +65,12 @@ public class UserInfoActivity extends AppCompatActivity {
         });
 
         mUserId = getIntent().getIntExtra(USERID_KEY, -1);
+        Log.d(TAG, "userId is " + mUserId);
 
+        loadUserInfo();
+    }
+
+    private void loadUserInfo() {
         mUserInfoService.getUserInfoByUserId(
                 new NetworkCallback<UserInfo>() {
                     @Override

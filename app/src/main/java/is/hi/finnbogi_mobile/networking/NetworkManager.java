@@ -199,7 +199,7 @@ public class NetworkManager {
         String finalRequestBodyString = requestBodyString;
         Log.d(TAG, "request body string: " + finalRequestBodyString);
 
-        // Make post request and send String response back
+        // Make patch request and send String response back
         StringRequest request = new StringRequest(
                 Request.Method.PATCH, url, new Response.Listener<String>() {
             @Override

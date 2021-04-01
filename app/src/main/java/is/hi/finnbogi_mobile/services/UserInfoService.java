@@ -25,6 +25,8 @@ public class UserInfoService {
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Log.d(TAG, result);
+
                 Gson gson = new Gson();
                 final Object json = gson.fromJson(result, Object.class);
                 LinkedTreeMap innerJson = (LinkedTreeMap)((ArrayList)json).get(0);
@@ -56,15 +58,21 @@ public class UserInfoService {
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                String tmp = result;
-                // TODO: kl'ara fall
+                Log.d(TAG, "patch request success");
             }
 
             @Override
             public void onFailure(String errorString) {
-
+                Log.e(TAG, "Error patching user info");
             }
-        }, new String[] {"users", "info", "1"}, new String[][] {{"firstname", "tester"}});
+        }, new String[] {"users", "info", ""+info.getUserInfoId()},
+                new String[][] {
+                    {"firstname", ""+info.getFirstName()},
+                    {"surname", ""+info.getSurName()},
+                    {"address", ""+info.getAddress()},
+                    {"email", ""+info.getEmail()},
+                    {"phonenumber", ""+info.getPhoneNumber()}
+                });
 
     }
 }
