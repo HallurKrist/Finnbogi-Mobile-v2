@@ -96,7 +96,6 @@ public class MakeShiftService {
                         ((String)((LinkedTreeMap)json).get("role"))
                 );
 
-                //TODO: make network patch call to set userId on shift in API
                 mNetworkManager.PATCH(new NetworkCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
