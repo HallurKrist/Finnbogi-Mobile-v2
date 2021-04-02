@@ -52,6 +52,31 @@ public class NotificationsService {
      * Býr til path og kallar á network fall.
      *
      * @param callback - Fall sem tekur við þegar network kall er búið.
+     * @param notificationId - Id á notification.
+     */
+    public void getNotificationById(NetworkCallback<Notification> callback, int notificationId) {
+        Log.d(TAG, "næ í notification: " + notificationId);
+        mNetworkManager.GET(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, "Gson-a notification");
+                Gson gson = new Gson();
+                Notification notification = gson.fromJson(result, Notification.class);
+                callback.onSuccess(notification);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, "Villa við að ná í notification: " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"notifications", String.valueOf(notificationId)});
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     *
+     * @param callback - Fall sem tekur við þegar network kall er búið.
      * @param title - Titill á notification.
      * @param text - Skilaboð í notification.
      * @param userIds - Id á þeim notendum sem eiga að fá notification.
