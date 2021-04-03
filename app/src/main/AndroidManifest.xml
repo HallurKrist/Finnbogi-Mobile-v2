@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="is.hi.finnbogi_mobile">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinnbogiMobile">
-        <activity android:name=".ShiftExchangeListActivity"></activity>
+        <activity android:name=".OneNotificationActivity"></activity>
+        <activity android:name=".ShiftExchangeListActivity" />
         <activity android:name=".ShiftexchangeActivity" />
         <activity android:name=".MakeUserActivity" />
         <activity android:name=".UserInfoActivity" />
@@ -26,7 +29,5 @@
             </intent-filter>
         </activity>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

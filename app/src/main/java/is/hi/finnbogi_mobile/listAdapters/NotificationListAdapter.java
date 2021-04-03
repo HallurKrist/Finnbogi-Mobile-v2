@@ -13,29 +13,25 @@ public class NotificationListAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
     private final String[] title;
-    private final String[] dateTime;
     private final String[] message;
 
-    public NotificationListAdapter(Activity context, String[] title,String[] dateTime, String[] message) {
+    public NotificationListAdapter(Activity context, String[] title, String[] message) {
         super(context, R.layout.notification_list, title);
 
-        this.context=context;
-        this.title=title;
-        this.dateTime=dateTime;
-        this.message=message;
+        this.context = context;
+        this.title = title;
+        this.message = message;
 
     }
 
     public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.notification_list, null,true);
+        LayoutInflater inflater = context.getLayoutInflater();
+        View rowView = inflater.inflate(R.layout.notification_list, null,true);
 
         TextView titleText = (TextView) rowView.findViewById(R.id.notification_list_title);
-        TextView dateTimeText = (TextView) rowView.findViewById(R.id.notification_list_dateTime);
         TextView messageText = (TextView) rowView.findViewById(R.id.notification_list_message);
 
         titleText.setText(title[position]);
-        dateTimeText.setText(dateTime[position]);
         messageText.setText(message[position]);
 
         return rowView;
