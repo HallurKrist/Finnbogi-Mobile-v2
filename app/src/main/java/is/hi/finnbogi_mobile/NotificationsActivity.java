@@ -74,7 +74,6 @@ public class NotificationsActivity extends AppCompatActivity {
             }
         }, sharedPref.getInt("userId", -1));
 
-        // TODO: Viljum við geta klikkað á notification?
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
