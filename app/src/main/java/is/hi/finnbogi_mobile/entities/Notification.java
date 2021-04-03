@@ -10,7 +10,7 @@ public class Notification {
     private String mTitle;
     @SerializedName("text")
     private String mText;
-    @SerializedName("mRead")
+    @SerializedName("read")
     private Boolean mRead;
 
     /**
