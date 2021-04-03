@@ -14,11 +14,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+public class ShiftExchangeActivity extends AppCompatActivity {
 
-public class ShiftexchangeActivity extends AppCompatActivity {
-    //TODO: this class
-
-    private static final String TAG = "ShiftexchangeActivity";
+    private static final String TAG = "ShiftExchangeActivity";
 
     private ListView mList;
 

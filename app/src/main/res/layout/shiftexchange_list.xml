@@ -18,22 +18,13 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/shiftexchange_list_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Jón Jónsson"
-                android:layout_weight="1"
-                android:textSize="18dp"
-                android:gravity="left"/>
-
-            <TextView
                 android:id="@+id/shiftexchange_list_role"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Kokkur"
+                tools:text="Chef"
                 android:layout_weight="1"
                 android:textSize="18dp"
-                android:gravity="right"/>
+                android:gravity="left"/>
 
         </LinearLayout>
 
@@ -57,22 +48,13 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/shiftexchange_list_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="08:00 - 16:00"
-                android:layout_weight="1"
-                android:textSize="18dp"
-                android:gravity="left"/>
-
-            <TextView
                 android:id="@+id/shiftexchange_list_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Beðið staðfestingar"
                 android:layout_weight="1"
                 android:textSize="18dp"
-                android:gravity="right"/>
+                android:gravity="left"/>
 
         </LinearLayout>
 
