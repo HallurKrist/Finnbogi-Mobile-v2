@@ -3,6 +3,9 @@ package is.hi.finnbogi_mobile;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,17 +17,33 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import is.hi.finnbogi_mobile.networking.NetworkManager;
+import is.hi.finnbogi_mobile.services.ShiftExchangeService;
+
 public class ShiftExchangeActivity extends AppCompatActivity {
 
     private static final String TAG = "ShiftExchangeActivity";
+    private static final String SHIFT_EXCHANGE_KEY = "currentShiftExchange";
+    private static final String MY_PREFERENCES = "Session";
 
     private ListView mList;
+
+    public static Intent newIntent(Context packageContext, int shiftExchangeId) {
+        Intent intent = new Intent(packageContext, ShiftExchangeActivity.class);
+        intent.putExtra(SHIFT_EXCHANGE_KEY, shiftExchangeId);
+        return intent;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shiftexchange);
+
+        NetworkManager networkManager = NetworkManager.getInstance(this);
+        ShiftExchangeService shiftExchangeService = new ShiftExchangeService(networkManager);
+
+        SharedPreferences sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
 
         Log.d(TAG, "onCreate: creating");
         //TODO: check what state the shiftexchange is in through the intent, show correct view for that state.

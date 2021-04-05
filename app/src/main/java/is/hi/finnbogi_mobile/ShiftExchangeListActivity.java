@@ -3,9 +3,7 @@ package is.hi.finnbogi_mobile;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,29 +12,26 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.ShiftExchange;
-import is.hi.finnbogi_mobile.entities.UserInfo;
-import is.hi.finnbogi_mobile.listAdapters.ShiftExchangeListAdapter;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.ShiftExchangeService;
-import is.hi.finnbogi_mobile.services.ShiftService;
-import is.hi.finnbogi_mobile.services.UserInfoService;
 
 public class ShiftExchangeListActivity extends AppCompatActivity {
 
     private static final String TAG = "ShiftExchangesActivity";
-    private static final String MY_PREFERENCES = "Session";
 
     private ListView mList;
 
     private List<ShiftExchange> mShiftExchangesList;
-    private List<Shift> mShiftsUpForGrabs;
+    private List<Shift> mShifts;
+    private List<String> roles = new ArrayList<>();
+    private List<String> dates = new ArrayList<>();
+    private List<String> statuses = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -46,27 +41,35 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
 
         mList = (ListView) findViewById(R.id.shiftexchange_list);
 
-        SharedPreferences sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
-
         NetworkManager networkManager = NetworkManager.getInstance(this);
         ShiftExchangeService shiftExchangeService = new ShiftExchangeService(networkManager);
-        ShiftService shiftService = new ShiftService(networkManager);
-        UserInfoService userInfoService = new UserInfoService(networkManager);
 
-        // Get all shiftexchanges up for grabs and show them
         shiftExchangeService.getAllShiftExchanges(new NetworkCallback<List<ShiftExchange>>() {
             @Override
             public void onSuccess(List<ShiftExchange> result) {
                 mShiftExchangesList = result;
-                Log.d(TAG, "Gekk að ná í lista af shiftexchanges: " + String.valueOf(mShiftExchangesList));
+                Log.d(TAG, "Gekk að ná í lista af shiftExchanges: " + String.valueOf(mShiftExchangesList));
+                int n = mShiftExchangesList.size();
+                String[] role = new String[n];
+                String[] date = new String[n];
+                String[] status = new String[n];
+
+                // TODO: Kalla á network fall til þess að sækja allar vaktir úr mShiftExchangesList
+                //       og fylla svo role, date og status
+
+                /*
+                ShiftExchangeListAdapter adapter = new ShiftExchangeListAdapter(
+                        ShiftExchangeListActivity.this, role, date, status);
+                mList.setAdapter(adapter);
+
+                 */
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa við að ná í shiftexchanges: " + errorString);
+                Log.e(TAG, "Villa að ná í lista af shiftExchanges: " + errorString);
             }
         });
-
 
         /*
         //mock list
@@ -92,26 +95,13 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
          */
 
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0) {
-                    //code specific to first list item
-                    Toast.makeText(getApplicationContext(),"Place Your First Option Code",Toast.LENGTH_SHORT).show();
-                    Intent shiftexchangeIntent = new Intent(ShiftExchangeListActivity.this, ShiftExchangeActivity.class);
-                    startActivity(shiftexchangeIntent);
-                }
-
-                else if(position == 1) {
-                    //code specific to 2nd list item
-                    Toast.makeText(getApplicationContext(),"Place Your Second Option Code",Toast.LENGTH_SHORT).show();
-                }
-
-                else if(position == 2) {
-
-                    Toast.makeText(getApplicationContext(),"Place Your Third Option Code",Toast.LENGTH_SHORT).show();
-                }
-
+                Log.d(TAG, "ShiftExchange nr. " + position + " í lista");
+                ShiftExchange shiftExchange = mShiftExchangesList.get(position);
+                Log.d(TAG, "id: " + shiftExchange.getShiftExchangeId());
+                Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId());
+                startActivity(intent);
             }
         });
     }
