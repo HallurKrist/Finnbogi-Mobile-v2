@@ -46,7 +46,7 @@ public class ShiftExchangeService {
                 Log.d(TAG, "Gson-a lista af ShiftExchange");
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<ShiftExchange>>(){}.getType();
-                List<ShiftExchange> allShiftExchanges = gson.fromJson(String.valueOf(result), listType);
+                List<ShiftExchange> allShiftExchanges = gson.fromJson(result, listType);
                 callback.onSuccess(allShiftExchanges);
             }
 
@@ -56,5 +56,48 @@ public class ShiftExchangeService {
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges"});
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void getShiftsForExchange(NetworkCallback<List<Shift>> callback) {
+        Log.d(TAG, "næ í öll shifts for exchange");
+        mNetworkManager.GET(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, "Gson-a lista af shifts");
+                Gson gson = new Gson();
+                final ArrayList<?> jsonArray = gson.fromJson(result, ArrayList.class);
+
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+                List<Shift> shifts = new ArrayList<>(jsonArray.size());
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    int shiftId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("id")).intValue();
+
+                    LocalDateTime startTime = null;
+                    LocalDateTime endTime = null;
+                    try {
+                        Date parsedStart = inputFormat.parse((String)((LinkedTreeMap)jsonArray.get(i)).get("starttime"));
+                        startTime = parsedStart.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                        Date parsedEnd = inputFormat.parse((String)((LinkedTreeMap)jsonArray.get(i)).get("endtime"));
+                        endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "Could not parse dates from DB");
+                    }
+
+                    int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
+                    String role = ((String)((LinkedTreeMap)jsonArray.get(i)).get("role"));
+                    shifts.add(new Shift(shiftId, startTime, endTime, userId, role));
+                }
+                callback.onSuccess(shifts);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, "Gekk ekki að ná í öll shifts for exchange: " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"shiftexchanges", "shiftsforexchange"});
     }
 }

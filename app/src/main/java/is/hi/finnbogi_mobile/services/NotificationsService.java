@@ -36,7 +36,7 @@ public class NotificationsService {
                 Log.d(TAG, "Gson-a lista af notifications");
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<Notification>>(){}.getType();
-                List<Notification> allNotifications = gson.fromJson(String.valueOf(result), listType);
+                List<Notification> allNotifications = gson.fromJson(result, listType);
                 callback.onSuccess(allNotifications);
             }
 

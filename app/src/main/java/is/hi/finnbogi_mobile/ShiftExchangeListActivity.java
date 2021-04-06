@@ -12,11 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.ShiftExchange;
+import is.hi.finnbogi_mobile.listAdapters.ShiftExchangeListAdapter;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.ShiftExchangeService;
@@ -49,20 +51,32 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
             public void onSuccess(List<ShiftExchange> result) {
                 mShiftExchangesList = result;
                 Log.d(TAG, "Gekk að ná í lista af shiftExchanges: " + String.valueOf(mShiftExchangesList));
-                int n = mShiftExchangesList.size();
-                String[] role = new String[n];
-                String[] date = new String[n];
-                String[] status = new String[n];
+                Log.d(TAG, "Næ í lista af shifts");
+                shiftExchangeService.getShiftsForExchange(new NetworkCallback<List<Shift>>() {
+                    @Override
+                    public void onSuccess(List<Shift> result) {
+                        mShifts = result;
+                        Log.d(TAG, "Gekk að ná í lista af shifts for exchange: " + String.valueOf(mShifts));
+                        int n = mShiftExchangesList.size();
+                        String[] role = new String[n];
+                        String[] date = new String[n];
+                        String[] status = new String[n];
+                        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm");
+                        for (int i = 0; i < n; i++) {
+                            role[i] = mShifts.get(i).getRole();
+                            date[i] = mShifts.get(i).getStartTime().format(dateFormat) + " - " + mShifts.get(i).getEndTime().format(dateFormat);
+                            status[i] = mShiftExchangesList.get(i).getStatus();
+                        }
+                        ShiftExchangeListAdapter adapter = new ShiftExchangeListAdapter(
+                                ShiftExchangeListActivity.this, role, date, status);
+                        mList.setAdapter(adapter);
+                    }
 
-                // TODO: Kalla á network fall til þess að sækja allar vaktir úr mShiftExchangesList
-                //       og fylla svo role, date og status
-
-                /*
-                ShiftExchangeListAdapter adapter = new ShiftExchangeListAdapter(
-                        ShiftExchangeListActivity.this, role, date, status);
-                mList.setAdapter(adapter);
-
-                 */
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, "Villa að ná í lista af shifts for exchange: " + errorString);
+                    }
+                });
             }
 
             @Override
