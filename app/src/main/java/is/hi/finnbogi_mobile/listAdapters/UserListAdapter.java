@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import is.hi.finnbogi_mobile.R;
@@ -33,6 +34,8 @@ public class UserListAdapter extends ArrayAdapter<String> {
 
         nameText.setText(mName[position]);
         roleText.setText(mRole[position]);
+
+        Button delete = (Button) rowView.findViewById()
 
         return rowView;
     };
