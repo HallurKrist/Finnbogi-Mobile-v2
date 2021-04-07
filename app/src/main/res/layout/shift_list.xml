@@ -11,47 +11,41 @@
         android:layout_marginTop="8dp">
 
         <LinearLayout
-            android:id="@+id/user_list_user"
+            android:id="@+id/shift_list_shift"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/week_border"
             android:layout_weight="8"
-            android:layout_margin="4dp">
+            android:layout_margin="4dp"
+            android:padding="8dp"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/user_list_name"
+                android:id="@+id/shift_list_datetime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="name"
+                tools:text="21/01 - 17:30-21:00"
                 android:textSize="20dp"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:layout_marginHorizontal="8dp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
             <TextView
-                android:id="@+id/user_list_role"
+                android:id="@+id/shift_list_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Waiter"
-                android:textSize="20dp"
-                android:gravity="right"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="8dp"/>
+                tools:text="UpForGrabs"
+                android:textSize="20dp"/>
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/user_list_delete"
+            android:id="@+id/shift_list_delete"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:text="@string/user_list_delete"
-            android:layout_marginHorizontal="8dp"/>
+            android:layout_marginHorizontal="8dp"
+            android:textSize="20dp"/>
 
     </LinearLayout>
-
-
-
-
+    
 </LinearLayout>
