@@ -33,4 +33,5 @@
     <string name="shiftexhange_to_offer">Vakt til að bjóða</string>
     <string name="make_user_role">Starfsheiti:</string>
     <string name="make_user_admin">Admin:</string>
+    <string name="user_list_delete">Eyða</string>
 </resources>
