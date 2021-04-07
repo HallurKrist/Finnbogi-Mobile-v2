@@ -10,13 +10,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import is.hi.finnbogi_mobile.entities.Shift;
+import is.hi.finnbogi_mobile.entities.ShiftExchange;
+import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.ShiftExchangeService;
 
@@ -26,8 +32,25 @@ public class ShiftExchangeActivity extends AppCompatActivity {
     private static final String SHIFT_EXCHANGE_KEY = "currentShiftExchange";
     private static final String MY_PREFERENCES = "Session";
 
-    private ListView mList;
+    private TextView mTextViewShiftRole;
+    private TextView mTextViewShiftDate;
+    private TextView mTextViewShiftTime;
+    private Spinner mSpinnerShiftsToOffer;
+    private TextView mTextViewSpecializedMessage;
+    private Button mButton;
 
+    private ShiftExchange mShiftExchange;
+    private Shift mShiftForExchange;
+    private Shift mShiftForOffer;
+    private List<Shift> mUserShifts;
+
+    /**
+     * Aðferð fyrir aðra klasa að búa til nýtt intent fyrir þetta activity.
+     *
+     * @param packageContext - Gamli activity klasinn
+     * @param shiftExchangeId - Id fyrir shiftexchange sem er verið að opna
+     * @return intent
+     */
     public static Intent newIntent(Context packageContext, int shiftExchangeId) {
         Intent intent = new Intent(packageContext, ShiftExchangeActivity.class);
         intent.putExtra(SHIFT_EXCHANGE_KEY, shiftExchangeId);
@@ -45,25 +68,115 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
 
-        Log.d(TAG, "onCreate: creating");
         //TODO: check what state the shiftexchange is in through the intent, show correct view for that state.
 
-        Spinner shifts = (Spinner) findViewById(R.id.shiftexchange_shifts_to_offer);
-        Button offerOrAccept = (Button) findViewById(R.id.shiftexchange_button);
-        LinearLayout theOffer = (LinearLayout) findViewById(R.id.shiftexchange_offer);
+        mTextViewShiftRole = (TextView) findViewById(R.id.shiftexchange_upforgrabs_shift_role);
+        mTextViewShiftDate = (TextView) findViewById(R.id.shiftexchange_upforgrabs_shift_date);
+        mTextViewShiftTime = (TextView) findViewById(R.id.shiftexchange_upforgrabs_shift_time);
+        mSpinnerShiftsToOffer = (Spinner) findViewById(R.id.shiftexchange_upforgrabs_shifts_to_offer);
+        mTextViewSpecializedMessage = (TextView) findViewById(R.id.shiftexchange_upforgrabs_message);
+        mButton = (Button) findViewById(R.id.shiftexchange_upforgrabs_button);
 
-        TextView employeeName = (TextView) findViewById(R.id.shiftexchange_name);
-        TextView originShiftDate = (TextView) findViewById(R.id.shiftexchange_shift_date);
-        TextView originShiftTime = (TextView) findViewById(R.id.shiftexchange_shift_time);
-        TextView offerShiftDate = (TextView) findViewById(R.id.shiftexchange_offer_shift_date);
-        TextView offerShiftTime = (TextView) findViewById(R.id.shiftexchange_offer_shift_time);
+        int shiftExchangeId = getIntent().getIntExtra(SHIFT_EXCHANGE_KEY, -1);
+        int userId = sharedPref.getInt("userId", -1);
 
-        TextView specializedMessage = (TextView) findViewById(R.id.shiftexchange_message);
+        shiftExchangeService.getShiftExchangeById(new NetworkCallback<ShiftExchange>() {
+            @Override
+            public void onSuccess(ShiftExchange result) {
+                Log.d(TAG, "Gekk að ná í shiftexchange: " + shiftExchangeId);
+                mShiftExchange = result;
+                shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
+                    @Override
+                    public void onSuccess(Shift result) {
+                        Log.d(TAG, "Gekk að ná í shift for exchange: " + result);
+                        mShiftForExchange = result;
+                        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+                        mTextViewShiftRole.setText(mShiftForExchange.getRole());
+                        mTextViewShiftDate.setText(mShiftForExchange.getStartTime().format(dateFormat));
+                        mTextViewShiftTime.setText(
+                                mShiftForExchange.getStartTime().format(timeFormat) + " - "
+                                        + mShiftForExchange.getEndTime().format(timeFormat));
+                    }
 
-        employeeName.setText("Jón jónsson");
-        originShiftDate.setText("01.01.2021");
-        originShiftTime.setText("08:00 - 16:00");
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, "Villa að ná í shift for exchange: " + errorString);
+                    }
+                }, mShiftExchange.getShiftForExchangeId());
 
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, "Villa við að ná í shiftexchange með id: " + shiftExchangeId + ": " + errorString);
+            }
+        }, shiftExchangeId);
+
+        // Þetta er ef notandi getur boðið vakt á móti
+        shiftExchangeService.getUserShifts(new NetworkCallback<List<Shift>>() {
+            @Override
+            public void onSuccess(List<Shift> result) {
+                Log.d(TAG, "Gekk að ná í vaktir notanda");
+                mUserShifts = result;
+                String[] dates = new String[result.size()];
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-mm-yyyy");
+                DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+                for (int i = 0; i < result.size(); i++) {
+                    dates[i] = result.get(i).getStartTime().format(dateFormat) +
+                            ": " + result.get(i).getStartTime().format(timeFormat) +
+                            " - " + result.get(i).getEndTime().format(timeFormat);
+                }
+                ArrayAdapter<String> adapter =
+                        new ArrayAdapter<String>(ShiftExchangeActivity.this, android.R.layout.simple_list_item_1, dates);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mSpinnerShiftsToOffer.setAdapter(adapter);
+                mSpinnerShiftsToOffer.setBackgroundResource(R.drawable.black_white_border);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, "Villa að ná í vaktir notanda: " + errorString);
+            }
+        }, userId);
+
+        // Heldur utan um shift sem er valin í lista
+        mSpinnerShiftsToOffer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mShiftForOffer = mUserShifts.get(mSpinnerShiftsToOffer.getSelectedItemPosition());
+                Log.d(TAG, "shift valin úr lista: " + mShiftForOffer.getShiftId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.d(TAG, "Ekkert valið úr lista");
+            }
+        });
+
+        // Bregst við þegar ýtt er á takka til að bjóða vakt á móti
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Ýtti á bjóða takka");
+                shiftExchangeService.offerShiftForExchange(new NetworkCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Log.d(TAG, "Gekk að update-a shiftexchange með vakt til að bjóða á móti");
+                        Toast.makeText(ShiftExchangeActivity.this, "Vakt var boðið á móti", Toast.LENGTH_SHORT).show();
+                        Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Toast.makeText(ShiftExchangeActivity.this, "Ekki gekk að bjóða vakt á móti", Toast.LENGTH_SHORT).show();
+                    }
+                }, shiftExchangeId, mShiftForOffer.getShiftId());
+            }
+        });
+
+        /*
         boolean UFG = true;
 
         if (UFG) {
@@ -76,38 +189,38 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter =
                     new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, title);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            shifts.setAdapter(adapter);
-            shifts.setBackgroundResource(R.drawable.black_white_border);
+            mSpinnerShiftsToOffer.setAdapter(adapter);
+            mSpinnerShiftsToOffer.setBackgroundResource(R.drawable.black_white_border);
 
-            offerOrAccept.setOnClickListener(new View.OnClickListener() {
+            mButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "onClick: shift " + shifts.getSelectedItem().toString() + " chosen");
+                    Log.d(TAG, "onClick: shift " + mSpinnerShiftsToOffer.getSelectedItem().toString() + " chosen");
                 }
             });
         } else {
             Log.d(TAG, "onCreate: in else");
-            shifts.setAdapter(null);
-            shifts.setVisibility(View.INVISIBLE);
-            shifts.getParent().bringChildToFront(shifts);
+            mSpinnerShiftsToOffer.setAdapter(null);
+            mSpinnerShiftsToOffer.setVisibility(View.INVISIBLE);
+            mSpinnerShiftsToOffer.getParent().bringChildToFront(mSpinnerShiftsToOffer);
 
-            theOffer.setVisibility(View.VISIBLE);
-            theOffer.setBackgroundResource(R.drawable.black_white_border);
+            mLinearLayoutOffer.setVisibility(View.VISIBLE);
+            mLinearLayoutOffer.setBackgroundResource(R.drawable.black_white_border);
 
-            offerShiftDate.setText("02.02.2022");
-            offerShiftTime.setText("08:00 - 16:00");
+            mTextViewOfferShiftDate.setText("02.02.2022");
+            mTextViewOfferShiftTime.setText("08:00 - 16:00");
 
             boolean employeeAccepts = true;
             boolean managerAccepts = false;
 
             if (!employeeAccepts ) {
                 Log.d(TAG, "onCreate: !employeeAccepts");
-                specializedMessage.setText("Beðið eftir að Jón samþykki");
-                specializedMessage.setVisibility(View.VISIBLE);
+                mTextViewSpecializedMessage.setText("Beðið eftir að Jón samþykki");
+                mTextViewSpecializedMessage.setVisibility(View.VISIBLE);
             } else if (employeeAccepts && !managerAccepts) {
                 Log.d(TAG, "onCreate: !employeeAccepts // !managerAccepts");
-                specializedMessage.setText("Beðið eftir að yfirmaður samþykki");
-                specializedMessage.setVisibility(View.VISIBLE);
+                mTextViewSpecializedMessage.setText("Beðið eftir að yfirmaður samþykki");
+                mTextViewSpecializedMessage.setVisibility(View.VISIBLE);
             } else  {
                 Log.d(TAG, "onCreate: á ekki að fara hingað");
                 //TODO: eyða shiftexchange þar sem að búið að samþykkja (það þarf að vera búið að skipta um vaktir og þannig)
@@ -115,6 +228,8 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             }
 
         }
+
+         */
 
 
     }

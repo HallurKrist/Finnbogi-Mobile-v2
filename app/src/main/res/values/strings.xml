@@ -28,9 +28,11 @@
     <string name="shiftexchange_list_title">Öll vaktaskipti</string>
     <string name="shiftexchange_list_status_0">Laus</string>
     <string name="shiftexchange_list_status_1">Beðið staðfestingar</string>
-    <string name="shiftexchange_get_rid_off">Vill losna við vakt</string>
+    <string name="shiftexchange_get_rid_off">Vakt í boði</string>
     <string name="shiftexchange_offer">Bjóða</string>
-    <string name="shiftexhange_to_offer">Vakt til að bjóða</string>
+    <string name="shiftexhange_to_offer">Vakt til að bjóða á móti</string>
     <string name="make_user_role">Starfsheiti:</string>
     <string name="make_user_admin">Admin:</string>
+    <string name="shiftexchange_list_mylist_title">Mín vaktaskipti</string>
+    <string name="shiftexchange_adminlist_title">Tilbúin vaktaskipti</string>
 </resources>

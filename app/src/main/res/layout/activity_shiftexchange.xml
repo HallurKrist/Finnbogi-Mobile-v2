@@ -1,148 +1,375 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShiftExchangeActivity"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:minHeight="50dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="32dp"
-            android:text="@string/shiftexchange_title" />
-
-    </LinearLayout>
-
-    <LinearLayout
+        android:id="@+id/shiftexchange_upforgrabs"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
+        android:layout_height="match_parent"
+        tools:context=".ShiftExchangeActivity"
         android:orientation="vertical"
-        android:layout_marginBottom="50dp">
+        android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/shiftexchange_name"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Jón Jónsson"
-            android:textSize="20dp"/>
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:minHeight="50dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/shiftexchange_get_rid_off"
-            android:textSize="18dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32dp"
+                android:text="@string/shiftexchange_title" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/black_white_border"
-            android:padding="4dp">
+            android:layout_marginHorizontal="32dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="50dp">
 
             <TextView
-                android:id="@+id/shiftexchange_shift_date"
+                android:id="@+id/shiftexchange_upforgrabs_shift_role"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="01.01.2021"
-                android:textSize="18dp"
-                android:layout_weight="1"
-                android:gravity="left"/>
+                tools:text="Waiter"
+                android:textSize="20dp"/>
 
             <TextView
-                android:id="@+id/shiftexchange_shift_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="08:00 - 16:00"
+                android:text="@string/shiftexchange_get_rid_off"
+                android:textSize="18dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/black_white_border"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/shiftexchange_upforgrabs_shift_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="01.01.2021"
+                    android:textSize="18dp"
+                    android:layout_weight="1"
+                    android:gravity="left"/>
+
+                <TextView
+                    android:id="@+id/shiftexchange_upforgrabs_shift_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="08:00 - 16:00"
+                    android:textSize="18dp"
+                    android:layout_weight="1"
+                    android:gravity="right"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shiftexhange_to_offer"
+                android:textSize="18dp"/>
+
+            <Spinner
+                android:id="@+id/shiftexchange_upforgrabs_shifts_to_offer"
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/shiftexchange_upforgrabs_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="the message for whoever is reading"
                 android:textSize="18dp"
-                android:layout_weight="1"
-                android:gravity="right"/>
+                android:layout_marginTop="18dp"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_horizontal|bottom">
+
+            <Button
+                android:id="@+id/shiftexchange_upforgrabs_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shiftexchange_offer"
+                android:layout_marginVertical="18dp"
+                android:layout_marginHorizontal="24dp"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
-
     <LinearLayout
+        android:id="@+id/shiftexchange_pending"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        tools:context=".ShiftExchangeActivity"
         android:orientation="vertical"
-        android:layout_marginHorizontal="32dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/shiftexhange_to_offer"
-            android:textSize="18dp"/>
-
-        <Spinner
-            android:id="@+id/shiftexchange_shifts_to_offer"
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
+        android:gravity="center_horizontal"
+        android:visibility="invisible">
 
         <LinearLayout
-            android:id="@+id/shiftexchange_offer"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="4dp"
-            android:visibility="invisible">
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:minHeight="50dp">
 
             <TextView
-                android:id="@+id/shiftexchange_offer_shift_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="01.01.2021"
-                android:textSize="18dp"
-                android:layout_weight="1"
-                android:gravity="left"/>
-
-            <TextView
-                android:id="@+id/shiftexchange_offer_shift_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="08:00 - 16:00"
-                android:textSize="18dp"
-                android:layout_weight="1"
-                android:gravity="right"/>
+                android:textSize="32dp"
+                android:text="@string/shiftexchange_title" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/shiftexchange_message"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="the message for whoever is reading"
-            android:textSize="18dp"
-            android:layout_marginTop="18dp"
-            android:visibility="invisible"/>
+            android:layout_marginHorizontal="32dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="50dp">
+
+            <TextView
+                android:id="@+id/shiftexchange_pending_shift_role"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Waiter"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shiftexchange_get_rid_off"
+                android:textSize="18dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/black_white_border"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/shiftexchange_pending_shift_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="01.01.2021"
+                    android:textSize="18dp"
+                    android:layout_weight="1"
+                    android:gravity="left"/>
+
+                <TextView
+                    android:id="@+id/shiftexchange_pending_shift_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="08:00 - 16:00"
+                    android:textSize="18dp"
+                    android:layout_weight="1"
+                    android:gravity="right"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shiftexhange_to_offer"
+                android:textSize="18dp"/>
+
+            <Spinner
+                android:id="@+id/shiftexchange_pending_shifts_to_offer"
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/shiftexchange_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="the message for whoever is reading"
+                android:textSize="18dp"
+                android:layout_marginTop="18dp"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_horizontal|bottom">
+
+            <Button
+                android:id="@+id/shiftexchange_pending_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shiftexchange_offer"
+                android:layout_marginVertical="18dp"
+                android:layout_marginHorizontal="24dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/shiftexchange_confirmable"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:gravity="right|bottom">
+        android:layout_height="match_parent"
+        tools:context=".ShiftExchangeActivity"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:visibility="invisible">
 
-        <Button
-            android:id="@+id/shiftexchange_button"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/shiftexchange_offer"
-            android:layout_marginVertical="18dp"
-            android:layout_marginHorizontal="24dp"/>
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:minHeight="50dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32dp"
+                android:text="@string/shiftexchange_title" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="50dp">
+
+            <TextView
+                android:id="@+id/shiftexchange_confirmable_shift_role"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Waiter"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shiftexchange_get_rid_off"
+                android:textSize="18dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/black_white_border"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/shiftexchange_confirmable_shift_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="01.01.2021"
+                    android:textSize="18dp"
+                    android:layout_weight="1"
+                    android:gravity="left"/>
+
+                <TextView
+                    android:id="@+id/shiftexchange_confirmable_shift_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="08:00 - 16:00"
+                    android:textSize="18dp"
+                    android:layout_weight="1"
+                    android:gravity="right"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shiftexhange_to_offer"
+                android:textSize="18dp"/>
+
+            <Spinner
+                android:id="@+id/shiftexchange_confirmable_shifts_to_offer"
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/shiftexchange_confirmable_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="the message for whoever is reading"
+                android:textSize="18dp"
+                android:layout_marginTop="18dp"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_horizontal|bottom">
+
+            <Button
+                android:id="@+id/shiftexchange_confirmable_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shiftexchange_offer"
+                android:layout_marginVertical="18dp"
+                android:layout_marginHorizontal="24dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
