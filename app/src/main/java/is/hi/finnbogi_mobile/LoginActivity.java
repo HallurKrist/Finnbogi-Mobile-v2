@@ -17,6 +17,8 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.LoginService;
 
+// TODO: Setja harðkóðaða strengi í strings.xml
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";

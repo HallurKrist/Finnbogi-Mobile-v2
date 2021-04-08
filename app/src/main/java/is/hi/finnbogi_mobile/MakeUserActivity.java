@@ -19,6 +19,8 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.MakeUserService;
 
+// TODO: Setja harðkóðaða strengi í strings.xml
+
 public class MakeUserActivity extends AppCompatActivity {
 
     private static final String TAG = "MakeUserActivity";

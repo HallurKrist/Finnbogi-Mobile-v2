@@ -12,6 +12,8 @@ import is.hi.finnbogi_mobile.entities.Notification;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 
+// TODO: Setja harðkóðaða strengi í strings.xml
+
 public class NotificationsService {
 
     private static final String TAG = "NotificationsService";

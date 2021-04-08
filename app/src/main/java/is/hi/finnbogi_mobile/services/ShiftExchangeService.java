@@ -24,6 +24,8 @@ import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 
+// TODO: Setja harðkóðaða strengi í strings.xml
+
 public class ShiftExchangeService {
 
     private static final String TAG = "ShiftExchangeService";
