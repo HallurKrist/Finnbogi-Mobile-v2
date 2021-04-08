@@ -34,7 +34,7 @@ public class UserListService {
                 int userId = -1;
                 for (int i = 0; i < jsonArray.size(); i++) {
                     LinkedTreeMap user = (LinkedTreeMap) jsonArray.get(i);
-                    if (user.get("username") == userName) {
+                    if (user.get("username").equals(userName)) {
                         userId = ((Double) user.get("id")).intValue();
                     }
                 }
