@@ -36,8 +36,10 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til lista af ShiftExchange hlutum með niðurstöðunni
+     * ef kallið gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      */
     public void getAllShiftExchanges(NetworkCallback<List<ShiftExchange>> callback) {
         Log.d(TAG, "næ í öll shiftexchanges");
@@ -61,8 +63,10 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til lista af ShiftExchange hlutum með niðurstöðunni
+     * ef kallið gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      */
     public void getConfirmableShiftExchanges(NetworkCallback<List<ShiftExchange>> callback) {
         Log.d(TAG, "næ í öll confirmable shiftexchanges");
@@ -86,8 +90,10 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til lista af ShiftExchange hlutum með niðurstöðunni
+     * ef kallið gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      * @param userId Id fyrir user.
      */
     public void getShiftExchangesForUser(NetworkCallback<List<ShiftExchange>> callback, int userId) {
@@ -119,8 +125,11 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til ShiftExchange hlut með niðurstöðunni
+     * ef kallið gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param shiftExchangeId Id á ShiftExchange.
      */
     public void getShiftExchangeById(NetworkCallback<ShiftExchange> callback, int shiftExchangeId) {
         Log.d(TAG, "næ í shiftexchange: " + shiftExchangeId);
@@ -143,8 +152,10 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til lista af Shift hlutum með niðurstöðunni
+     * ef kall gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getShiftsForExchange(NetworkCallback<List<Shift>> callback) {
@@ -191,8 +202,10 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til lista af Shift hlutum með niðurstöðunni
+     * ef kall gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getShiftsForExchangeForConfirmable(NetworkCallback<List<Shift>> callback) {
@@ -239,9 +252,11 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til lista af Shift hlutum með niðurstöðunni
+     * ef kall gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
-     * @param userId Id á user
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param userId Id á user.
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getShiftsForExchangeForUser(NetworkCallback<List<Shift>> callback, int userId) {
@@ -295,8 +310,10 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til Shift hlut með niðurstöðunni ef
+     * kall gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      * @param shiftId Id á shift sem á að sækja.
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -344,9 +361,10 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til lista af Shift hlutum með niðurstöðunni
+     * ef kall gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
-     * @param userId Id á user.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getUserShifts(NetworkCallback<List<Shift>> callback, int userId) {
@@ -393,8 +411,10 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til User hlut með niðurstöðunni ef
+     * kall gekk upp.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      * @param userId Id á user sem á að sækja.
      */
     public void getUserById(NetworkCallback<User> callback, int userId) {
@@ -418,8 +438,9 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Lætur vita hvort kallið gekk upp eða ekki.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
      * @param shiftId Id á vakt sem er boðið á móti.
      */
@@ -443,8 +464,9 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Lætur vita hvort kallið gekk upp eða ekki.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
      */
     public void declinePendingOffer(NetworkCallback<String> callback, int shiftExchangeId) {
@@ -467,8 +489,9 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Lætur vita hvort kallið gekk upp eða ekki.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
      */
     public void acceptPendingOffer(NetworkCallback<String> callback, int shiftExchangeId) {
@@ -491,8 +514,9 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Lætur vita hvort kallið gekk upp eða ekki.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
      */
     public void declineConfirmableOffer(NetworkCallback<String> callback, int shiftExchangeId) {
@@ -502,8 +526,9 @@ public class ShiftExchangeService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Lætur vita hvort kallið gekk upp eða ekki.
      *
-     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
      * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
      */
     public void acceptConfirmableOffer(NetworkCallback<String> callback, int shiftExchangeId) {

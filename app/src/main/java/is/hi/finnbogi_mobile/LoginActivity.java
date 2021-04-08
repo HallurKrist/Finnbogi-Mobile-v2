@@ -22,10 +22,12 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final String MY_PREFERENCES = "Session";
 
+    // Viðmótshlutir
     private EditText mEditTextUserName;
     private EditText mEditTextPassword;
     private Button mButtonLogin;
 
+    // Global breytur
     private String mUserName;
     private String mPassword;
     private User mUserLoggingIn;
@@ -43,6 +45,11 @@ public class LoginActivity extends AppCompatActivity {
         return intent;
     }
 
+    /**
+     * Upphafsstillir alla viðmótshluti, nær í gögn og setur hlustara.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,21 +64,26 @@ public class LoginActivity extends AppCompatActivity {
         mButtonLogin = (Button) findViewById(R.id.button_login);
         mButtonLogin.setOnClickListener(new View.OnClickListener() {
             /**
-             * Þegar ýtt er á innskráningartakka.
+             * Event listener fyrir innskráningartakka.
              * Reynir að innskrá notanda, ef tekst þá er HomeActivity opnað,
              * annars eru birt skilaboð um að innskráning hafi ekki tekist.
-             * @param v
+             *
              */
             @Override
             public void onClick(View v) {
                 mUserName = mEditTextUserName.getText().toString();
                 mPassword = mEditTextPassword.getText().toString();
-                // Reynum að logga inn með þessu username og password
+                /**
+                 * Reynum að innskrá notanda með þetta notandanafn
+                 * og þetta lykilorð. Ef það gekk upp, þá er id á
+                 * notanda sett í SharedPreferences minni, og HomeActivity
+                 * svo opnað.
+                 *
+                 */
                 loginService.login(new NetworkCallback<User>() {
                     @Override
                     public void onSuccess(User result) {
                         mUserLoggingIn = result;
-                        Log.d(TAG, "User that was logged in: " + mUserLoggingIn.getUserName());
                         SharedPreferences.Editor editor = mSharedPreferences.edit();
                         editor.putInt("userId", mUserLoggingIn.getUserId());
                         editor.commit();
@@ -82,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(String errorString) {
                         Toast.makeText(LoginActivity.this, "Notendanafn eða lykilorð rangt", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Failed to log in: " + errorString);
+                        Log.e(TAG, errorString);
                     }
                 }, mUserName, mPassword);
             }

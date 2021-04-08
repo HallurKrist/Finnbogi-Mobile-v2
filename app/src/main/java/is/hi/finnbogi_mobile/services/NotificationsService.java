@@ -24,9 +24,11 @@ public class NotificationsService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til lista af Notification hlutum með niðurstöðunni
+     * ef kallið gekk upp.
      *
-     * @param callback - Fall sem tekur við þegar network kall er búið.
-     * @param userId - Id á notanda.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param userId Id á user.
      */
     public void getAllNotifications(NetworkCallback<List<Notification>> callback, int userId) {
         Log.d(TAG, "næ í öll notification fyrir user: " + userId);
@@ -50,9 +52,11 @@ public class NotificationsService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til Notification hlut með niðurstöðunni
+     * ef kallið gekk upp.
      *
-     * @param callback - Fall sem tekur við þegar network kall er búið.
-     * @param notificationId - Id á notification.
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param notificationId Id á Notification.
      */
     public void getNotificationById(NetworkCallback<Notification> callback, int notificationId) {
         Log.d(TAG, "næ í notification: " + notificationId);
@@ -75,8 +79,10 @@ public class NotificationsService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til Notification hlut með niðurstöðunni
+     * ef kall gekk upp.
      *
-     * @param callback - Fall sem tekur við þegar network kall er búið.
+     * @param callback - Fall sem tekur við þegar þetta fall er búið.
      * @param title - Titill á notification.
      * @param text - Skilaboð í notification.
      * @param userIds - Id á þeim notendum sem eiga að fá notification.
@@ -102,21 +108,24 @@ public class NotificationsService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Lætur vita hvort kallið gekk upp eða ekki.
      *
      * @param notificationId - Id á notification sem á að uppfæra.
      * @param userId - Id á notanda sem er með þetta notification.
      */
-    public void updateNotification(int notificationId, int userId) {
+    public void updateNotification(NetworkCallback<String> callback, int notificationId, int userId) {
         Log.d(TAG, "update-a notification " + notificationId);
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Log.d(TAG, "Notification var update-að");
+                callback.onSuccess("Gekk upp");
             }
 
             @Override
             public void onFailure(String errorString) {
                 Log.e(TAG, "Ekki gekk að update-a notification: " + errorString);
+                callback.onFailure(errorString);
             }
         }, new String[] {"notifications", String.valueOf(userId), "read", String.valueOf(notificationId)},
                 new String[][] {});

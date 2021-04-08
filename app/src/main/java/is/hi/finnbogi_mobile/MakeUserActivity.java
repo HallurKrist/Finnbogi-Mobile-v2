@@ -23,6 +23,7 @@ public class MakeUserActivity extends AppCompatActivity {
 
     private static final String TAG = "MakeUserActivity";
 
+    // Viðmótshlutir
     private EditText mEditTextUserName;
     private Spinner mSpinnerRole;
     private EditText mEditTextPassword;
@@ -31,12 +32,18 @@ public class MakeUserActivity extends AppCompatActivity {
     private Button mButtonConfirm;
     private Button mButtonCancel;
 
+    // Global breytur
     private String mUserName;
     private String mRole;
     private String mPassword;
     private String mSsn;
     private boolean mIsAdmin;
 
+    /**
+     * Upphafsstillir alla viðmótshluti, nær í gögn og setur hlustara.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +57,8 @@ public class MakeUserActivity extends AppCompatActivity {
         mEditTextPassword = (EditText) findViewById(R.id.user_make_password);
         mEditTextSsn = (EditText) findViewById(R.id.user_make_ssn);
         mCheckBoxAdmin = (CheckBox) findViewById(R.id.user_make_admin);
+        mButtonCancel = (Button) findViewById(R.id.user_make_cancel);
+        mButtonConfirm = (Button) findViewById(R.id.user_make_confirm);
 
         // Setja roles í spinner fyrir starfsheiti
         String[] roles = new String[]{"Chef", "Bartender", "Waiter", "Busboy", "ShiftManager", "Employer"};
@@ -58,14 +67,12 @@ public class MakeUserActivity extends AppCompatActivity {
         rolesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerRole.setAdapter(rolesAdapter);
 
-        // Setja event listener á checkbox
+        /**
+         * Event listener fyrir checkbox, setur mIsAdmin tilviksbreytu
+         * í samræmi við checkboxið.
+         *
+         */
         mCheckBoxAdmin.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Atburðahandler fyrir checkbox, setur mIsAdmin tilviksbreytu
-             * í samræmi við checkboxið.
-             *
-             * @param v - View
-             */
             @Override
             public void onClick(View v) {
                 boolean checked = ((CheckBox) v).isChecked();
@@ -73,31 +80,31 @@ public class MakeUserActivity extends AppCompatActivity {
             }
         });
 
-        // Þegar notandi ýtir á 'Hætta við' takka
-        mButtonCancel = (Button) findViewById(R.id.user_make_cancel);
+        /**
+         * Event listener fyrir cancel takka, sendir
+         * notanda aftur í HomeActivity.
+         *
+         */
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Atburðahandler fyrir 'Hætta við' takka.
-             * Notandi er sendur aftur í HomeActivity.
-             *
-             * @param v - View
-             */
             @Override
             public void onClick(View v) {
+                finish();
+                /*
                 Intent intent = HomeActivity.newIntent(MakeUserActivity.this);
                 startActivity(intent);
+
+                 */
             }
         });
 
-        mButtonConfirm = (Button) findViewById(R.id.user_make_confirm);
+        /**
+         * Event listener fyrir Staðfesta takka.
+         * Reynt er að búa til nýjan notanda, ef það tekst
+         * er notandi sendur í UserInfoActivity, annars eru
+         * birt villuskilaboð.
+         *
+         */
         mButtonConfirm.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Atburðahandler fyrir 'Staðfesta' takka.
-             * Reynt er að búa til nýjan notanda. Ef það tekst er notandi sendur
-             * í UserInfoActivity fyrir nýja notandann. Annars eru birt villuskilaboð.
-             *
-             * @param v - View
-             */
             @Override
             public void onClick(View v) {
                 // Ná í texta úr viðmóti
@@ -109,7 +116,6 @@ public class MakeUserActivity extends AppCompatActivity {
                 makeUserService.createUser(new NetworkCallback<User>() {
                     @Override
                     public void onSuccess(User result) {
-                        Log.d(TAG, "User that was created: " + result.getUserName());
                         Toast.makeText(MakeUserActivity.this, "Tókst að búa til user", Toast.LENGTH_SHORT).show();
                         Intent intent = UserInfoActivity.newIntent(MakeUserActivity.this, result.getUserId());
                         startActivity(intent);
@@ -118,7 +124,7 @@ public class MakeUserActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(String errorString) {
                         Toast.makeText(MakeUserActivity.this, "Ekki tókst að búa til user", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Failed to create user: " + errorString);
+                        Log.e(TAG, errorString);
                     }
                 }, mUserName, mRole, mPassword, mSsn, mIsAdmin);
             }
