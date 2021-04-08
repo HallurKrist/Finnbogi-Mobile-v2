@@ -58,4 +58,5 @@
     <string name="shiftexchange_activity_confirm_fail">Ekki gekk að samþykkja vaktaskipti</string>
     <string name="shiftexchangelist_activity_pending">Búið hefur verið að bjóða vakt á móti þessari vakt</string>
     <string name="shiftexchangelist_activity_different_role">Þú hefur ekki sama role og þessi vakt</string>
+    <string name="user_list_delete">Eyða</string>
 </resources>
