@@ -17,8 +17,6 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.LoginService;
 
-// TODO: Setja harðkóðaða strengi í strings.xml
-
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -85,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginService.login(new NetworkCallback<User>() {
                     @Override
                     public void onSuccess(User result) {
+                        Log.d(TAG, String.valueOf(R.string.activity_success));
                         mUserLoggingIn = result;
                         SharedPreferences.Editor editor = mSharedPreferences.edit();
                         editor.putInt("userId", mUserLoggingIn.getUserId());
@@ -95,8 +94,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String errorString) {
-                        Toast.makeText(LoginActivity.this, "Notendanafn eða lykilorð rangt", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, errorString);
+                        Toast.makeText(LoginActivity.this, String.valueOf(R.string.login_activity_wrong_name_or_password), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, R.string.activity_error + " " + errorString);
                     }
                 }, mUserName, mPassword);
             }

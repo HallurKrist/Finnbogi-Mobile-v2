@@ -4,11 +4,10 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import is.hi.finnbogi_mobile.R;
 import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
-
-// TODO: Setja harðkóðaða strengi í strings.xml
 
 public class LoginService {
 
@@ -32,7 +31,7 @@ public class LoginService {
         mNetworkManager.POST(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Successfully logged in user");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 User user = gson.fromJson(result, User.class);
                 callback.onSuccess(user);
@@ -40,7 +39,7 @@ public class LoginService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"users", "login"}, new String[][] {{"username", userName},{"password", password}});

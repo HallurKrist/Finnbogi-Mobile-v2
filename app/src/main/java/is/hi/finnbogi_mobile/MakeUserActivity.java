@@ -19,8 +19,6 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.MakeUserService;
 
-// TODO: Setja harðkóðaða strengi í strings.xml
-
 public class MakeUserActivity extends AppCompatActivity {
 
     private static final String TAG = "MakeUserActivity";
@@ -91,11 +89,6 @@ public class MakeUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                /*
-                Intent intent = HomeActivity.newIntent(MakeUserActivity.this);
-                startActivity(intent);
-
-                 */
             }
         });
 
@@ -118,15 +111,16 @@ public class MakeUserActivity extends AppCompatActivity {
                 makeUserService.createUser(new NetworkCallback<User>() {
                     @Override
                     public void onSuccess(User result) {
-                        Toast.makeText(MakeUserActivity.this, "Tókst að búa til user", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, String.valueOf(R.string.activity_success));
+                        Toast.makeText(MakeUserActivity.this, String.valueOf(R.string.makeuser_activity_success), Toast.LENGTH_SHORT).show();
                         Intent intent = UserInfoActivity.newIntent(MakeUserActivity.this, result.getUserId());
                         startActivity(intent);
                     }
 
                     @Override
                     public void onFailure(String errorString) {
-                        Toast.makeText(MakeUserActivity.this, "Ekki tókst að búa til user", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, errorString);
+                        Toast.makeText(MakeUserActivity.this, String.valueOf(R.string.makeuser_activity_fail), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, R.string.activity_error + " " + errorString);
                     }
                 }, mUserName, mRole, mPassword, mSsn, mIsAdmin);
             }

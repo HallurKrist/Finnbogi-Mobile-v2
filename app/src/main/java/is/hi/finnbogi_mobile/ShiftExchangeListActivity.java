@@ -26,8 +26,6 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.ShiftExchangeService;
 
-// TODO: Setja harðkóðaða strengi í strings.xml
-
 public class ShiftExchangeListActivity extends AppCompatActivity {
 
     private static final String TAG = "ShiftExchangesActivity";
@@ -50,17 +48,6 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
     private List<Shift> mShiftsAll;
     private List<Shift> mShiftsAdmin;
     private User mUser;
-
-    /**
-     * Aðferð fyrir aðra klasa að búa til nýtt intent fyrir þetta activity.
-     *
-     * @param packageContext - Gamli activity klasinn
-     * @return intent
-     */
-    public static Intent newIntent(Context packageContext) {
-        Intent intent = new Intent(packageContext, ShiftExchangeListActivity.class);
-        return intent;
-    }
 
     /**
      * Upphafsstillir alla viðmótshluti, nær í gögn og setur hlustara.
@@ -93,7 +80,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
         shiftExchangeService.getUserById(new NetworkCallback<User>() {
             @Override
             public void onSuccess(User result) {
-                Log.d(TAG, "User logged in: " + result);
+                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mUser = result;
                 // Ef user er admin þá náum við líka í öll confirmable shiftExchange
                 if (mUser.getAdmin()) {
@@ -106,9 +93,8 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                     shiftExchangeService.getConfirmableShiftExchanges(new NetworkCallback<List<ShiftExchange>>() {
                         @Override
                         public void onSuccess(List<ShiftExchange> result) {
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftExchangesListAdmin = result;
-                            Log.d(TAG, "Gekk að ná í lista af confirmable shiftExchanges: " + String.valueOf(mShiftExchangesListAdmin));
-                            Log.d(TAG, "Næ í lista af shifts");
                             /**
                              * Nær í allar vaktirnar sem eru venslaðar við þessi shiftExchange
                              * og setur viðeigandi upplýsingar í viðmótshluti.
@@ -117,8 +103,8 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                             shiftExchangeService.getShiftsForExchangeForConfirmable(new NetworkCallback<List<Shift>>() {
                                 @Override
                                 public void onSuccess(List<Shift> result) {
+                                    Log.d(TAG, String.valueOf(R.string.activity_success));
                                     mShiftsAdmin = result;
-                                    Log.d(TAG, "Gekk að ná í lista af shifts for exchange fyrir confirmable: " + String.valueOf(mShiftsAdmin));
                                     int n = mShiftExchangesListAdmin.size();
                                     String[] role = new String[n];
                                     String[] date = new String[n];
@@ -149,14 +135,14 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(String errorString) {
-                                    Log.e(TAG, errorString);
+                                    Log.e(TAG, R.string.activity_error + " " + errorString);
                                 }
                             });
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
                         }
                     });
                 }
@@ -164,7 +150,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, errorString);
+                Log.e(TAG, R.string.activity_error + " " + errorString);
             }
         }, userId);
 
@@ -176,8 +162,8 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
         shiftExchangeService.getShiftExchangesForUser(new NetworkCallback<List<ShiftExchange>>() {
             @Override
             public void onSuccess(List<ShiftExchange> result) {
+                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mShiftExchangesListUser = result;
-                Log.d(TAG, "Gekk að ná í lista af shiftExchanges fyrir user: " + String.valueOf(mShiftExchangesListUser));
                 /**
                  * Nær í allar vaktirnar sem eru venslaðar við þessi shiftExchange
                  * og setur viðeigandi upplýsingar í viðmótshluti.
@@ -186,8 +172,8 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 shiftExchangeService.getShiftsForExchangeForUser(new NetworkCallback<List<Shift>>() {
                     @Override
                     public void onSuccess(List<Shift> result) {
+                        Log.d(TAG, String.valueOf(R.string.activity_success));
                         mShiftsUser = result;
-                        Log.d(TAG, "Gekk að ná í lista af shifts for exchange fyrir user: " + String.valueOf(mShiftsUser));
                         int n = mShiftExchangesListUser.size();
                         String[] role = new String[n];
                         String[] date = new String[n];
@@ -205,14 +191,14 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String errorString) {
-                        Log.e(TAG, errorString);
+                        Log.e(TAG, R.string.activity_error + " " + errorString);
                     }
                 }, userId);
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, errorString);
+                Log.e(TAG, R.string.activity_error + " " + errorString);
             }
         }, userId);
 
@@ -223,8 +209,8 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
         shiftExchangeService.getAllShiftExchanges(new NetworkCallback<List<ShiftExchange>>() {
             @Override
             public void onSuccess(List<ShiftExchange> result) {
+                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mShiftExchangesListAll = result;
-                Log.d(TAG, "Gekk að ná í lista af shiftExchanges: " + String.valueOf(mShiftExchangesListAll));
                 /**
                  * Nær í allar vaktirnar sem eru venslaðar við þessi shiftExchange
                  * og setur viðeigandi upplýsingar í viðmótshluti.
@@ -233,8 +219,8 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 shiftExchangeService.getShiftsForExchange(new NetworkCallback<List<Shift>>() {
                     @Override
                     public void onSuccess(List<Shift> result) {
+                        Log.d(TAG, String.valueOf(R.string.activity_success));
                         mShiftsAll = result;
-                        Log.d(TAG, "Gekk að ná í lista af shifts for exchange: " + String.valueOf(mShiftsAll));
                         int n = mShiftExchangesListAll.size();
                         String[] role = new String[n];
                         String[] date = new String[n];
@@ -252,14 +238,14 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String errorString) {
-                        Log.e(TAG, errorString);
+                        Log.e(TAG, R.string.activity_error + " " + errorString);
                     }
                 });
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, errorString);
+                Log.e(TAG, R.string.activity_error + " " + errorString);
             }
         });
 
@@ -297,10 +283,10 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 // Aðrir geta bara opnað þau sem eru upforgrabs og hafa sama role og notandi
                 else {
                     if (!shiftExchange.getStatus().equals("upforgrabs")) {
-                        Toast.makeText(ShiftExchangeListActivity.this, "Búið hefur verið að bjóða vakt á móti þessari vakt", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ShiftExchangeListActivity.this, String.valueOf(R.string.shiftexchangelist_activity_pending), Toast.LENGTH_SHORT).show();
                     } else {
                         if (!mShiftsAll.get(position).getRole().equals(mUser.getRole())) {
-                            Toast.makeText(ShiftExchangeListActivity.this, "Þú hefur ekki sama role og þessi vakt", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShiftExchangeListActivity.this, String.valueOf(R.string.shiftexchangelist_activity_different_role), Toast.LENGTH_SHORT).show();
                         } else {
                             Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                             startActivity(intent);

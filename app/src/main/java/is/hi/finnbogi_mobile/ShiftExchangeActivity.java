@@ -27,8 +27,6 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.ShiftExchangeService;
 
-// TODO: Setja harðkóðaða strengi í strings.xml
-
 public class ShiftExchangeActivity extends AppCompatActivity {
 
     private static final String TAG = "ShiftExchangeActivity";
@@ -124,7 +122,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             shiftExchangeService.getShiftExchangeById(new NetworkCallback<ShiftExchange>() {
                 @Override
                 public void onSuccess(ShiftExchange result) {
-                    Log.d(TAG, "Gekk að ná í shiftexchange: " + shiftExchangeId);
+                    Log.d(TAG, String.valueOf(R.string.activity_success));
                     mShiftExchange = result;
                     /**
                      * Nær í vakt sem er í boði og setur viðmótshluti.
@@ -133,7 +131,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, "Gekk að ná í shift for exchange: " + result);
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForExchange = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -146,7 +144,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
                         }
                     }, mShiftExchange.getShiftForExchangeId());
 
@@ -154,7 +152,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String errorString) {
-                    Log.e(TAG, errorString);
+                    Log.e(TAG, R.string.activity_error + " " + errorString);
                 }
             }, shiftExchangeId);
 
@@ -165,7 +163,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             shiftExchangeService.getUserShifts(new NetworkCallback<List<Shift>>() {
                 @Override
                 public void onSuccess(List<Shift> result) {
-                    Log.d(TAG, "Gekk að ná í vaktir notanda");
+                    Log.d(TAG, String.valueOf(R.string.activity_success));
                     mUserShifts = result;
                     String[] dates = new String[result.size()];
                     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-mm-yyyy");
@@ -184,7 +182,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String errorString) {
-                    Log.e(TAG, errorString);
+                    Log.e(TAG, R.string.activity_error + " " + errorString);
                 }
             }, userId);
 
@@ -196,13 +194,10 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     mShiftForOffer = mUserShifts.get(mSpinnerShiftsToOfferUFG.getSelectedItemPosition());
-                    Log.d(TAG, "shift valin úr lista: " + mShiftForOffer.getShiftId());
                 }
 
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    Log.d(TAG, "Ekkert valið úr lista");
-                }
+                public void onNothingSelected(AdapterView<?> parent) { }
             });
 
             /**
@@ -213,24 +208,18 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             mButtonOfferUFG.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "Ýtti á bjóða takka");
                     shiftExchangeService.offerShiftForExchange(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, "Gekk að update-a shiftexchange með vakt til að bjóða á móti");
-                            Toast.makeText(ShiftExchangeActivity.this, "Vakt var boðið á móti", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_success), Toast.LENGTH_SHORT).show();
                             finish();
-                            /*
-                            Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
-                            startActivity(intent);
-
-                             */
                         }
 
                         @Override
                         public void onFailure(String errorString) {
                             Log.e(TAG, errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, "Ekki gekk að bjóða vakt á móti", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId, mShiftForOffer.getShiftId());
                 }
@@ -257,7 +246,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             shiftExchangeService.getShiftExchangeById(new NetworkCallback<ShiftExchange>() {
                 @Override
                 public void onSuccess(ShiftExchange result) {
-                    Log.d(TAG, "Gekk að ná í shiftexchange: " + shiftExchangeId);
+                    Log.d(TAG, String.valueOf(R.string.activity_success));
                     mShiftExchange = result;
                     /**
                      * Nær í vakt sem er í boði og setur viðmótshluti.
@@ -266,7 +255,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, "Gekk að ná í shift for exchange: " + result);
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForExchange = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -279,7 +268,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
                         }
                     }, mShiftExchange.getShiftForExchangeId());
 
@@ -290,7 +279,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, "Gekk að ná í coworkershift: " + result);
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForOffer = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -302,7 +291,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
                         }
                     }, mShiftExchange.getCoworkerShiftId());
 
@@ -310,7 +299,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String errorString) {
-                    Log.e(TAG, errorString);
+                    Log.e(TAG, R.string.activity_error + " " + errorString);
                 }
             }, shiftExchangeId);
 
@@ -322,24 +311,18 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             mButtonDeclinePending.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "Ýtti á decline takka");
                     shiftExchangeService.declinePendingOffer(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, "Gekk að decline-a pending offer");
-                            Toast.makeText(ShiftExchangeActivity.this, "Boði hafnað", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_declined_success), Toast.LENGTH_SHORT).show();
                             finish();
-                            /*
-                            Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
-                            startActivity(intent);
-
-                             */
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, "Ekki gekk að hafna boði", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_declined_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId);
                 }
@@ -353,24 +336,18 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             mButtonAcceptPending.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "Ýtti á accept takka");
                     shiftExchangeService.acceptPendingOffer(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, "Gekk að accepta-a pending offer");
-                            Toast.makeText(ShiftExchangeActivity.this, "Boð samþykkt", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_accept_success), Toast.LENGTH_SHORT).show();
                             finish();
-                            /*
-                            Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
-                            startActivity(intent);
-
-                             */
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, "Ekki gekk að samþykkja boð", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_accept_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId);
                 }
@@ -397,7 +374,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             shiftExchangeService.getShiftExchangeById(new NetworkCallback<ShiftExchange>() {
                 @Override
                 public void onSuccess(ShiftExchange result) {
-                    Log.d(TAG, "Gekk að ná í shiftexchange: " + shiftExchangeId);
+                    Log.d(TAG, String.valueOf(R.string.activity_success));
                     mShiftExchange = result;
                     /**
                      * Nær í vakt sem er í boði og setur viðmótshluti.
@@ -406,7 +383,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, "Gekk að ná í shift for exchange: " + result);
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForExchange = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -419,7 +396,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
                         }
                     }, mShiftExchange.getShiftForExchangeId());
 
@@ -430,7 +407,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, "Gekk að ná í shift for exchange: " + result);
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForOffer = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -442,7 +419,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
                         }
                     }, mShiftExchange.getCoworkerShiftId());
 
@@ -450,7 +427,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String errorString) {
-                    Log.e(TAG, errorString);
+                    Log.e(TAG, R.string.activity_error + " " + errorString);
                 }
             }, shiftExchangeId);
 
@@ -462,24 +439,18 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             mButtonDeclineConfirmable.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "Ýtti á decline takka");
                     shiftExchangeService.declineConfirmableOffer(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, "Gekk að decline-a confirmable offer");
-                            Toast.makeText(ShiftExchangeActivity.this, "Vaktaskiptum hafnað", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_declined_success), Toast.LENGTH_SHORT).show();
                             finish();
-                            /*
-                            Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
-                            startActivity(intent);
-
-                             */
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, "Ekki gekk að hafna vaktaskiptum", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_declined_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId);
                 }
@@ -493,24 +464,18 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             mButtonAcceptConfirmable.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "Ýtti á accept takka");
                     shiftExchangeService.acceptConfirmableOffer(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, "Gekk að accepta-a vaktaskipti");
-                            Toast.makeText(ShiftExchangeActivity.this, "Vaktaskipti samþykkt", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, String.valueOf(R.string.activity_success));
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_confirm_success), Toast.LENGTH_SHORT).show();
                             finish();
-                            /*
-                            Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
-                            startActivity(intent);
-
-                             */
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, "Ekki gekk að samþykkja vaktaskipti", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_confirm_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId);
                 }

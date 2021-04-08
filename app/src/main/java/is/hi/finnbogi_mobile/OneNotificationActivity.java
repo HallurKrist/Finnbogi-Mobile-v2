@@ -14,8 +14,6 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.NotificationsService;
 
-// TODO: Setja harðkóðaða strengi í strings.xml
-
 public class OneNotificationActivity extends AppCompatActivity {
 
     private static final String TAG = "OneNotificationActivity";
@@ -69,7 +67,7 @@ public class OneNotificationActivity extends AppCompatActivity {
         notificationsService.getNotificationById(new NetworkCallback<Notification>() {
             @Override
             public void onSuccess(Notification result) {
-                Log.d(TAG, "Gekk að ná í notification: " + notificationId);
+                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mNotification = result;
                 mTextViewTitle.setText(mNotification.getTitle());
                 mTextViewText.setText(mNotification.getText());
@@ -80,19 +78,19 @@ public class OneNotificationActivity extends AppCompatActivity {
                 notificationsService.updateNotification(new NetworkCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
-                        Log.d(TAG, "Gekk upp");
+                        Log.d(TAG, String.valueOf(R.string.activity_success));
                     }
 
                     @Override
                     public void onFailure(String errorString) {
-                        Log.e(TAG, errorString);
+                        Log.e(TAG, R.string.activity_error + " " + errorString);
                     }
                 }, notificationId, sharedPref.getInt("userId", -1));
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, errorString);
+                Log.e(TAG, R.string.activity_error + " " + errorString);
             }
         }, notificationId);
     }

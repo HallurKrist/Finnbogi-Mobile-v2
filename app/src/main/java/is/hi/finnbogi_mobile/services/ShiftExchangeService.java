@@ -18,13 +18,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import is.hi.finnbogi_mobile.R;
+import is.hi.finnbogi_mobile.entities.Notification;
 import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.ShiftExchange;
 import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
-
-// TODO: Setja harðkóðaða strengi í strings.xml
 
 public class ShiftExchangeService {
 
@@ -44,11 +44,10 @@ public class ShiftExchangeService {
      * @param callback Fall sem tekur við þegar þetta fall er búið.
      */
     public void getAllShiftExchanges(NetworkCallback<List<ShiftExchange>> callback) {
-        Log.d(TAG, "næ í öll shiftexchanges");
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gson-a lista af ShiftExchange");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<ShiftExchange>>(){}.getType();
                 List<ShiftExchange> allShiftExchanges = gson.fromJson(result, listType);
@@ -57,7 +56,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Gekk ekki að ná í öll ShiftExchange: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges"});
@@ -71,11 +70,10 @@ public class ShiftExchangeService {
      * @param callback Fall sem tekur við þegar þetta fall er búið.
      */
     public void getConfirmableShiftExchanges(NetworkCallback<List<ShiftExchange>> callback) {
-        Log.d(TAG, "næ í öll confirmable shiftexchanges");
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gson-a lista af ShiftExchange");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<ShiftExchange>>(){}.getType();
                 List<ShiftExchange> allShiftExchanges = gson.fromJson(result, listType);
@@ -84,7 +82,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Gekk ekki að ná í öll ShiftExchange: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", "confirmable"});
@@ -99,11 +97,10 @@ public class ShiftExchangeService {
      * @param userId Id fyrir user.
      */
     public void getShiftExchangesForUser(NetworkCallback<List<ShiftExchange>> callback, int userId) {
-        Log.d(TAG, "Næ í shiftexchanges fyrir user: " + userId);
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gson-a lista af ShiftExchange");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<ShiftExchange>>(){}.getType();
                 List<ShiftExchange> allShiftExchanges = gson.fromJson(result, listType);
@@ -119,7 +116,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Gekk ekki að ná í öll ShiftExchange fyrir user: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges"});
@@ -134,11 +131,10 @@ public class ShiftExchangeService {
      * @param shiftExchangeId Id á ShiftExchange.
      */
     public void getShiftExchangeById(NetworkCallback<ShiftExchange> callback, int shiftExchangeId) {
-        Log.d(TAG, "næ í shiftexchange: " + shiftExchangeId);
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gson-a shiftexchange");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 ShiftExchange shiftExchange = gson.fromJson(result, ShiftExchange.class);
                 callback.onSuccess(shiftExchange);
@@ -146,7 +142,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa við að ná í shiftexchange: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", String.valueOf(shiftExchangeId)});
@@ -161,11 +157,10 @@ public class ShiftExchangeService {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getShiftsForExchange(NetworkCallback<List<Shift>> callback) {
-        Log.d(TAG, "næ í öll shifts for exchange");
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gson-a lista af shifts");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 final ArrayList<?> jsonArray = gson.fromJson(result, ArrayList.class);
 
@@ -184,7 +179,7 @@ public class ShiftExchangeService {
                         endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        Log.e(TAG, "Could not parse dates from DB");
+                        Log.e(TAG, String.valueOf(R.string.service_error));
                     }
 
                     int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
@@ -196,7 +191,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Gekk ekki að ná í öll shifts for exchange: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", "shiftsforexchange"});
@@ -211,11 +206,10 @@ public class ShiftExchangeService {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getShiftsForExchangeForConfirmable(NetworkCallback<List<Shift>> callback) {
-        Log.d(TAG, "næ í öll shifts for exchange");
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gson-a lista af shifts");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 final ArrayList<?> jsonArray = gson.fromJson(result, ArrayList.class);
 
@@ -234,7 +228,7 @@ public class ShiftExchangeService {
                         endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        Log.e(TAG, "Could not parse dates from DB");
+                        Log.e(TAG, String.valueOf(R.string.service_error));
                     }
 
                     int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
@@ -246,7 +240,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Gekk ekki að ná í öll shifts for exchange: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", "confirmable", "shiftsforexchange"});
@@ -262,11 +256,10 @@ public class ShiftExchangeService {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getShiftsForExchangeForUser(NetworkCallback<List<Shift>> callback, int userId) {
-        Log.d(TAG, "næ í öll shifts for exchange fyrir user");
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gson-a lista af shifts");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 final ArrayList<?> jsonArray = gson.fromJson(result, ArrayList.class);
 
@@ -285,7 +278,7 @@ public class ShiftExchangeService {
                         endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        Log.e(TAG, "Could not parse dates from DB");
+                        Log.e(TAG, String.valueOf(R.string.service_error));
                     }
 
                     int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
@@ -304,7 +297,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Gekk ekki að ná í öll shifts for exchange fyrir user: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", "shiftsforexchange"});
@@ -320,11 +313,10 @@ public class ShiftExchangeService {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getShiftById(NetworkCallback<Shift> callback, int shiftId) {
-        Log.d(TAG, "Næ í shift: " + shiftId);
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gson-a shift");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 final Object json = gson.fromJson(result, Object.class);
 
@@ -339,7 +331,7 @@ public class ShiftExchangeService {
                     endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    Log.e(TAG, "Could not parse dates from DB");
+                    Log.e(TAG, String.valueOf(R.string.service_error));
                 }
 
                 // Make shift to return
@@ -355,7 +347,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa að ná í shift: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shifts", String.valueOf(shiftId)});
@@ -370,11 +362,10 @@ public class ShiftExchangeService {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getUserShifts(NetworkCallback<List<Shift>> callback, int userId) {
-        Log.d(TAG, "Næ í allar vaktir fyrir user: " + userId);
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gson-a lista af shifts");
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 final ArrayList<?> jsonArray = gson.fromJson(result, ArrayList.class);
 
@@ -393,7 +384,7 @@ public class ShiftExchangeService {
                         endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        Log.e(TAG, "Could not parse dates from DB");
+                        Log.e(TAG, String.valueOf(R.string.service_error));
                     }
 
                     int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
@@ -405,7 +396,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa að ná í vaktir notanda: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shifts", "user", String.valueOf(userId)});
@@ -420,11 +411,10 @@ public class ShiftExchangeService {
      * @param userId Id á user sem á að sækja.
      */
     public void getUserById(NetworkCallback<User> callback, int userId) {
-        Log.d(TAG, "Næ í user: " + userId);
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Náði í user: " + result);
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 User user = gson.fromJson(result, User.class);
                 callback.onSuccess(user);
@@ -432,7 +422,7 @@ public class ShiftExchangeService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa að ná í user: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"users", String.valueOf(userId)});
@@ -447,17 +437,16 @@ public class ShiftExchangeService {
      * @param shiftId Id á vakt sem er boðið á móti.
      */
     public void offerShiftForExchange(NetworkCallback<String> callback, int shiftExchangeId, int shiftId) {
-        Log.d(TAG, "update-a shiftexchange með offeredshift í pending");
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gekk að update-a shiftexchange með vakt til að bjóða á móti");
-                callback.onSuccess("Gekk upp");
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                callback.onSuccess(String.valueOf(R.string.service_success));
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa að update-a shiftexchange með vakt til að bjóða á móti: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", "setpending", String.valueOf(shiftExchangeId)},
@@ -472,17 +461,16 @@ public class ShiftExchangeService {
      * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
      */
     public void declinePendingOffer(NetworkCallback<String> callback, int shiftExchangeId) {
-        Log.d(TAG, "decline-a pending offer");
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gekk að decline-a pending offer");
-                callback.onSuccess("Gekk upp");
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                callback.onSuccess(String.valueOf(R.string.service_success));
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa að decline-a pending offer: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", "declinepending", String.valueOf(shiftExchangeId)},
@@ -497,17 +485,16 @@ public class ShiftExchangeService {
      * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
      */
     public void acceptPendingOffer(NetworkCallback<String> callback, int shiftExchangeId) {
-        Log.d(TAG, "accepta-a pending offer");
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gekk að accepta-a pending offer");
-                callback.onSuccess("Gekk upp");
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                callback.onSuccess(String.valueOf(R.string.service_success));
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa að decline-a pending offer: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", "approvepending", String.valueOf(shiftExchangeId)},
@@ -522,7 +509,6 @@ public class ShiftExchangeService {
      * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
      */
     public void declineConfirmableOffer(NetworkCallback<String> callback, int shiftExchangeId) {
-        Log.d(TAG, "decline-a vaktaskipti");
         // kalla á delete fall í network manager
     }
 
@@ -534,20 +520,80 @@ public class ShiftExchangeService {
      * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
      */
     public void acceptConfirmableOffer(NetworkCallback<String> callback, int shiftExchangeId) {
-        Log.d(TAG, "accepta-a vaktaskipti");
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, "Gekk að accepta-a vaktaskipti");
-                callback.onSuccess("Gekk upp");
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                callback.onSuccess(String.valueOf(R.string.service_success));
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa að accepta-a vaktaskipti: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", "confirm", String.valueOf(shiftExchangeId)},
                 new String[][] {});
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     * Býr til Notification hlut með niðurstöðunni
+     * ef kall gekk upp.
+     *
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param title Titill á notification.
+     * @param text Skilaboð í notification.
+     * @param userIds Id á þeim notendum sem eiga að fá notification.
+     */
+    public void createNotification(NetworkCallback<Notification> callback, String title, String text, int[] userIds) {
+        mNetworkManager.POST(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                Gson gson = new Gson();
+                Notification notificationCreated = gson.fromJson(result, Notification.class);
+                callback.onSuccess(notificationCreated);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, R.string.service_error + " " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"notifications"}, new String[][] {{"title", title}, {"text", text}, {"userIds", String.valueOf(userIds)}});
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     * Býr til lista af User hlutum með niðurstöðunni
+     * ef kall gekk upp.
+     *
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param role Role á notendum.
+     */
+    public void getAllUsersWithSameRole(NetworkCallback<List<User>> callback, String role) {
+        mNetworkManager.GET(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<User>>(){}.getType();
+                List<User> allUsers = gson.fromJson(result, listType);
+                List<User> usersWithSameRole = new ArrayList<>();
+                for (User user : allUsers) {
+                    if (user.getRole().equals(role)) {
+                        usersWithSameRole.add(user);
+                    }
+                }
+                callback.onSuccess(usersWithSameRole);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, R.string.service_error + " " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"users"});
     }
 }

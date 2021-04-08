@@ -26,8 +26,6 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.NotificationsService;
 
-// TODO: Setja harðkóðaða strengi í strings.xml
-
 public class NotificationsActivity extends AppCompatActivity {
 
     private static final String TAG = "NotificationsActivity";
@@ -65,8 +63,8 @@ public class NotificationsActivity extends AppCompatActivity {
         notificationsService.getAllNotifications(new NetworkCallback<List<Notification>>() {
             @Override
             public void onSuccess(List<Notification> result) {
+                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mAllNotifications = result;
-                Log.d(TAG, "Gekk að ná í lista af notifications: " + String.valueOf(mAllNotifications));
                 int n = mAllNotifications.size();
                 String[] title = new String[n];
                 String[] message = new String[n];
@@ -84,7 +82,7 @@ public class NotificationsActivity extends AppCompatActivity {
             @Override
             public void onFailure(String errorString) {
                 mAllNotifications = null;
-                Log.e(TAG, errorString);
+                Log.e(TAG, R.string.activity_error + " " + errorString);
             }
         }, sharedPref.getInt("userId", -1));
 
