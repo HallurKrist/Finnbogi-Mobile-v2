@@ -95,34 +95,43 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                             Log.d(TAG, "Gekk að ná í lista af confirmable shiftExchanges: " + String.valueOf(mShiftExchangesListAdmin));
                             Log.d(TAG, "Næ í lista af shifts");
                             // Ná í allar vaktir sem eru í confirmable shiftexchange hlutum
-                    /*
-                    shiftExchangeService.getShiftsForExchangeForConfirmable(new NetworkCallback<List<Shift>>() {
-                        @Override
-                        public void onSuccess(List<Shift> result) {
-                            mShiftsAdmin = result;
-                            Log.d(TAG, "Gekk að ná í lista af shifts for exchange fyrir confirmable: " + String.valueOf(mShiftsAdmin));
-                            int n = mShiftExchangesListAdmin.size();
-                            String[] role = new String[n];
-                            String[] date = new String[n];
-                            String[] status = new String[n];
-                            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm");
-                            for (int i = 0; i < n; i++) {
-                                role[i] = mShiftsAdmin.get(i).getRole();
-                                date[i] = mShiftsAdmin.get(i).getStartTime().format(dateFormat) + " - " + mShiftsAdmin.get(i).getEndTime().format(dateFormat);
-                                status[i] = mShiftExchangesListAdmin.get(i).getStatus();
-                            }
-                            ShiftExchangeListAdapter adapterAdmin = new ShiftExchangeListAdapter(
-                                    ShiftExchangeListActivity.this, role, date, status);
-                            mListAll.setAdapter(adapterAdmin);
-                        }
+                            shiftExchangeService.getShiftsForExchangeForConfirmable(new NetworkCallback<List<Shift>>() {
+                                @Override
+                                public void onSuccess(List<Shift> result) {
+                                    mShiftsAdmin = result;
+                                    Log.d(TAG, "Gekk að ná í lista af shifts for exchange fyrir confirmable: " + String.valueOf(mShiftsAdmin));
+                                    int n = mShiftExchangesListAdmin.size();
+                                    String[] role = new String[n];
+                                    String[] date = new String[n];
+                                    String[] status = new String[n];
+                                    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm");
+                                    for (int i = 0; i < n; i++) {
+                                        role[i] = mShiftsAdmin.get(i).getRole();
+                                        date[i] = mShiftsAdmin.get(i).getStartTime().format(dateFormat) + " - " + mShiftsAdmin.get(i).getEndTime().format(dateFormat);
+                                        status[i] = mShiftExchangesListAdmin.get(i).getStatus();
+                                    }
+                                    ShiftExchangeListAdapter adapterAdmin = new ShiftExchangeListAdapter(
+                                            ShiftExchangeListActivity.this, role, date, status);
+                                    mListAdmin.setAdapter(adapterAdmin);
+                                    // Opnar nýtt activity með shift exchange hlutnum sem smellt var á
+                                    mListAdmin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            ShiftExchange shiftExchange = mShiftExchangesListAdmin.get(position);
+                                            Log.d(TAG, "ShiftExchange nr. " + position + " í lista");
+                                            Log.d(TAG, "id: " + shiftExchange.getShiftExchangeId());
+                                            // Opnum nýtt activity fyrir þetta shiftexchange
+                                            Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
+                                            startActivity(intent);
+                                        }
+                                    });
+                                }
 
-                        @Override
-                        public void onFailure(String errorString) {
-                            Log.e(TAG, "Villa að ná í lista af shifts for exchange fyrir confirmable: " + errorString);
-                        }
-                    });
-
-                     */
+                                @Override
+                                public void onFailure(String errorString) {
+                                    Log.e(TAG, "Villa að ná í lista af shifts for exchange fyrir confirmable: " + errorString);
+                                }
+                            });
                         }
 
                         @Override
@@ -221,7 +230,17 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
             }
         });
 
-        // TODO: onclicklistener fyrir stök í mListUser
+        // Opnar nýtt activity með shift exchange hlutnum sem smellt var á
+        mListUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ShiftExchange shiftExchange = mShiftExchangesListUser.get(position);
+                Log.d(TAG, "ShiftExchange nr. " + position + " í lista");
+                Log.d(TAG, "id: " + shiftExchange.getShiftExchangeId());
+                Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
+                startActivity(intent);
+            }
+        });
 
         // Opnar nýtt activity með shift exchange hlutnum sem smellt var á
         mListAll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -232,7 +251,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 Log.d(TAG, "id: " + shiftExchange.getShiftExchangeId());
                 // Admin getur opnað öll shiftexchanges
                 if (mUser.getAdmin()) {
-                    Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId());
+                    Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                     startActivity(intent);
                 }
                 // Aðrir geta bara opnað þau sem eru upforgrabs og hafa sama role og notandi
@@ -243,14 +262,12 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                         if (!mShiftsAll.get(position).getRole().equals(mUser.getRole())) {
                             Toast.makeText(ShiftExchangeListActivity.this, "Þú hefur ekki sama role og þessi vakt", Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId());
+                            Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                             startActivity(intent);
                         }
                     }
                 }
             }
         });
-
-        // TODO: onclicklistener fyrir stök í confirmable mListAdmin
     }
 }

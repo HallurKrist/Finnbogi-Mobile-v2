@@ -92,7 +92,7 @@
             android:id="@+id/shiftexchange_list_adminlinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible">
+            android:visibility="gone">
 
             <ListView
                 android:id="@+id/shiftexchange_list_adminlist"

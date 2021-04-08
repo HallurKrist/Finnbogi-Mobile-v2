@@ -35,4 +35,8 @@
     <string name="make_user_admin">Admin:</string>
     <string name="shiftexchange_list_mylist_title">Mín vaktaskipti</string>
     <string name="shiftexchange_adminlist_title">Tilbúin vaktaskipti</string>
+    <string name="shiftexchange_pending_myshift">Vaktin mín</string>
+    <string name="shiftexchange_pending_offeredshift">Vakt boðið á móti</string>
+    <string name="shiftexchange_confirmable_vakt1">Vakt 1</string>
+    <string name="shiftexchange_confirmable_vakt2">Vakt 2</string>
 </resources>

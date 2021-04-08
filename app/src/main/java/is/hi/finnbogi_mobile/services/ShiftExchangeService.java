@@ -424,7 +424,7 @@ public class ShiftExchangeService {
      * @param shiftId Id á vakt sem er boðið á móti.
      */
     public void offerShiftForExchange(NetworkCallback<String> callback, int shiftExchangeId, int shiftId) {
-        Log.d(TAG, "update-a shiftexchange");
+        Log.d(TAG, "update-a shiftexchange með offeredshift í pending");
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -439,5 +439,88 @@ public class ShiftExchangeService {
             }
         }, new String[] {"shiftexchanges", "setpending", String.valueOf(shiftExchangeId)},
                 new String[][]{{"coworkerShiftId", String.valueOf(shiftId)}});
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     *
+     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
+     */
+    public void declinePendingOffer(NetworkCallback<String> callback, int shiftExchangeId) {
+        Log.d(TAG, "decline-a pending offer");
+        mNetworkManager.PATCH(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, "Gekk að decline-a pending offer");
+                callback.onSuccess("Gekk upp");
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, "Villa að decline-a pending offer: " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"shiftexchanges", "declinepending", String.valueOf(shiftExchangeId)},
+                new String[][] {});
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     *
+     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
+     */
+    public void acceptPendingOffer(NetworkCallback<String> callback, int shiftExchangeId) {
+        Log.d(TAG, "accepta-a pending offer");
+        mNetworkManager.PATCH(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, "Gekk að accepta-a pending offer");
+                callback.onSuccess("Gekk upp");
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, "Villa að decline-a pending offer: " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"shiftexchanges", "approvepending", String.valueOf(shiftExchangeId)},
+                new String[][] {});
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     *
+     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
+     */
+    public void declineConfirmableOffer(NetworkCallback<String> callback, int shiftExchangeId) {
+        Log.d(TAG, "decline-a vaktaskipti");
+        // kalla á delete fall í network manager
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     *
+     * @param callback Fall sem tekur við þegar network kall er búið.
+     * @param shiftExchangeId Id á shiftexchange sem á að uppfæra.
+     */
+    public void acceptConfirmableOffer(NetworkCallback<String> callback, int shiftExchangeId) {
+        Log.d(TAG, "accepta-a vaktaskipti");
+        mNetworkManager.PATCH(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, "Gekk að accepta-a vaktaskipti");
+                callback.onSuccess("Gekk upp");
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, "Villa að accepta-a vaktaskipti: " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"shiftexchanges", "confirm", String.valueOf(shiftExchangeId)},
+                new String[][] {});
     }
 }
