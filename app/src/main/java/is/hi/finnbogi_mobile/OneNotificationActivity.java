@@ -20,17 +20,31 @@ public class OneNotificationActivity extends AppCompatActivity {
     private static final String NOTIFICATION_KEY = "currentNotification";
     private static final String MY_PREFERENCES = "Session";
 
+    // Viðmótshlutir
     private TextView mTextViewTitle;
     private TextView mTextViewText;
 
+    // Global breyta
     private Notification mNotification;
 
+    /**
+     * Aðferð fyrir aðra klasa að búa til nýtt intent fyrir þetta activity.
+     *
+     * @param packageContext Gamli activity klasinn.
+     * @param notificationId Id fyrir Notification sem er verið að opna.
+     * @return intent
+     */
     public static Intent newIntent(Context packageContext, int notificationId) {
         Intent intent = new Intent(packageContext, OneNotificationActivity.class);
         intent.putExtra(NOTIFICATION_KEY, notificationId);
         return intent;
     }
 
+    /**
+     * Upphafsstillir alla viðmótshluti, nær í gögn og setur hlustara.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,20 +60,37 @@ public class OneNotificationActivity extends AppCompatActivity {
 
         int notificationId = getIntent().getIntExtra(NOTIFICATION_KEY, -1);
 
+        /**
+         * Nær í ShiftExchange hlutinn sem á að skoða og setur viðmótshluti.
+         *
+         */
         notificationsService.getNotificationById(new NetworkCallback<Notification>() {
             @Override
             public void onSuccess(Notification result) {
-                Log.d(TAG, "Gekk að ná í notification: " + notificationId);
+                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mNotification = result;
                 mTextViewTitle.setText(mNotification.getTitle());
                 mTextViewText.setText(mNotification.getText());
-                // Setja notification sem 'read'
-                notificationsService.updateNotification(notificationId, sharedPref.getInt("userId", -1));
+                /**
+                 * Uppfærir Notification hlut sem 'lesinn'.
+                 *
+                 */
+                notificationsService.updateNotification(new NetworkCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Log.d(TAG, String.valueOf(R.string.activity_success));
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Log.e(TAG, R.string.activity_error + " " + errorString);
+                    }
+                }, notificationId, sharedPref.getInt("userId", -1));
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Villa við að ná í notification með id: " + notificationId + ": " + errorString);
+                Log.e(TAG, R.string.activity_error + " " + errorString);
             }
         }, notificationId);
     }

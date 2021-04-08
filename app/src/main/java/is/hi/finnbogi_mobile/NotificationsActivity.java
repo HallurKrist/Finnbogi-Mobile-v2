@@ -31,10 +31,17 @@ public class NotificationsActivity extends AppCompatActivity {
     private static final String TAG = "NotificationsActivity";
     private static final String MY_PREFERENCES = "Session";
 
+    // Viðmótshlutir
     private ListView mList;
 
+    // Global breytur
     private List<Notification> mAllNotifications;
 
+    /**
+     * Upphafsstillir alla viðmótshluti, nær í gögn og setur hlustara.
+     *
+     * @param savedInstanceState
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +55,16 @@ public class NotificationsActivity extends AppCompatActivity {
         NetworkManager networkManager = NetworkManager.getInstance(this);
         NotificationsService notificationsService = new NotificationsService(networkManager);
 
+        /**
+         * Nær í öll Notification sem innskráður notandi
+         * er venslaður við og setur lista með þeim.
+         *
+         */
         notificationsService.getAllNotifications(new NetworkCallback<List<Notification>>() {
             @Override
             public void onSuccess(List<Notification> result) {
+                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mAllNotifications = result;
-                Log.d(TAG, "Gekk að ná í lista af notifications: " + String.valueOf(mAllNotifications));
                 int n = mAllNotifications.size();
                 String[] title = new String[n];
                 String[] message = new String[n];
@@ -70,16 +82,21 @@ public class NotificationsActivity extends AppCompatActivity {
             @Override
             public void onFailure(String errorString) {
                 mAllNotifications = null;
-                Log.e(TAG, "Villa að ná í allar tilkynningar: " + errorString);
+                Log.e(TAG, R.string.activity_error + " " + errorString);
             }
         }, sharedPref.getInt("userId", -1));
 
+        /**
+         * Event listener fyrir lista af Notifiction.
+         * Hlustar á hvaða stak er smellt á í lista og opnar
+         * OneNotificationActivity með þeim Notification hlut
+         * sem smellt er á.
+         *
+         */
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "Tilkynning nr: " + position + " í lista");
                 Notification notification = mAllNotifications.get(position);
-                Log.d(TAG, "id: " + notification.getNotificationId());
                 Intent intent = OneNotificationActivity.newIntent(NotificationsActivity.this, notification.getNotificationId());
                 startActivity(intent);
             }
