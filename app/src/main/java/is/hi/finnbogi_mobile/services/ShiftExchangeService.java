@@ -536,6 +536,25 @@ public class ShiftExchangeService {
                 new String[][] {});
     }
 
+    public void createShiftExchange(NetworkCallback<ShiftExchange> callback, int employeeId, int shiftId) {
+        mNetworkManager.POST(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                Gson gson = new Gson();
+                ShiftExchange shiftExchange = gson.fromJson(result, ShiftExchange.class);
+                callback.onSuccess(shiftExchange);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, R.string.service_error + " " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"shiftexchanges"},
+                new String[][] {{"employeeid", String.valueOf(employeeId)}, {"shiftid", String.valueOf(shiftId)}});
+    }
+
     /**
      * Býr til path og kallar á network fall.
      * Býr til Notification hlut með niðurstöðunni
