@@ -33,6 +33,13 @@
     <string name="shiftexhange_to_offer">Vakt til að bjóða á móti</string>
     <string name="make_user_role">Starfsheiti:</string>
     <string name="make_user_admin">Admin:</string>
+    <string name="shift_list_title">Vakt</string>
+    <string name="dialog_confirm">Staðfesta</string>
+    <string name="dialog_cancel">Hætta við</string>
+    <string name="shift_list_dialog_message">Ertu viss um að þú viljir eyða þessari vakt?</string>
+    <string name="shift_list_dialog_title">Eyða vakt</string>
+    <string name="user_list_dialog_message">Ertu viss um að þú viljir eyða þessum starfsmanni</string>
+    <string name="user_list_dialog_title">Eyða starfsmanni</string>
     <string name="shiftexchange_list_mylist_title">Mín vaktaskipti</string>
     <string name="shiftexchange_adminlist_title">Tilbúin vaktaskipti</string>
     <string name="shiftexchange_pending_myshift">Vaktin mín</string>

@@ -6,8 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.content.Intent;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,92 +18,92 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import is.hi.finnbogi_mobile.R;
+import is.hi.finnbogi_mobile.ShiftActivity;
 import is.hi.finnbogi_mobile.UserInfoActivity;
+import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
+import is.hi.finnbogi_mobile.services.ShiftListService;
 import is.hi.finnbogi_mobile.services.UserInfoService;
 import is.hi.finnbogi_mobile.services.UserListService;
 
-public class UserListAdapter extends ArrayAdapter<String> {
+public class ShiftListAdapter extends ArrayAdapter<String> {
 
-    private static final String TAG = "UserListAdapter";
+    private static final String TAG = "ShiftListAdapter";
 
     private final Activity mContext;
-    private final String[] mName;
+    private final String[] mDateTime;
     private final String[] mRole;
+    private final int[] mShiftIds;
 
-    private final UserListService mUserListService;
+    private final ShiftListService mShiftListService;
 
-    public UserListAdapter(Activity context, UserListService userListService, String[] name, String[] role) {
-        super(context, R.layout.user_list, name);
+    public ShiftListAdapter(Activity context, ShiftListService shiftListService, int[] shiftIds, String[] dateTime, String[] role) {
+        super(context, R.layout.user_list, dateTime);
 
         this.mContext=context;
-        this.mName=name;
+        this.mShiftIds=shiftIds;
+        this.mDateTime=dateTime;
         this.mRole=role;
 
-        this.mUserListService = userListService;
-
+        this.mShiftListService = shiftListService;
     }
 
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=mContext.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.user_list, null,true);
+        View rowView=inflater.inflate(R.layout.shift_list, null,true);
 
-        TextView nameText = (TextView) rowView.findViewById(R.id.user_list_name);
-        TextView roleText = (TextView) rowView.findViewById(R.id.user_list_role);
+        TextView idText = (TextView) rowView.findViewById(R.id.shift_list_shiftID);
+        TextView nameText = (TextView) rowView.findViewById(R.id.shift_list_datetime);
+        TextView roleText = (TextView) rowView.findViewById(R.id.shift_list_role);
 
-        nameText.setText(mName[position]);
+        idText.setText(String.valueOf(mShiftIds[position]));
+        nameText.setText(mDateTime[position]);
         roleText.setText(mRole[position]);
 
-        LinearLayout theUser = (LinearLayout) rowView.findViewById(R.id.user_list_user);
-        theUser.setOnClickListener(new View.OnClickListener() {
+        LinearLayout theShift = (LinearLayout) rowView.findViewById(R.id.shift_list_shift);
+        theShift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUserListService.getUserIdByName(new NetworkCallback<Integer>() {
-                    @Override
-                    public void onSuccess(Integer result) {
-                        Intent userInfoIntent = UserInfoActivity.newIntent(mContext, result);
-                        mContext.startActivity(userInfoIntent);
-                    }
-
-                    @Override
-                    public void onFailure(String errorString) {
-                        Log.e(TAG, "Error finding user");
-                    }
-                }, (String) ((TextView) theUser.getChildAt(0)).getText());
+                TextView shiftIDTextView = ((TextView) ((LinearLayout) theShift.getParent()).getChildAt(1));
+                int shiftID =Integer.parseInt((String)shiftIDTextView.getText());
+                Intent shiftIntent = ShiftActivity.newIntent(mContext, shiftID);
+                mContext.startActivity(shiftIntent);
             }
         });
 
-        Button delete = (Button) rowView.findViewById(R.id.user_list_delete);
+        Button delete = (Button) rowView.findViewById(R.id.shift_list_delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // hierarchy
                 // LinearLayout
                 //      LinearLayout
                 //          TextView (name)
                 //          TextView (role)
+                //      TextView (shiftId)
                 //      Button (View v)
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setMessage(R.string.user_list_dialog_message)
-                        .setTitle(R.string.user_list_dialog_title)
+                builder.setMessage(R.string.shift_list_dialog_message)
+                        .setTitle(R.string.shift_list_dialog_title)
                         .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                String userName = (String) ((TextView) ((LinearLayout) ((LinearLayout) v.getParent()).getChildAt(0)).getChildAt(0)).getText();
-                                mUserListService.deleteUserByName(new NetworkCallback<Boolean>() {
+                                int shiftId = Integer.parseInt((String)((TextView) ((LinearLayout) delete.getParent()).getChildAt(1)).getText());
+                                mShiftListService.deleteShiftById(new NetworkCallback<Boolean>() {
 
                                     @Override
                                     public void onSuccess(Boolean result) {
-                                        Log.d(TAG, "Successfully deleted user" + userName);
-                                        Toast.makeText(mContext,"Successfully deleted user "+userName, Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, "Successfully deleted shift" + shiftId);
+                                        Toast.makeText(mContext,"Successfully deleted shift", Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
                                     public void onFailure(String errorString) {
-                                        Log.e(TAG, "Error while deleting user: " + errorString);
-                                        Toast.makeText(mContext,"Error deleting user " + userName, Toast.LENGTH_SHORT).show();
+                                        Log.e(TAG, "Error while deleting shift: " + errorString);
+                                        Toast.makeText(mContext,"Error deleting shift", Toast.LENGTH_SHORT).show();
                                     }
-                                }, userName);
+                                }, shiftId);
                             }
                         })
                         .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -132,8 +132,6 @@ public class UserListAdapter extends ArrayAdapter<String> {
                 dialog.show();
             }
         });
-
-
 
         return rowView;
     };

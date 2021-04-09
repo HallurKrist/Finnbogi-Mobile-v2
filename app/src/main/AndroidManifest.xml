@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinnbogiMobile">
+        <activity android:name=".ShiftListActivity"></activity>
         <activity android:name=".OneNotificationActivity"></activity>
         <activity android:name=".ShiftExchangeListActivity" />
         <activity android:name=".ShiftExchangeActivity" />

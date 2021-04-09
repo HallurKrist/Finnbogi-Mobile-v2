@@ -8,8 +8,8 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_shift"
-        android:title="Shift"
+        android:id="@+id/menu_shift_list"
+        android:title="Shift List"
         app:showAsAction="never" />
 
     <item
