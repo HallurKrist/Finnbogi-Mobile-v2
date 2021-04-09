@@ -42,6 +42,7 @@ public class UserListService {
                 // Ef engin með þetta nafn í gagnagrunni skila villu
                 if (userId == -1) {
                     callback.onFailure("No user with that name in DB");
+                    return;
                 }
 
                 // Ef er til í gagnagrunni þá eyða
@@ -124,8 +125,8 @@ public class UserListService {
 //                    String[] splitName = ;
                     String name = ((String) user.get("username"));
                     mNames[i] = name;
-                    if (name.length() > 16) {
-                        namesNRoles[0][i] =  name.substring(0, 16);
+                    if (name.length() > 10) {
+                        namesNRoles[0][i] =  name.substring(0, 10);
                     } else {
                         namesNRoles[0][i] = name;
                     }

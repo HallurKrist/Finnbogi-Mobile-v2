@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import is.hi.finnbogi_mobile.R;
 import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
@@ -20,6 +21,7 @@ public class MakeUserService {
 
     /**
      * Býr til path og kallar á network fall.
+     * Býr til User hlut með niðurstöðunni ef kall gekk upp.
      *
      * @param callback - fall sem tekur við þegar network kall er búið
      * @param userName - notendanafn fyrir user
@@ -30,11 +32,10 @@ public class MakeUserService {
      */
     public void createUser(NetworkCallback<User> callback, String userName, String role,
                            String password, String ssn, boolean admin) {
-        Log.d(TAG, "búa til user");
         mNetworkManager.POST(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                // Get user information
+                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 User userCreated = gson.fromJson(result, User.class);
                 callback.onSuccess(userCreated);
@@ -42,7 +43,7 @@ public class MakeUserService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, "Failed to create user: " + errorString);
+                Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"users", "register"},

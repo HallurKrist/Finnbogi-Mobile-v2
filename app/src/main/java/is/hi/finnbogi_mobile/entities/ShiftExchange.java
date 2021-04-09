@@ -1,52 +1,52 @@
 package is.hi.finnbogi_mobile.entities;
 
-import java.io.StringBufferInputStream;
+import com.google.gson.annotations.SerializedName;
 
 public class ShiftExchange {
 
+    @SerializedName("id")
     private int mShiftExchangeId;
-    private User mEmployee;
-    private Shift mShiftForExchange;
-    private Shift mCoworkerShift;
+    @SerializedName("employeeid")
+    private int mEmployeeId;
+    @SerializedName("shiftforexchangeid")
+    private int mShiftForExchangeId;
+    @SerializedName("coworkershiftid")
+    private int mCoworkerShiftId;
+    @SerializedName("status")
     private String mStatus;
 
     // All Status'
-    private static String UFG = "UpForGrabs";
-    private static String CSO = "CoworkerShiftOffered";
-    private static String EAO = "EmployeeAcceptsOffer";
+    private static String UFG = "upforgrabs";
+    private static String PENDING = "pending";
+    private static String CONFIRMABLE = "confirmable";
 
-    /**
-     *
-     * @param shiftExchangeId int > 0
-     * @param employee User
-     * @param shiftForExchange Shift
-     * @param coworkerShift User / null
-     * @param status null / UpForGrabs / CoworkerShiftOffered / EmployeeAcceptsOffer
-     */
-    public ShiftExchange(int shiftExchangeId, User employee, Shift shiftForExchange, Shift coworkerShift, String status) {
+    public ShiftExchange(int shiftExchangeId, int employeeId, int shiftForExchangeId, int coworkerShiftId, String status) {
         mShiftExchangeId = shiftExchangeId;
-        mEmployee = employee;
-        mShiftForExchange = shiftForExchange;
-        mCoworkerShift = coworkerShift;
+        mEmployeeId = employeeId;
+        mShiftForExchangeId = shiftForExchangeId;
+        mCoworkerShiftId = coworkerShiftId;
         mStatus = status;
-        if (status == null) { mStatus = UFG; }
+        if (status == null) {
+            mStatus = UFG;
+        }
     }
 
     /**
-     * updates status if accepted status given
-     * @param status, UFG = UpForGrabs, CSO = CoworkerShiftOffered OR EAO = EmployeeAcceptsOffer.
+     * Updates status if accepted status is given.
+     *
+     * @param status UFG = UpForGrabs, CSO = CoworkerShiftOffered OR EAO = EmployeeAcceptsOffer.
      * @return true if status was updated, false else.
      */
-    public Boolean updateStatus(String status) {
+    public boolean updateStatus(String status) {
         switch(status) {
             case "UFG":
                 mStatus = UFG;
                 return true;
-            case "CSO":
-                mStatus = CSO;
+            case "PENDING":
+                mStatus = PENDING;
                 return true;
-            case "EAO":
-                mStatus = EAO;
+            case "CONFIRMABLE":
+                mStatus = CONFIRMABLE;
                 return true;
         }
         return false;
@@ -56,27 +56,19 @@ public class ShiftExchange {
         return mShiftExchangeId;
     }
 
-    public User getEmployee() {
-        return mEmployee;
+    public int getEmployeeId() {
+        return mEmployeeId;
+    }
+
+    public int getShiftForExchangeId() {
+        return mShiftForExchangeId;
+    }
+
+    public int getCoworkerShiftId() {
+        return mCoworkerShiftId;
     }
 
     public String getStatus() {
         return mStatus;
-    }
-
-    public Shift getShiftForExchange() {
-        return mShiftForExchange;
-    }
-
-    public void setShiftForExchange(Shift shiftForExchange) {
-        mShiftForExchange = shiftForExchange;
-    }
-
-    public Shift getCoworkerShift() {
-        return mCoworkerShift;
-    }
-
-    public void setCoworkerShift(Shift coworkerShift) {
-        mCoworkerShift = coworkerShift;
     }
 }

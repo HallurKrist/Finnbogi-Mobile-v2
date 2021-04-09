@@ -1,10 +1,16 @@
 package is.hi.finnbogi_mobile.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Notification {
 
+    @SerializedName("id")
     private int mNotificationId;
+    @SerializedName("title")
     private String mTitle;
+    @SerializedName("text")
     private String mText;
+    @SerializedName("read")
     private Boolean mRead;
 
     /**

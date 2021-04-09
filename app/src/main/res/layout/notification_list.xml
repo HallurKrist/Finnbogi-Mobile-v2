@@ -22,16 +22,6 @@
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
-        <TextView
-            android:id="@+id/notification_list_dateTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="01.01.2021 - 12:00"
-            android:textSize="20dp"
-            android:gravity="right"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="4dp"/>
-
     </LinearLayout>
 
 

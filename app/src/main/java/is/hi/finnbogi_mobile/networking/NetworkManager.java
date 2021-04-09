@@ -72,7 +72,7 @@ public class NetworkManager {
      * @param callback callback sem skilar response
      * @param path String[] {path1, path2} = BASE_URL/path1/path2
      */
-    public void GET(final NetworkCallback<String> callback, String[] path){
+    public void GET(final NetworkCallback<String> callback, String[] path) {
 
         // Make correct path
         Uri.Builder urlBuilder = Uri.parse(BASE_URL)
@@ -105,7 +105,7 @@ public class NetworkManager {
      * @param path String[] {path1, path2} = /path1/path2
      * @param requestBody String[][] {{key1 , value1}, {key2, value2}} = key1=value1&key2=value2
      */
-    public void POST(final NetworkCallback<String> callback, String[] path, String[][] requestBody){
+    public void POST(final NetworkCallback<String> callback, String[] path, String[][] requestBody) {
 
         // Make path
         Uri.Builder urlBuilder = Uri.parse(BASE_URL)
@@ -315,6 +315,5 @@ public class NetworkManager {
         };
         mQueue.add(request);
     }
-
 
 }

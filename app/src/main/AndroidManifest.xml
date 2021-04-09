@@ -12,8 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinnbogiMobile">
         <activity android:name=".ShiftListActivity"></activity>
+        <activity android:name=".OneNotificationActivity"></activity>
         <activity android:name=".ShiftExchangeListActivity" />
-        <activity android:name=".ShiftexchangeActivity" />
+        <activity android:name=".ShiftExchangeActivity" />
         <activity android:name=".MakeUserActivity" />
         <activity android:name=".UserInfoActivity" />
         <activity android:name=".UserListActivity" />

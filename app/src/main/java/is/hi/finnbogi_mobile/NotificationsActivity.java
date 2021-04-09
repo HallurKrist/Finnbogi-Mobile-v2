@@ -3,67 +3,102 @@ package is.hi.finnbogi_mobile;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.Toast;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
+import is.hi.finnbogi_mobile.entities.Notification;
 import is.hi.finnbogi_mobile.listAdapters.NotificationListAdapter;
+import is.hi.finnbogi_mobile.networking.NetworkCallback;
+import is.hi.finnbogi_mobile.networking.NetworkManager;
+import is.hi.finnbogi_mobile.services.NotificationsService;
 
 public class NotificationsActivity extends AppCompatActivity {
-    //TODO: this class
 
-    private ListView list;
+    private static final String TAG = "NotificationsActivity";
+    private static final String MY_PREFERENCES = "Session";
 
+    // Viðmótshlutir
+    private ListView mList;
+
+    // Global breytur
+    private List<Notification> mAllNotifications;
+
+    /**
+     * Upphafsstillir alla viðmótshluti, nær í gögn og setur hlustara.
+     *
+     * @param savedInstanceState
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
 
-        //mock list
-        String[] title = {"title1","title2","title3","title4","title5","title1","title2","title3","title4","title5","title1","title2","title3","title4","title5"};
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        String date = (LocalDateTime.now()).format(format);
-        String[] dateTime = {date,date,date,date,date,date,date,date,date,date,date,date,date,date,date};
-        String[] message = {"message1","message2","message3","a long message with alot of words and possible \n some enter and \n\t tabs","message5","message1","message2","message3","message4","message5","message1","message2","message3","message4","message5"};
-        NotificationListAdapter adapter = new NotificationListAdapter(this, title, dateTime, message);
+        mList = (ListView) findViewById(R.id.notification_list);
 
-        list = (ListView) findViewById(R.id.notification_list);
-        list.setAdapter(adapter);
+        SharedPreferences sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        NetworkManager networkManager = NetworkManager.getInstance(this);
+        NotificationsService notificationsService = new NotificationsService(networkManager);
+
+        /**
+         * Nær í öll Notification sem innskráður notandi
+         * er venslaður við og setur lista með þeim.
+         *
+         */
+        notificationsService.getAllNotifications(new NetworkCallback<List<Notification>>() {
+            @Override
+            public void onSuccess(List<Notification> result) {
+                Log.d(TAG, String.valueOf(R.string.activity_success));
+                mAllNotifications = result;
+                int n = mAllNotifications.size();
+                String[] title = new String[n];
+                String[] message = new String[n];
+                // Setjum upplýsingar inn í fylkin fyrir hvert notification fyrir ListView
+                int i = 0;
+                for (Notification notification : mAllNotifications) {
+                    title[i] = notification.getTitle();
+                    message[i] = notification.getText();
+                    i++;
+                }
+                NotificationListAdapter adapter = new NotificationListAdapter(NotificationsActivity.this, title, message);
+                mList.setAdapter(adapter);
+            }
 
             @Override
+            public void onFailure(String errorString) {
+                mAllNotifications = null;
+                Log.e(TAG, R.string.activity_error + " " + errorString);
+            }
+        }, sharedPref.getInt("userId", -1));
+
+        /**
+         * Event listener fyrir lista af Notifiction.
+         * Hlustar á hvaða stak er smellt á í lista og opnar
+         * OneNotificationActivity með þeim Notification hlut
+         * sem smellt er á.
+         *
+         */
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0) {
-                    //code specific to first list item
-                    Toast.makeText(getApplicationContext(),"Place Your First Option Code",Toast.LENGTH_SHORT).show();
-                }
-
-                else if(position == 1) {
-                    //code specific to 2nd list item
-                    Toast.makeText(getApplicationContext(),"Place Your Second Option Code",Toast.LENGTH_SHORT).show();
-                }
-
-                else if(position == 2) {
-
-                    Toast.makeText(getApplicationContext(),"Place Your Third Option Code",Toast.LENGTH_SHORT).show();
-                }
-                else if(position == 3) {
-
-                    Toast.makeText(getApplicationContext(),"Place Your Forth Option Code",Toast.LENGTH_SHORT).show();
-                }
-                else if(position == 4) {
-
-                    Toast.makeText(getApplicationContext(),"Place Your Fifth Option Code",Toast.LENGTH_SHORT).show();
-                }
-
+                Notification notification = mAllNotifications.get(position);
+                Intent intent = OneNotificationActivity.newIntent(NotificationsActivity.this, notification.getNotificationId());
+                startActivity(intent);
             }
         });
     }
