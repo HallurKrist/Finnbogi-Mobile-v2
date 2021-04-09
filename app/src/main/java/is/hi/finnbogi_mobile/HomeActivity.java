@@ -347,8 +347,9 @@ public class HomeActivity extends AppCompatActivity {
                 Intent notificationIntent = new Intent(HomeActivity.this, NotificationsActivity.class);
                 startActivity(notificationIntent);
                 return true;
-            case R.id.menu_shift:
-                Toast.makeText(HomeActivity.this, "TODO", Toast.LENGTH_SHORT).show();
+            case R.id.menu_shift_list:
+                Intent shiftListIntent = new Intent(HomeActivity.this, ShiftListActivity.class);
+                startActivity(shiftListIntent);
                 return true;
             case R.id.menu_make_shift:
                 Intent makeShiftIntent = new Intent(HomeActivity.this, MakeShiftActivity.class);

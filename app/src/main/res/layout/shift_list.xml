@@ -30,13 +30,20 @@
                 android:textColor="@color/black"/>
 
             <TextView
-                android:id="@+id/shift_list_status"
+                android:id="@+id/shift_list_role"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="UpForGrabs"
+                tools:text="Manager"
                 android:textSize="20dp"/>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/shift_list_shiftID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="blablabla"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/shift_list_delete"

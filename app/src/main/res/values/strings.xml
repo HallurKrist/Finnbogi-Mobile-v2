@@ -35,4 +35,10 @@
     <string name="make_user_admin">Admin:</string>
     <string name="user_list_delete">Eyða</string>
     <string name="shift_list_title">Vakt</string>
+    <string name="dialog_confirm">Staðfesta</string>
+    <string name="dialog_cancel">Hætta við</string>
+    <string name="shift_list_dialog_message">Ertu viss um að þú viljir eyða þessari vakt?</string>
+    <string name="shift_list_dialog_title">Eyða vakt</string>
+    <string name="user_list_dialog_message">Ertu viss um að þú viljir eyða þessum starfsmanni</string>
+    <string name="user_list_dialog_title">Eyða starfsmanni</string>
 </resources>
