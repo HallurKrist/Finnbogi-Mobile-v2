@@ -42,6 +42,6 @@ public class LoginService {
                 Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
-        }, new String[] {"users", "login"}, new String[][] {{"username", userName},{"password", password}});
+        }, new String[] {"users", "login"}, new String[][][] {{{"username"}, {userName}},{{"password"}, {password}}});
     }
 }

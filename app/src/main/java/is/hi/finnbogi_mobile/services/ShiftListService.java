@@ -15,14 +15,23 @@ public class ShiftListService {
 
     NetworkManager mNetworkManager;
 
+    /**
+     * constructor
+     * @param networkManager
+     */
     public ShiftListService(NetworkManager networkManager) {
         mNetworkManager=networkManager;
     }
 
+    /**
+     * get all ids, datetimes and roles for all shifts
+     * @param callback
+     */
     public void getIdNDateTimeNRole(NetworkCallback<String[][]> callback) {
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                // work with string response
                 Gson gson = new Gson();
                 Object json = gson.fromJson(result, Object.class);
                 ArrayList jsonArray = (ArrayList) json;
@@ -47,6 +56,11 @@ public class ShiftListService {
         }, new String[] {"shifts"});
     }
 
+    /**
+     * delete shift by shiftId
+     * @param callback
+     * @param shiftId
+     */
     public void deleteShiftById(NetworkCallback<Boolean> callback, int shiftId) {
         mNetworkManager.DELETE(new NetworkCallback<String>() {
             @Override
@@ -62,6 +76,12 @@ public class ShiftListService {
         },new String[] {"shifts", ""+shiftId}, new String[][] {});
     }
 
+    /**
+     * make a "pretty" string from 2 DateTime strings
+     * @param startTime
+     * @param endTime
+     * @return "beautyfied" string
+     */
     private String prettyDateTime(String startTime, String endTime) {
         String[] datePlusTime = startTime.split("T");
         String[] yearMonthDay = datePlusTime[0].split("-");

@@ -34,6 +34,13 @@ public class UserListAdapter extends ArrayAdapter<String> {
 
     private final UserListService mUserListService;
 
+    /**
+     * constructor
+     * @param context UserListActiviy
+     * @param userListService UserListSerivce from UserListActivity
+     * @param name list of strings representing names of users
+     * @param role list of strings representing roles of users
+     */
     public UserListAdapter(Activity context, UserListService userListService, String[] name, String[] role) {
         super(context, R.layout.user_list, name);
 
@@ -42,23 +49,33 @@ public class UserListAdapter extends ArrayAdapter<String> {
         this.mRole=role;
 
         this.mUserListService = userListService;
-
     }
 
+    /**
+     * How UserListActivity knows what to display
+     * @param position
+     * @param view
+     * @param parent
+     * @return
+     */
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=mContext.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.user_list, null,true);
 
+        // find textViews
         TextView nameText = (TextView) rowView.findViewById(R.id.user_list_name);
         TextView roleText = (TextView) rowView.findViewById(R.id.user_list_role);
 
+        // set TextViews
         nameText.setText(mName[position]);
         roleText.setText(mRole[position]);
 
+        // Set onclick for user in the list
         LinearLayout theUser = (LinearLayout) rowView.findViewById(R.id.user_list_user);
         theUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // get userId and navigate to UserInfoActivity for correct user
                 mUserListService.getUserIdByName(new NetworkCallback<Integer>() {
                     @Override
                     public void onSuccess(Integer result) {
@@ -74,6 +91,7 @@ public class UserListAdapter extends ArrayAdapter<String> {
             }
         });
 
+        // Set onclick for deleting user
         Button delete = (Button) rowView.findViewById(R.id.user_list_delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,11 +102,14 @@ public class UserListAdapter extends ArrayAdapter<String> {
                 //          TextView (name)
                 //          TextView (role)
                 //      Button (View v)
+
+                // Ask user if sure they want to delete user
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setMessage(R.string.user_list_dialog_message)
                         .setTitle(R.string.user_list_dialog_title)
                         .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                // if user chooses positively (want to delete) then delete
                                 String userName = (String) ((TextView) ((LinearLayout) ((LinearLayout) v.getParent()).getChildAt(0)).getChildAt(0)).getText();
                                 mUserListService.deleteUserByName(new NetworkCallback<Boolean>() {
 
@@ -107,6 +128,7 @@ public class UserListAdapter extends ArrayAdapter<String> {
                             }
                         })
                         .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                            // if user chooses negatively (does not want to delete) then do nothing
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
@@ -116,6 +138,7 @@ public class UserListAdapter extends ArrayAdapter<String> {
                 dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
+                        // Changes alert style for buttons
                         Button positiveButton = ((AlertDialog) dialog)
                                 .getButton(AlertDialog.BUTTON_POSITIVE);
                         positiveButton.setBackgroundColor(Color.WHITE);
@@ -125,16 +148,11 @@ public class UserListAdapter extends ArrayAdapter<String> {
                                 .getButton(AlertDialog.BUTTON_NEGATIVE);
                         negativeButton.setBackgroundColor(Color.WHITE);
                         negativeButton.setTextColor(Color.BLACK);
-
                     }
                 });
-
                 dialog.show();
             }
         });
-
-
-
         return rowView;
     };
 }

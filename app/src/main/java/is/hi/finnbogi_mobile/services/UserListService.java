@@ -9,7 +9,6 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 
 public class UserListService {
-
     private static final String TAG = "UserListService";
 
     NetworkManager mNetworkManager;
@@ -17,10 +16,19 @@ public class UserListService {
     private String[] mNames;
     private String[][] mNamesNRoles;
 
+    /**
+     * constructor
+     * @param networkManager
+     */
     public UserListService(NetworkManager networkManager) {
         mNetworkManager = networkManager;
     }
 
+    /**
+     * delete user from API with userName (assume username is unique)
+     * @param callback
+     * @param userName
+     */
     public void deleteUserByName(NetworkCallback<Boolean> callback, String userName) {
         // Ná í alla users og bera saman við nafn
         mNetworkManager.GET(new NetworkCallback<String>() {
@@ -67,6 +75,11 @@ public class UserListService {
         }, new String[] {"users"});
     }
 
+    /**
+     * get user from API with userName (assume username is unique)
+     * @param callback
+     * @param userName
+     */
     public void getUserIdByName(NetworkCallback<Integer> callback, String userName) {
         // Ná í alla users og bera saman við nafn
         mNetworkManager.GET(new NetworkCallback<String>() {
@@ -104,11 +117,15 @@ public class UserListService {
         }, new String[] {"users"});
     }
 
+    /**
+     * get all usernames and corresponding roles from API
+     * @param callback
+     */
     public void getNamesAndRoles(NetworkCallback<String[][]> callback) {
-
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                // get data from string response
                 Gson gson = new Gson();
                 Object json = gson.fromJson(result, Object.class);
 
@@ -122,7 +139,6 @@ public class UserListService {
                 for (int i = 0; i < arrayLength; i++) {
                     LinkedTreeMap user = (LinkedTreeMap) jsonArray.get(i);
                     // if name is to long split it so that the view is correct
-//                    String[] splitName = ;
                     String name = ((String) user.get("username"));
                     mNames[i] = name;
                     if (name.length() > 10) {

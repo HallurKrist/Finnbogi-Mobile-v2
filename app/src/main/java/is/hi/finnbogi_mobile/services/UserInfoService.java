@@ -17,16 +17,24 @@ public class UserInfoService {
 
     NetworkManager mNetworkManager;
 
+    /**
+     * constructor
+     * @param networkManager
+     */
     public UserInfoService(NetworkManager networkManager) {
         mNetworkManager = networkManager;
     }
 
+    /**
+     * get userinfo from API with userInfoId
+     * @param callback
+     * @param userId
+     */
     public void getUserInfoByUserId(NetworkCallback<UserInfo> callback, int userId) {
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, result);
-
+                // make userInfo object from string response
                 Gson gson = new Gson();
                 final Object json = gson.fromJson(result, Object.class);
                 LinkedTreeMap innerJson = (LinkedTreeMap)((ArrayList)json).get(0);
@@ -53,8 +61,11 @@ public class UserInfoService {
         }, new String[] {"users", "info", String.valueOf(userId)});
     }
 
+    /**
+     * changes userinfo in API to info with userINfoId
+     * @param info
+     */
     public void patchUserInfo(UserInfo info) {
-        // TODO: implement this class
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -66,13 +77,12 @@ public class UserInfoService {
                 Log.e(TAG, "Error patching user info");
             }
         }, new String[] {"users", "info", ""+info.getUserInfoId()},
-                new String[][] {
-                    {"firstname", ""+info.getFirstName()},
-                    {"surname", ""+info.getSurName()},
-                    {"address", ""+info.getAddress()},
-                    {"email", ""+info.getEmail()},
-                    {"phonenumber", ""+info.getPhoneNumber()}
-                });
-
+            new String[][] {
+                {"firstname", ""+info.getFirstName()},
+                {"surname", ""+info.getSurName()},
+                {"address", ""+info.getAddress()},
+                {"email", ""+info.getEmail()},
+                {"phonenumber", ""+info.getPhoneNumber()}
+            });
     }
 }

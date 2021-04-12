@@ -115,6 +115,6 @@ public class MakeShiftService {
             public void onFailure(String errorString) {
                 Log.e(TAG, "Error in creation of shift");
             }
-        }, new String[] {"shifts"}, new String[][] {{"startTime", startTime.toString()}, {"endTime", endTime.toString()}, {"role", role}});
+        }, new String[] {"shifts"}, new String[][][] {{{"startTime"}, {startTime.toString()}}, {{"endTime"}, {endTime.toString()}}, {{"role"}, {role}}});
     }
 }

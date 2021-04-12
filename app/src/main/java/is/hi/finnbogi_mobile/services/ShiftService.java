@@ -25,15 +25,25 @@ public class ShiftService {
 
     NetworkManager mNetworkManager;
 
+    /**
+     * constructor
+     * @param networkManager
+     */
     public ShiftService(NetworkManager networkManager) {
         mNetworkManager = networkManager;
     }
 
+    /**
+     * get a shift from API with ShiftId
+     * @param callback
+     * @param shiftId
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getShiftById(NetworkCallback<Shift> callback, int shiftId) {
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                // make shift object from result string
                 Gson gson = new Gson();
                 final Object json = gson.fromJson(result, Object.class);
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
