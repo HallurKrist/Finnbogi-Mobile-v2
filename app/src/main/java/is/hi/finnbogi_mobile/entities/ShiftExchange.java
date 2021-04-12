@@ -15,11 +15,6 @@ public class ShiftExchange {
     @SerializedName("status")
     private String mStatus;
 
-    // All Status'
-    private static String UFG = "upforgrabs";
-    private static String PENDING = "pending";
-    private static String CONFIRMABLE = "confirmable";
-
     public ShiftExchange(int shiftExchangeId, int employeeId, int shiftForExchangeId, int coworkerShiftId, String status) {
         mShiftExchangeId = shiftExchangeId;
         mEmployeeId = employeeId;
@@ -27,29 +22,8 @@ public class ShiftExchange {
         mCoworkerShiftId = coworkerShiftId;
         mStatus = status;
         if (status == null) {
-            mStatus = UFG;
+            mStatus = "upforgrabs";
         }
-    }
-
-    /**
-     * Updates status if accepted status is given.
-     *
-     * @param status UFG = UpForGrabs, CSO = CoworkerShiftOffered OR EAO = EmployeeAcceptsOffer.
-     * @return true if status was updated, false else.
-     */
-    public boolean updateStatus(String status) {
-        switch(status) {
-            case "UFG":
-                mStatus = UFG;
-                return true;
-            case "PENDING":
-                mStatus = PENDING;
-                return true;
-            case "CONFIRMABLE":
-                mStatus = CONFIRMABLE;
-                return true;
-        }
-        return false;
     }
 
     public int getShiftExchangeId() {

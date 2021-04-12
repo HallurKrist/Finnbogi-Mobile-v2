@@ -80,7 +80,6 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
         shiftExchangeService.getUserById(new NetworkCallback<User>() {
             @Override
             public void onSuccess(User result) {
-                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mUser = result;
                 // Ef user er admin þá náum við líka í öll confirmable shiftExchange
                 if (mUser.getAdmin()) {
@@ -93,7 +92,6 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                     shiftExchangeService.getConfirmableShiftExchanges(new NetworkCallback<List<ShiftExchange>>() {
                         @Override
                         public void onSuccess(List<ShiftExchange> result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftExchangesListAdmin = result;
                             /**
                              * Nær í allar vaktirnar sem eru venslaðar við þessi shiftExchange
@@ -103,7 +101,6 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                             shiftExchangeService.getShiftsForExchangeForConfirmable(new NetworkCallback<List<Shift>>() {
                                 @Override
                                 public void onSuccess(List<Shift> result) {
-                                    Log.d(TAG, String.valueOf(R.string.activity_success));
                                     mShiftsAdmin = result;
                                     int n = mShiftExchangesListAdmin.size();
                                     String[] role = new String[n];
@@ -135,14 +132,14 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(String errorString) {
-                                    Log.e(TAG, R.string.activity_error + " " + errorString);
+                                    Log.e(TAG, errorString);
                                 }
                             });
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Log.e(TAG, errorString);
                         }
                     });
                 }
@@ -150,7 +147,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.activity_error + " " + errorString);
+                Log.e(TAG, errorString);
             }
         }, userId);
 
@@ -162,7 +159,6 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
         shiftExchangeService.getShiftExchangesForUser(new NetworkCallback<List<ShiftExchange>>() {
             @Override
             public void onSuccess(List<ShiftExchange> result) {
-                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mShiftExchangesListUser = result;
                 /**
                  * Nær í allar vaktirnar sem eru venslaðar við þessi shiftExchange
@@ -172,7 +168,6 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 shiftExchangeService.getShiftsForExchangeForUser(new NetworkCallback<List<Shift>>() {
                     @Override
                     public void onSuccess(List<Shift> result) {
-                        Log.d(TAG, String.valueOf(R.string.activity_success));
                         mShiftsUser = result;
                         int n = mShiftExchangesListUser.size();
                         String[] role = new String[n];
@@ -191,14 +186,14 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String errorString) {
-                        Log.e(TAG, R.string.activity_error + " " + errorString);
+                        Log.e(TAG, errorString);
                     }
                 }, userId);
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.activity_error + " " + errorString);
+                Log.e(TAG, errorString);
             }
         }, userId);
 
@@ -209,7 +204,6 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
         shiftExchangeService.getAllShiftExchanges(new NetworkCallback<List<ShiftExchange>>() {
             @Override
             public void onSuccess(List<ShiftExchange> result) {
-                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mShiftExchangesListAll = result;
                 /**
                  * Nær í allar vaktirnar sem eru venslaðar við þessi shiftExchange
@@ -219,7 +213,6 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 shiftExchangeService.getShiftsForExchange(new NetworkCallback<List<Shift>>() {
                     @Override
                     public void onSuccess(List<Shift> result) {
-                        Log.d(TAG, String.valueOf(R.string.activity_success));
                         mShiftsAll = result;
                         int n = mShiftExchangesListAll.size();
                         String[] role = new String[n];
@@ -238,14 +231,14 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String errorString) {
-                        Log.e(TAG, R.string.activity_error + " " + errorString);
+                        Log.e(TAG, errorString);
                     }
                 });
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.activity_error + " " + errorString);
+                Log.e(TAG, errorString);
             }
         });
 
@@ -259,8 +252,14 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ShiftExchange shiftExchange = mShiftExchangesListUser.get(position);
-                Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
-                startActivity(intent);
+                if (shiftExchange.getStatus().equals("pending")) {
+                    Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
+                    startActivity(intent);
+                } else if (shiftExchange.getStatus().equals("upforgrabs")) {
+                    Toast.makeText(ShiftExchangeListActivity.this, getString(R.string.shiftexchange_list_activity_still_upforgrab), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ShiftExchangeListActivity.this, getString(R.string.shiftexchange_list_activity_still_confirmable), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -283,10 +282,10 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 // Aðrir geta bara opnað þau sem eru upforgrabs og hafa sama role og notandi
                 else {
                     if (!shiftExchange.getStatus().equals("upforgrabs")) {
-                        Toast.makeText(ShiftExchangeListActivity.this, String.valueOf(R.string.shiftexchangelist_activity_pending), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ShiftExchangeListActivity.this, getString(R.string.shiftexchangelist_activity_pending), Toast.LENGTH_SHORT).show();
                     } else {
                         if (!mShiftsAll.get(position).getRole().equals(mUser.getRole())) {
-                            Toast.makeText(ShiftExchangeListActivity.this, String.valueOf(R.string.shiftexchangelist_activity_different_role), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShiftExchangeListActivity.this, getString(R.string.shiftexchangelist_activity_different_role), Toast.LENGTH_SHORT).show();
                         } else {
                             Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                             startActivity(intent);
