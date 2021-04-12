@@ -67,7 +67,6 @@ public class OneNotificationActivity extends AppCompatActivity {
         notificationsService.getNotificationById(new NetworkCallback<Notification>() {
             @Override
             public void onSuccess(Notification result) {
-                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mNotification = result;
                 mTextViewTitle.setText(mNotification.getTitle());
                 mTextViewText.setText(mNotification.getText());
@@ -78,19 +77,18 @@ public class OneNotificationActivity extends AppCompatActivity {
                 notificationsService.updateNotification(new NetworkCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
-                        Log.d(TAG, String.valueOf(R.string.activity_success));
                     }
 
                     @Override
                     public void onFailure(String errorString) {
-                        Log.e(TAG, R.string.activity_error + " " + errorString);
+                        Log.e(TAG, errorString);
                     }
                 }, notificationId, sharedPref.getInt("userId", -1));
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.activity_error + " " + errorString);
+                Log.e(TAG, errorString);
             }
         }, notificationId);
     }

@@ -63,7 +63,6 @@ public class NotificationsActivity extends AppCompatActivity {
         notificationsService.getAllNotifications(new NetworkCallback<List<Notification>>() {
             @Override
             public void onSuccess(List<Notification> result) {
-                Log.d(TAG, String.valueOf(R.string.activity_success));
                 mAllNotifications = result;
                 int n = mAllNotifications.size();
                 String[] title = new String[n];
@@ -82,7 +81,7 @@ public class NotificationsActivity extends AppCompatActivity {
             @Override
             public void onFailure(String errorString) {
                 mAllNotifications = null;
-                Log.e(TAG, R.string.activity_error + " " + errorString);
+                Log.e(TAG, errorString);
             }
         }, sharedPref.getInt("userId", -1));
 

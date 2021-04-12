@@ -122,7 +122,6 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             shiftExchangeService.getShiftExchangeById(new NetworkCallback<ShiftExchange>() {
                 @Override
                 public void onSuccess(ShiftExchange result) {
-                    Log.d(TAG, String.valueOf(R.string.activity_success));
                     mShiftExchange = result;
                     /**
                      * Nær í vakt sem er í boði og setur viðmótshluti.
@@ -131,7 +130,6 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForExchange = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -144,7 +142,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Log.e(TAG, errorString);
                         }
                     }, mShiftExchange.getShiftForExchangeId());
 
@@ -152,7 +150,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String errorString) {
-                    Log.e(TAG, R.string.activity_error + " " + errorString);
+                    Log.e(TAG, errorString);
                 }
             }, shiftExchangeId);
 
@@ -163,7 +161,6 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             shiftExchangeService.getUserShifts(new NetworkCallback<List<Shift>>() {
                 @Override
                 public void onSuccess(List<Shift> result) {
-                    Log.d(TAG, String.valueOf(R.string.activity_success));
                     mUserShifts = result;
                     String[] dates = new String[result.size()];
                     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-mm-yyyy");
@@ -182,7 +179,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String errorString) {
-                    Log.e(TAG, R.string.activity_error + " " + errorString);
+                    Log.e(TAG, errorString);
                 }
             }, userId);
 
@@ -211,15 +208,14 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.offerShiftForExchange(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_success), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_success), Toast.LENGTH_SHORT).show();
                             finish();
                         }
 
                         @Override
                         public void onFailure(String errorString) {
                             Log.e(TAG, errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_fail), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId, mShiftForOffer.getShiftId());
                 }
@@ -246,7 +242,6 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             shiftExchangeService.getShiftExchangeById(new NetworkCallback<ShiftExchange>() {
                 @Override
                 public void onSuccess(ShiftExchange result) {
-                    Log.d(TAG, String.valueOf(R.string.activity_success));
                     mShiftExchange = result;
                     /**
                      * Nær í vakt sem er í boði og setur viðmótshluti.
@@ -255,7 +250,6 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForExchange = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -268,7 +262,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Log.e(TAG, errorString);
                         }
                     }, mShiftExchange.getShiftForExchangeId());
 
@@ -279,7 +273,6 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForOffer = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -291,7 +284,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Log.e(TAG, errorString);
                         }
                     }, mShiftExchange.getCoworkerShiftId());
 
@@ -299,7 +292,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String errorString) {
-                    Log.e(TAG, R.string.activity_error + " " + errorString);
+                    Log.e(TAG, errorString);
                 }
             }, shiftExchangeId);
 
@@ -314,15 +307,14 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.declinePendingOffer(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_declined_success), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_declined_success), Toast.LENGTH_SHORT).show();
                             finish();
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_declined_fail), Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, errorString);
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_declined_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId);
                 }
@@ -339,15 +331,14 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.acceptPendingOffer(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_accept_success), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_accept_success), Toast.LENGTH_SHORT).show();
                             finish();
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_offer_accept_fail), Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, errorString);
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_accept_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId);
                 }
@@ -374,7 +365,6 @@ public class ShiftExchangeActivity extends AppCompatActivity {
             shiftExchangeService.getShiftExchangeById(new NetworkCallback<ShiftExchange>() {
                 @Override
                 public void onSuccess(ShiftExchange result) {
-                    Log.d(TAG, String.valueOf(R.string.activity_success));
                     mShiftExchange = result;
                     /**
                      * Nær í vakt sem er í boði og setur viðmótshluti.
@@ -383,7 +373,6 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForExchange = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -396,7 +385,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Log.e(TAG, errorString);
                         }
                     }, mShiftExchange.getShiftForExchangeId());
 
@@ -407,7 +396,6 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.getShiftById(new NetworkCallback<Shift>() {
                         @Override
                         public void onSuccess(Shift result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
                             mShiftForOffer = result;
                             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -419,7 +407,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
+                            Log.e(TAG, errorString);
                         }
                     }, mShiftExchange.getCoworkerShiftId());
 
@@ -427,7 +415,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String errorString) {
-                    Log.e(TAG, R.string.activity_error + " " + errorString);
+                    Log.e(TAG, errorString);
                 }
             }, shiftExchangeId);
 
@@ -442,15 +430,14 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.declineConfirmableOffer(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_declined_success), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_declined_success), Toast.LENGTH_SHORT).show();
                             finish();
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_declined_fail), Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, errorString);
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_declined_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId);
                 }
@@ -467,15 +454,14 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                     shiftExchangeService.acceptConfirmableOffer(new NetworkCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Log.d(TAG, String.valueOf(R.string.activity_success));
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_confirm_success), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_confirm_success), Toast.LENGTH_SHORT).show();
                             finish();
                         }
 
                         @Override
                         public void onFailure(String errorString) {
-                            Log.e(TAG, R.string.activity_error + " " + errorString);
-                            Toast.makeText(ShiftExchangeActivity.this, String.valueOf(R.string.shiftexchange_activity_confirm_fail), Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, errorString);
+                            Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_confirm_fail), Toast.LENGTH_SHORT).show();
                         }
                     }, shiftExchangeId);
                 }

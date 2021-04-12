@@ -7,15 +7,21 @@ import androidx.annotation.RequiresApi;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import is.hi.finnbogi_mobile.R;
+import is.hi.finnbogi_mobile.entities.Notification;
 import is.hi.finnbogi_mobile.entities.Shift;
+import is.hi.finnbogi_mobile.entities.ShiftExchange;
 import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
@@ -79,7 +85,7 @@ public class ShiftService {
     }
 
     /**
-     * tekur inn notandalykil og skilar User hlut með upplýsingum um notanda.
+     * Tekur inn notandalykil og skilar User hlut með upplýsingum um notanda.
      * @param callback fallðið sem er notað til að skila user tilbaka.
      * @param userId
      */
@@ -124,7 +130,7 @@ public class ShiftService {
      * Býr til tímabils strenginn sem er birtur í viðmótinu útfrá tveimur LocalDateTime hlutum
      * @param startTime
      * @param endTime
-     * @return
+     * @return String
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String shiftTimeString(LocalDateTime startTime, LocalDateTime endTime) {
@@ -146,11 +152,97 @@ public class ShiftService {
     }
 
     /**
-     *  Býr til starfsmanna strenginn sem er birtur í viðmótinu útfrá nafni notanda.
+     * Býr til starfsmanna strenginn sem er birtur í viðmótinu útfrá nafni notanda.
      * @param userName
      * @return
      */
     public String employeeString(String userName) {
         return "Starfsmaður: " + userName;
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     * Býr til lista af User hlutum með niðurstöðunni
+     * ef kall gekk upp.
+     *
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param role Role á notendum.
+     * @param userId Id á notandanum sem á ekki að fá notification.
+     */
+    public void getAllUsersWithSameRole(NetworkCallback<List<User>> callback, String role, int userId) {
+        mNetworkManager.GET(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<User>>(){}.getType();
+                List<User> allUsers = gson.fromJson(result, listType);
+                List<User> usersWithSameRole = new ArrayList<>();
+                for (User user : allUsers) {
+                    if (user.getRole().equals(role) && user.getUserId() != userId) {
+                        usersWithSameRole.add(user);
+                    }
+                }
+                callback.onSuccess(usersWithSameRole);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, R.string.service_error + " " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"users"});
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     * Býr til ShiftExchange hlut með niðurstöðunni
+     * ef kall gekk upp.
+     *
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param employeeId Id á user sem á vaktina sem er í boði.
+     * @param shiftId Id á vaktinni sem er í boði.
+     */
+    public void createShiftExchange(NetworkCallback<String> callback, int employeeId, int shiftId) {
+        mNetworkManager.POST(new NetworkCallback<String>() {
+             @Override
+             public void onSuccess(String result) {
+                 Log.d(TAG, "Gekk upp");
+                 callback.onSuccess(result);
+             }
+
+             @Override
+             public void onFailure(String errorString) {
+                 Log.e(TAG, errorString);
+                 callback.onFailure(errorString);
+             }
+        }, new String[] {"shiftexchanges"},
+                new String[][] {{"employeeid", String.valueOf(employeeId)}, {"shiftid", String.valueOf(shiftId)}});
+    }
+
+    /**
+     * Býr til path og kallar á network fall.
+     * Býr til Notification hlut með niðurstöðunni
+     * ef kall gekk upp.
+     *
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param title Titill á notification.
+     * @param text Skilaboð í notification.
+     * @param userIds Id á þeim notendum sem eiga að fá notification.
+     */
+    public void createNotification(NetworkCallback<String> callback, String title, String text, int[] userIds) {
+        mNetworkManager.POST(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                callback.onSuccess(result);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, R.string.service_error + " " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"notifications"}, new String[][][] {{{"title"}, {title}}, {{"text"}, {text}}, {{"userIds"}, {String.valueOf(userIds)}}});
     }
 }
