@@ -46,8 +46,8 @@ public class MakeUserService {
                 callback.onFailure(errorString);
             }
         }, new String[] {"users", "register"},
-           new String[][] {{"username", userName}, {"password", password}, {"role", role},
-                   {"ssn", ssn}, {"admin", String.valueOf(admin)}}
+           new String[][][] {{{"username"}, {userName}}, {{"password"}, {password}}, {{"role"}, {role}},
+                   {{"ssn"}, {ssn}}, {{"admin"}, {String.valueOf(admin)}}}
         );
     }
 }

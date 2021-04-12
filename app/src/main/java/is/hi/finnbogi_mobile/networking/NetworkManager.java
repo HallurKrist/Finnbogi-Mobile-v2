@@ -38,7 +38,6 @@ import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
 
 public class NetworkManager {
-
     private static final String TAG = "NetworkManager";
     private static final String BASE_URL = "https://finnbogi-api.herokuapp.com/";
 
@@ -46,6 +45,11 @@ public class NetworkManager {
     private static RequestQueue mQueue;
     private Context mContext;
 
+    /**
+     * gives Networkmanager instance
+     * @param context
+     * @return current Networkmanager if exists, else new Networkmanager
+     */
     public static synchronized NetworkManager getInstance(Context context){
         if(mInstance == null) {
             mInstance = new NetworkManager(context);
@@ -53,12 +57,20 @@ public class NetworkManager {
         return mInstance;
     }
 
+    /**
+     * constructor
+     * @param context
+     */
     private NetworkManager(Context context) {
         mContext = context;
 
         mQueue = getRequestQueue();
     }
 
+    /**
+     * returns requestqueue
+     * @return request queue if exists, else new request queue
+     */
     public RequestQueue getRequestQueue() {
         if(mQueue == null) {
             mQueue = Volley.newRequestQueue(mContext.getApplicationContext());
@@ -103,9 +115,9 @@ public class NetworkManager {
      *
      * @param callback callback sem skilar response
      * @param path String[] {path1, path2} = /path1/path2
-     * @param requestBody String[][] {{key1 , value1}, {key2, value2}} = key1=value1&key2=value2
+     * @param requestBody String[][][] {{{key1} , {value1}}, {{key2}, {value2, value3}} = key1=value1&key2=value2&key2=value3
      */
-    public void POST(final NetworkCallback<String> callback, String[] path, String[][] requestBody) {
+    public void POST(final NetworkCallback<String> callback, String[] path, String[][][] requestBody) {
 
         // Make path
         Uri.Builder urlBuilder = Uri.parse(BASE_URL)
@@ -121,9 +133,17 @@ public class NetworkManager {
             requestBodyString = "";
             for (int i = 0; i < requestBody.length; i++) {
                 if (i == 0) {
-                    requestBodyString = requestBodyString + requestBody[i][0] + "=" + requestBody[i][1];
+                    for (int j = 0; j < requestBody[i][1].length; j++) {
+                        if (j > 0) {
+                            requestBodyString = requestBodyString + "&" + requestBody[i][0][0] + "=" + requestBody[i][1][j];
+                        } else {
+                            requestBodyString = requestBodyString + requestBody[i][0][0] + "=" + requestBody[i][1][j];
+                        }
+                    }
                 } else {
-                    requestBodyString = requestBodyString + "&" + requestBody[i][0] + "=" + requestBody[i][1];
+                    for (int j = 0; j < requestBody[i][1].length; j++) {
+                        requestBodyString = requestBodyString + "&" + requestBody[i][0][0] + "=" + requestBody[i][1][j];
+                    }
                 }
             }
         }
@@ -174,6 +194,13 @@ public class NetworkManager {
         mQueue.add(request);
     }
 
+    /**
+     * Fall sem tekur gerir patch request á path með request body og skilar json Streng við response
+     *
+     * @param callback callback sem skilar response
+     * @param path String[] {path1, path2} = /path1/path2
+     * @param requestBody String[][] {{key1 , value1}, {key2, value2}} = key1=value1&key2=value2
+     */
     public void PATCH(final NetworkCallback<String> callback, String[] path, String[][] requestBody){
 
         // Make path
@@ -245,6 +272,13 @@ public class NetworkManager {
         mQueue.add(request);
     }
 
+    /**
+     * Fall sem tekur gerir delete request á path með request body og skilar json Streng við response
+     *
+     * @param callback callback sem skilar response
+     * @param path String[] {path1, path2} = /path1/path2
+     * @param requestBody String[][] {{key1 , value1}, {key2, value2}} = key1=value1&key2=value2
+     */
     public void DELETE(final NetworkCallback<String> callback, String[] path, String[][] requestBody){
 
         // Make path

@@ -31,23 +31,25 @@ public class ShiftService {
 
     NetworkManager mNetworkManager;
 
+    /**
+     * constructor
+     * @param networkManager
+     */
     public ShiftService(NetworkManager networkManager) {
         mNetworkManager = networkManager;
     }
 
     /**
-     * Býr til path og kallar á network fall.
-     * Nær í vakt með shiftId sem id og býr til Shift hlut
-     * með niðurstöðunni.
-     *
-     * @param callback Fall sem tekur við þegar þetta fall er búið.
-     * @param shiftId Id á vakt sem verið er að ná í.
+     * get a shift from API with ShiftId
+     * @param callback
+     * @param shiftId
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getShiftById(NetworkCallback<Shift> callback, int shiftId) {
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                // make shift object from result string
                 Gson gson = new Gson();
                 final Object json = gson.fromJson(result, Object.class);
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -241,6 +243,6 @@ public class ShiftService {
                 Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
-        }, new String[] {"notifications"}, new String[][] {{"title", title}, {"text", text}, {"userIds", String.valueOf(userIds)}});
+        }, new String[] {"notifications"}, new String[][][] {{{"title"}, {title}}, {{"text"}, {text}}, {{"userIds"}, {String.valueOf(userIds)}}});
     }
 }

@@ -22,12 +22,15 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 
 public class HomeService {
-
     private final String TAG = "HomeService";
 
     NetworkManager mNetworkManager;
     User mUser;
 
+    /**
+     * constructor
+     * @param networkManager
+     */
     public HomeService(NetworkManager networkManager) {
         mNetworkManager = networkManager;
     }
@@ -68,17 +71,24 @@ public class HomeService {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getWeek(final NetworkCallback<Shift[]> callback, int userId, int weekNr) {
+        // find start of week (last/current monday)
         LocalDateTime weekstart = findWeekStartDay(weekNr);
+
+        // initalize week list of shifts
         Shift[] week = new Shift[] {null, null, null, null, null, null, null};
 
+        // get all shifts for user with id userId
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                // make arraylist from string response
                 Gson gson = new Gson();
                 final ArrayList<?> jsonArray = gson.fromJson(result, ArrayList.class);
 
+                // how we want our dates to be formatted
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
+                // Go through all string shifts in array and make shifts from them
                 Shift[] shifts = new Shift[jsonArray.size()];
                 for ( int i = 0; i < jsonArray.size(); i++) {
                     int shiftId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("id")).intValue();
@@ -100,6 +110,8 @@ public class HomeService {
                     shifts[i] = new Shift(shiftId, startTime, endTime, userId, role);
                 }
 
+                // go through all shifts and check if they are in given week (assume only one shift per day)
+                // and assign shifts correct shifts to week
                 for (int i = 0; i < shifts.length; i++) {
                     LocalDateTime shiftDate = shifts[i].getStartTime();
                     if ((weekstart.isBefore(shiftDate) || weekstart.isEqual(shiftDate)) && weekstart.plusDays(7).isAfter(shiftDate)) {
