@@ -9,12 +9,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import is.hi.finnbogi_mobile.entities.Notification;
 import is.hi.finnbogi_mobile.entities.Shift;
+import is.hi.finnbogi_mobile.entities.ShiftExchange;
 import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
@@ -28,6 +35,7 @@ public class ShiftActivity extends AppCompatActivity {
     private ShiftService mShiftService;
     private Shift mShift;
     private User mUser;
+    private List<User> mUsersWithSameRole;
 
     private TextView mDate;
     private TextView mTime;
@@ -81,5 +89,61 @@ public class ShiftActivity extends AppCompatActivity {
                 Log.e(TAG, "Error in finding shift by id");
             }
         }, shiftId);
+
+        /**
+         * Event listener fyrir bjóða takkann. Býr til ný vaktaskipti
+         * fyrir þessa vakt og sendir notification á alla notendur með
+         * sama role og vaktin.
+         *
+         */
+        mOffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Búa til ShiftExchange-ið sjálft
+                mShiftService.createShiftExchange(new NetworkCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Toast.makeText(ShiftActivity.this, String.valueOf(R.string.shift_activity_createexchange_success), Toast.LENGTH_SHORT).show();
+                        // Búa til Notification og senda út á þá notendur sem eiga að fá tilkynningu
+                        mShiftService.getAllUsersWithSameRole(new NetworkCallback<List<User>>() {
+                            @Override
+                            public void onSuccess(List<User> result) {
+                                mUsersWithSameRole = result;
+                                String title = getString(R.string.shift_activity_notification_title);
+                                String text = getString(R.string.shift_activity_notification_text);
+                                int[] userIds = new int[mUsersWithSameRole.size()];
+                                int i = 0;
+                                for (User user : mUsersWithSameRole) {
+                                    userIds[i] = user.getUserId();
+                                    i++;
+                                }
+                                mShiftService.createNotification(new NetworkCallback<String>() {
+                                    @Override
+                                    public void onSuccess(String result) {
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onFailure(String errorString) {
+                                        Log.e(TAG, errorString);
+                                    }
+                                }, title, text, userIds);
+                            }
+
+                            @Override
+                            public void onFailure(String errorString) {
+                                Log.e(TAG, errorString);
+                            }
+                        }, mShift.getRole(), mUser.getUserId());
+                    }
+
+                    @Override
+                    public void onFailure(String errorString) {
+                        Toast.makeText(ShiftActivity.this, String.valueOf(R.string.shift_activity_createexchange_fail), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, errorString);
+                    }
+                }, mUser.getUserId(), shiftId);
+            }
+        });
     }
 }

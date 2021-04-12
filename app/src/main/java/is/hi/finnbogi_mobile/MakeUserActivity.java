@@ -111,16 +111,15 @@ public class MakeUserActivity extends AppCompatActivity {
                 makeUserService.createUser(new NetworkCallback<User>() {
                     @Override
                     public void onSuccess(User result) {
-                        Log.d(TAG, String.valueOf(R.string.activity_success));
-                        Toast.makeText(MakeUserActivity.this, String.valueOf(R.string.makeuser_activity_success), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MakeUserActivity.this, getString(R.string.makeuser_activity_success), Toast.LENGTH_SHORT).show();
                         Intent intent = UserInfoActivity.newIntent(MakeUserActivity.this, result.getUserId());
                         startActivity(intent);
                     }
 
                     @Override
                     public void onFailure(String errorString) {
-                        Toast.makeText(MakeUserActivity.this, String.valueOf(R.string.makeuser_activity_fail), Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, R.string.activity_error + " " + errorString);
+                        Toast.makeText(MakeUserActivity.this, getString(R.string.makeuser_activity_fail), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, errorString);
                     }
                 }, mUserName, mRole, mPassword, mSsn, mIsAdmin);
             }

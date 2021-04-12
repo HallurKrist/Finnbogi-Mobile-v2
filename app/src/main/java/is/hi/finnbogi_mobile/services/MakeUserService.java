@@ -35,7 +35,6 @@ public class MakeUserService {
         mNetworkManager.POST(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 User userCreated = gson.fromJson(result, User.class);
                 callback.onSuccess(userCreated);
@@ -43,7 +42,7 @@ public class MakeUserService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.service_error + " " + errorString);
+                Log.e(TAG, errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"users", "register"},

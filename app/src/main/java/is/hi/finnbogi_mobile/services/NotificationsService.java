@@ -35,7 +35,6 @@ public class NotificationsService {
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<Notification>>(){}.getType();
                 List<Notification> allNotifications = gson.fromJson(result, listType);
@@ -44,7 +43,7 @@ public class NotificationsService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.service_error + " " + errorString);
+                Log.e(TAG, errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"notifications", "user", String.valueOf(userId)});
@@ -62,7 +61,6 @@ public class NotificationsService {
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 Notification notification = gson.fromJson(result, Notification.class);
                 callback.onSuccess(notification);
@@ -70,38 +68,10 @@ public class NotificationsService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.service_error + " " + errorString);
+                Log.e(TAG, errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"notifications", String.valueOf(notificationId)});
-    }
-
-    /**
-     * Býr til path og kallar á network fall.
-     * Býr til Notification hlut með niðurstöðunni
-     * ef kall gekk upp.
-     *
-     * @param callback Fall sem tekur við þegar þetta fall er búið.
-     * @param title Titill á notification.
-     * @param text Skilaboð í notification.
-     * @param userIds Id á þeim notendum sem eiga að fá notification.
-     */
-    public void createNotification(NetworkCallback<Notification> callback, String title, String text, int[] userIds) {
-        mNetworkManager.POST(new NetworkCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.d(TAG, String.valueOf(R.string.service_success));
-                Gson gson = new Gson();
-                Notification notificationCreated = gson.fromJson(result, Notification.class);
-                callback.onSuccess(notificationCreated);
-            }
-
-            @Override
-            public void onFailure(String errorString) {
-                Log.e(TAG, R.string.service_error + " " + errorString);
-                callback.onFailure(errorString);
-            }
-        }, new String[] {"notifications"}, new String[][] {{"title", title}, {"text", text}, {"userIds", String.valueOf(userIds)}});
     }
 
     /**
@@ -115,13 +85,12 @@ public class NotificationsService {
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, String.valueOf(R.string.service_success));
-                callback.onSuccess("Gekk upp");
+                callback.onSuccess(result);
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.service_error + " " + errorString);
+                Log.e(TAG, errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"notifications", String.valueOf(userId), "read", String.valueOf(notificationId)},
