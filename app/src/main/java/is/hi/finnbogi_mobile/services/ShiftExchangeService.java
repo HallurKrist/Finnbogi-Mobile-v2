@@ -533,4 +533,30 @@ public class ShiftExchangeService {
         }, new String[] {"shiftexchanges", "confirm", String.valueOf(shiftExchangeId)},
                 new String[][] {});
     }
+
+    /**
+     * Býr til path og kallar á network fall.
+     * Býr til Notification hlut með niðurstöðunni
+     * ef kall gekk upp.
+     *
+     * @param callback Fall sem tekur við þegar þetta fall er búið.
+     * @param title Titill á notification.
+     * @param text Skilaboð í notification.
+     * @param userIds Id á þeim notendum sem eiga að fá notification.
+     */
+    public void createNotification(NetworkCallback<String> callback, String title, String text, String[] userIds) {
+        mNetworkManager.POST(new NetworkCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.d(TAG, String.valueOf(R.string.service_success));
+                callback.onSuccess(result);
+            }
+
+            @Override
+            public void onFailure(String errorString) {
+                Log.e(TAG, R.string.service_error + " " + errorString);
+                callback.onFailure(errorString);
+            }
+        }, new String[] {"notifications"}, new String[][][] {{{"title"}, {title}}, {{"text"}, {text}}, {{"userIds"}, userIds}});
+    }
 }

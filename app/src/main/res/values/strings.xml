@@ -72,4 +72,14 @@
     <string name="shift_activity_notification_text">Ný vakt hefur verið boðin til skiptana sem þú gætir átt möguleika á að taka</string>
     <string name="shiftexchange_list_activity_still_upforgrab">Enginn hefur boðið vakt á móti ennþá</string>
     <string name="shiftexchange_list_activity_still_confirmable">Beðið eftir svari frá stjórnanda</string>
+    <string name="shiftexchange_activity_notification_offered_title">Þér hefur verið boðið vakt á móti til skiptana</string>
+    <string name="shiftexchange_activity_notification_offered_text">Þér hefur verið boðið vakt til skiptana við þína vakt</string>
+    <string name="shiftexchange_activity_notification_pending_fail_title">Boðinu þínu var hafnað</string>
+    <string name="shiftexchange_activity_notification_pending_fail_text">Boðinu þínu um vakt til skiptana var hafnað af notanda</string>
+    <string name="shiftexchange_activity_notification_pending_success_title">Boðið þitt var samþykkt</string>
+    <string name="shiftexchange_activity_notification_pending_success_text">Boðið þitt um vakt til skiptana var samþykkt af notanda. Nú er beðið samþykkis stjórnanda</string>
+    <string name="shiftexchange_activity_notification_confirmable_fail_title">Vaktaskiptum hafnað</string>
+    <string name="shiftexchange_activity_notification_confirmable_fail_text">Vaktaskiptunum var hafnað. Ef þú þarft ennþá að losna við þessa vakt þá geturu prufað að bjóða vaktina aftur lausa til skiptana.</string>
+    <string name="shiftexchange_activity_notification_confirmable_success_title">Vaktaskipti samþykkt</string>
+    <string name="shiftexchange_activity_notification_confirmable_success_text">Vaktaskiptin voru samþykkt. Þú getur nú séð nýju vaktina þína á vaktaplaninu.</string>
 </resources>
