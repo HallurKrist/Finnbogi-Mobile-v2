@@ -552,7 +552,7 @@ public class ShiftExchangeService {
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges"},
-                new String[][] {{"employeeid", String.valueOf(employeeId)}, {"shiftid", String.valueOf(shiftId)}});
+                new String[][][] {{{"employeeid"}, {String.valueOf(employeeId)}}, {{"shiftid"}, {String.valueOf(shiftId)}}});
     }
 
     /**
@@ -580,7 +580,7 @@ public class ShiftExchangeService {
                 Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
-        }, new String[] {"notifications"}, new String[][] {{"title", title}, {"text", text}, {"userIds", String.valueOf(userIds)}});
+        }, new String[] {"notifications"}, new String[][][] {{{"title"}, {title}}, {{"text"}, {text}}, {{"userIds"}, {String.valueOf(userIds)}}});
     }
 
     /**

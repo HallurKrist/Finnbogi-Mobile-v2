@@ -101,7 +101,7 @@ public class NotificationsService {
                 Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
-        }, new String[] {"notifications"}, new String[][] {{"title", title}, {"text", text}, {"userIds", String.valueOf(userIds)}});
+        }, new String[] {"notifications"}, new String[][][] {{{"title"}, {title}}, {{"text"}, {text}}, {{"userIds"}, {String.valueOf(userIds)}}});
     }
 
     /**
