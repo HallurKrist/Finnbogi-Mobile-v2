@@ -123,10 +123,10 @@ public class ShiftActivity extends AppCompatActivity {
                                 mUsersWithSameRole = result;
                                 String title = getString(R.string.shift_activity_notification_title);
                                 String text = getString(R.string.shift_activity_notification_text);
-                                int[] userIds = new int[mUsersWithSameRole.size()];
+                                String[] userIds = new String[mUsersWithSameRole.size()];
                                 int i = 0;
                                 for (User user : mUsersWithSameRole) {
-                                    userIds[i] = user.getUserId();
+                                    userIds[i] = String.valueOf(user.getUserId());
                                     i++;
                                 }
                                 mShiftService.createNotification(new NetworkCallback<String>() {

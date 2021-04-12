@@ -217,7 +217,7 @@ public class ShiftService {
                  callback.onFailure(errorString);
              }
         }, new String[] {"shiftexchanges"},
-                new String[][] {{"employeeid", String.valueOf(employeeId)}, {"shiftid", String.valueOf(shiftId)}});
+                new String[][][] {{{"employeeid"}, {String.valueOf(employeeId)}}, {{"shiftid"}, {String.valueOf(shiftId)}}});
     }
 
     /**
@@ -230,7 +230,7 @@ public class ShiftService {
      * @param text Skilaboð í notification.
      * @param userIds Id á þeim notendum sem eiga að fá notification.
      */
-    public void createNotification(NetworkCallback<String> callback, String title, String text, int[] userIds) {
+    public void createNotification(NetworkCallback<String> callback, String title, String text, String[] userIds) {
         mNetworkManager.POST(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -243,6 +243,6 @@ public class ShiftService {
                 Log.e(TAG, R.string.service_error + " " + errorString);
                 callback.onFailure(errorString);
             }
-        }, new String[] {"notifications"}, new String[][][] {{{"title"}, {title}}, {{"text"}, {text}}, {{"userIds"}, {String.valueOf(userIds)}}});
+        }, new String[] {"notifications"}, new String[][][] {{{"title"}, {title}}, {{"text"}, {text}}, {{"userIds"}, userIds}});
     }
 }
