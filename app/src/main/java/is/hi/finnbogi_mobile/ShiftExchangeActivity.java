@@ -209,12 +209,15 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_success), Toast.LENGTH_SHORT).show();
-                            String[] userId = {String.valueOf(mShiftForExchange.getUserId())};
+                            String[] userId = new String[1];
+                            userId[0] = String.valueOf(mShiftForExchange.getUserId());
                             String title = getString(R.string.shiftexchange_activity_notification_offered_title);
                             String text = getString(R.string.shiftexchange_activity_notification_offered_text);
                             shiftExchangeService.createNotification(new NetworkCallback<String>() {
                                 @Override
                                 public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
                                     finish();
                                 }
 
@@ -321,12 +324,15 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_declined_success), Toast.LENGTH_SHORT).show();
-                            String[] userId = {String.valueOf(mShiftForOffer.getUserId())};
+                            String[] userId = new String[1];
+                            userId[0] = String.valueOf(mShiftForOffer.getUserId());
                             String title = getString(R.string.shiftexchange_activity_notification_pending_fail_title);
                             String text = getString(R.string.shiftexchange_activity_notification_pending_fail_text);
                             shiftExchangeService.createNotification(new NetworkCallback<String>() {
                                 @Override
                                 public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
                                     finish();
                                 }
 
@@ -358,12 +364,15 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_accept_success), Toast.LENGTH_SHORT).show();
-                            String[] userId = {String.valueOf(mShiftForOffer.getUserId())};
+                            String[] userId = new String[1];
+                            userId[0] = String.valueOf(mShiftForOffer.getUserId());
                             String title = getString(R.string.shiftexchange_activity_notification_pending_success_title);
                             String text = getString(R.string.shiftexchange_activity_notification_pending_success_text);
                             shiftExchangeService.createNotification(new NetworkCallback<String>() {
                                 @Override
                                 public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
                                     finish();
                                 }
 
@@ -470,12 +479,16 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_declined_success), Toast.LENGTH_SHORT).show();
-                            String[] userIds = {String.valueOf(mShiftForExchange.getUserId()), String.valueOf(mShiftForOffer.getUserId())};
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForExchange.getUserId());
+                            userIds[1] = String.valueOf(mShiftForOffer.getUserId());
                             String title = getString(R.string.shiftexchange_activity_notification_confirmable_fail_title);
                             String text = getString(R.string.shiftexchange_activity_notification_confirmable_fail_text);
                             shiftExchangeService.createNotification(new NetworkCallback<String>() {
                                 @Override
                                 public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
                                     finish();
                                 }
 
@@ -507,12 +520,16 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_confirm_success), Toast.LENGTH_SHORT).show();
-                            String[] userIds = {String.valueOf(mShiftForExchange.getUserId()), String.valueOf(mShiftForOffer.getUserId())};
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForExchange.getUserId());
+                            userIds[1] = String.valueOf(mShiftForOffer.getUserId());
                             String title = getString(R.string.shiftexchange_activity_notification_confirmable_success_title);
                             String text = getString(R.string.shiftexchange_activity_notification_confirmable_success_text);
                             shiftExchangeService.createNotification(new NetworkCallback<String>() {
                                 @Override
                                 public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
                                     finish();
                                 }
 

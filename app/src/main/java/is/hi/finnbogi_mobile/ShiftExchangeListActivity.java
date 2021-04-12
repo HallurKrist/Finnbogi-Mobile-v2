@@ -50,6 +50,17 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
     private User mUser;
 
     /**
+     * Aðferð fyrir aðra klasa að búa til nýtt intent fyrir þetta activity.
+     *
+     * @param packageContext Gamli activity klasinn.
+     * @return intent
+     */
+    public static Intent newIntent(Context packageContext) {
+        Intent intent = new Intent(packageContext, ShiftExchangeListActivity.class);
+        return intent;
+    }
+
+    /**
      * Upphafsstillir alla viðmótshluti, nær í gögn og setur hlustara.
      *
      * @param savedInstanceState
@@ -126,6 +137,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                                             ShiftExchange shiftExchange = mShiftExchangesListAdmin.get(position);
                                             Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                                             startActivity(intent);
+                                            finish();
                                         }
                                     });
                                 }
@@ -255,6 +267,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 if (shiftExchange.getStatus().equals("pending")) {
                     Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                     startActivity(intent);
+                    finish();
                 } else if (shiftExchange.getStatus().equals("upforgrabs")) {
                     Toast.makeText(ShiftExchangeListActivity.this, getString(R.string.shiftexchange_list_activity_still_upforgrab), Toast.LENGTH_SHORT).show();
                 } else {
@@ -278,6 +291,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 if (mUser.getAdmin()) {
                     Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                     startActivity(intent);
+                    finish();
                 }
                 // Aðrir geta bara opnað þau sem eru upforgrabs og hafa sama role og notandi
                 else {
@@ -289,6 +303,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                         } else {
                             Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                             startActivity(intent);
+                            finish();
                         }
                     }
                 }
