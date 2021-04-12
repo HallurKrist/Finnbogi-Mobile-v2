@@ -30,11 +30,9 @@ import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.HomeService;
 
 public class HomeActivity extends AppCompatActivity {
-
     private static final String TAG = "HomeActivity";
     private static final String EXTRA_USER_ID = "is.hi.finnbogi_mobile.userId";
     private static final String MY_PREFERENCES = "Session";
-
 
     private TextView mLoggedInUser;
     private LinearLayout mMonday;
@@ -136,81 +134,28 @@ public class HomeActivity extends AppCompatActivity {
         mLoggedInUser.setText(mCurrentUser.getUserName());
 
         mMonday = (LinearLayout) findViewById(R.id.monday);
-        mMonday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCurrWeek[0] != null) {
-                    Intent mondayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[0].getShiftId());
-                    startActivity(mondayIntent);
-                }
-            }
-        });
-
         mTuesday = (LinearLayout) findViewById(R.id.tuesday);
-        mTuesday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCurrWeek[1] != null) {
-                    Intent tuesdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[1].getShiftId());
-                    startActivity(tuesdayIntent);
-                }
-            }
-        });
-
         mWednesday = (LinearLayout) findViewById(R.id.wednesday);
-        mWednesday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { ;
-                if (mCurrWeek[2] != null) {
-                    Intent wednesdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[2].getShiftId());
-                    startActivity(wednesdayIntent);
-                }
-            }
-        });
-
         mThursday = (LinearLayout) findViewById(R.id.thursday);
-        mThursday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCurrWeek[3] != null) {
-                    Intent thursdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[3].getShiftId());
-                    startActivity(thursdayIntent);
-                }
-            }
-        });
-
         mFriday = (LinearLayout) findViewById(R.id.friday);
-        mFriday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCurrWeek[4] != null) {
-                    Intent fridayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[4].getShiftId());
-                    startActivity(fridayIntent);
-                }
-            }
-        });
-
         mSaturday = (LinearLayout) findViewById(R.id.saturday);
-        mSaturday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCurrWeek[5] != null) {
-                    Intent saturdayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[5].getShiftId());
-                    startActivity(saturdayIntent);
-                }
-            }
-        });
-
         mSunday = (LinearLayout) findViewById(R.id.sunday);
-        mSunday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mCurrWeek[6] != null) {
-                    Intent sundayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[6].getShiftId());
-                    startActivity(sundayIntent);
+
+        LinearLayout[] theWeekView = {mMonday, mTuesday, mWednesday, mThursday, mFriday, mSaturday, mSunday};
+
+        // Setja onclicklistener fyrir alla daga vikunar
+        for (int i = 0; i < 7; i++) {
+            int finalI = i;
+            theWeekView[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mCurrWeek[finalI] != null) {
+                        Intent mondayIntent = ShiftActivity.newIntent(HomeActivity.this, mCurrWeek[finalI].getShiftId());
+                        startActivity(mondayIntent);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         mNextWeek = (Button) findViewById(R.id.button_week_next);
         mNextWeek.setOnClickListener(new View.OnClickListener() {
@@ -340,8 +285,7 @@ public class HomeActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        //TODO: take out Shift and put inn shifts list view for admin
-        //TODO: make sure all navigation is correct
+        // TODO: navigation to notifications
         switch (item.getItemId()) {
             case R.id.menu_notifications:
                 Intent notificationIntent = new Intent(HomeActivity.this, NotificationsActivity.class);

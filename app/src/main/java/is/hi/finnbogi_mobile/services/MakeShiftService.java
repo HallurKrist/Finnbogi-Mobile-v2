@@ -23,11 +23,14 @@ import is.hi.finnbogi_mobile.networking.NetworkCallback;
 import is.hi.finnbogi_mobile.networking.NetworkManager;
 
 public class MakeShiftService {
-
     private static final String TAG = "MakeShiftService";
 
     private NetworkManager mNetworkManager;
 
+    /**
+     * constructor
+     * @param networkManager
+     */
     public MakeShiftService(NetworkManager networkManager) {
         mNetworkManager = networkManager;
     }
@@ -96,6 +99,7 @@ public class MakeShiftService {
                         ((String)((LinkedTreeMap)json).get("role"))
                 );
 
+                // Add userID to shift in API
                 mNetworkManager.PATCH(new NetworkCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
