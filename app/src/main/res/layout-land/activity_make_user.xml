@@ -5,23 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MakeUserActivity"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_weight="0.2"
-        android:layout_marginVertical="36dp"
-        android:layout_marginHorizontal="12dp">
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp">
 
         <TextView
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="32dp"
-            android:textAlignment="center"
-            android:text="@string/user_make_title"
-            android:gravity="center_horizontal" />
+            android:text="@string/user_make_title" />
 
     </LinearLayout>
 
@@ -30,51 +26,75 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:layout_weight="0.7"
-        android:layout_marginVertical="12dp"
-        android:layout_marginHorizontal="24dp">
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp">
 
-        <EditText
-            android:id="@+id/user_make_userName"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:hint="Notendanafn"
-            android:background="@drawable/black_white_border"
-            android:gravity="center"
-            android:layout_marginVertical="8dp"/>
-
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/make_user_role"
-            android:layout_marginTop="8dp"/>
+            android:layout_gravity="center_horizontal">
 
-        <Spinner
-            android:id="@+id/user_make_role"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:background="@drawable/black_white_border"
-            android:gravity="center"
-            android:layout_marginVertical="8dp"/>
+            <EditText
+                android:id="@+id/user_make_userName"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                android:hint="Notendanafn"
+                android:background="@drawable/black_white_border"
+                android:gravity="center"
+                android:layout_marginVertical="35dp"
+                android:layout_marginHorizontal="12dp"/>
 
-        <EditText
-            android:id="@+id/user_make_password"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:hint="Lykilorð"
-            android:background="@drawable/black_white_border"
-            android:gravity="center"
-            android:layout_marginVertical="8dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="12dp">
 
-        <EditText
-            android:id="@+id/user_make_ssn"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:hint="Kennitala"
-            android:background="@drawable/black_white_border"
-            android:gravity="center"
-            android:inputType="number"
-            android:layout_marginVertical="8dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/make_user_role"
+                    android:layout_marginTop="8dp"/>
+
+                <Spinner
+                    android:id="@+id/user_make_role"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/black_white_border"
+                    android:gravity="center"
+                    android:layout_marginVertical="8dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <EditText
+                android:id="@+id/user_make_password"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                android:hint="Lykilorð"
+                android:background="@drawable/black_white_border"
+                android:gravity="center"
+                android:layout_marginVertical="8dp"
+                android:layout_marginHorizontal="12dp"/>
+
+            <EditText
+                android:id="@+id/user_make_ssn"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                android:hint="Kennitala"
+                android:background="@drawable/black_white_border"
+                android:gravity="center"
+                android:inputType="number"
+                android:layout_marginVertical="8dp"
+                android:layout_marginHorizontal="12dp"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -85,7 +105,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
+                android:layout_marginTop="8dp"
                 android:textSize="16dp"
                 android:text="@string/make_user_admin"/>
 
@@ -94,7 +114,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:gravity="center"
-                android:layout_marginVertical="8dp"/>
+                android:layout_marginTop="8dp"/>
 
         </LinearLayout>
 
@@ -103,24 +123,23 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|center_vertical"
+        android:layout_gravity="center_horizontal"
         android:layout_marginHorizontal="24dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/user_make_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user_make_cancel"
-            android:layout_marginBottom="36dp"/>
+            android:layout_marginHorizontal="12dp" />
 
         <Button
             android:id="@+id/user_make_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user_make_confirm"
-            android:layout_marginTop="36dp"/>
+            android:layout_marginHorizontal="12dp"/>
 
     </LinearLayout>
 
