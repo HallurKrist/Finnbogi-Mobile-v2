@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.time.format.DateTimeFormatter;
@@ -39,6 +40,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
     private ListView mListAdmin;
     private LinearLayout mAdminTitle;
     private LinearLayout mAdminLinear;
+    private TextView mTextViewTitle;
 
     // Aðrar global breytur
     private List<ShiftExchange> mShiftExchangesListUser;
@@ -76,6 +78,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
         mListAdmin = (ListView) findViewById(R.id.shiftexchange_list_adminlist);
         mAdminTitle = (LinearLayout) findViewById(R.id.shiftexchange_list_admintitle);
         mAdminLinear = (LinearLayout) findViewById(R.id.shiftexchange_list_adminlinear);
+        mTextViewTitle = (TextView) findViewById(R.id.shiftexchange_list_text_admintitle);
 
         NetworkManager networkManager = NetworkManager.getInstance(this);
         ShiftExchangeService shiftExchangeService = new ShiftExchangeService(networkManager);
@@ -96,6 +99,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 if (mUser.getAdmin()) {
                     mAdminTitle.setVisibility(View.VISIBLE);
                     mAdminLinear.setVisibility(View.VISIBLE);
+                    mTextViewTitle.setVisibility(View.VISIBLE);
                     /**
                      * Nær í öll confirmable shiftExchange og setur lista með þeim.
                      *
