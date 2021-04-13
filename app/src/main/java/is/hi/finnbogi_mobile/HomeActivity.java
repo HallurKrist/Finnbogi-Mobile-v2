@@ -30,9 +30,11 @@ import is.hi.finnbogi_mobile.networking.NetworkManager;
 import is.hi.finnbogi_mobile.services.HomeService;
 
 public class HomeActivity extends AppCompatActivity {
+
     private static final String TAG = "HomeActivity";
     private static final String EXTRA_USER_ID = "is.hi.finnbogi_mobile.userId";
     private static final String MY_PREFERENCES = "Session";
+    private static final String KEY_INDEX = "currWeekIndex";
 
     private TextView mLoggedInUser;
     private LinearLayout mMonday;
@@ -79,6 +81,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mCurrWeekNr = savedInstanceState.getInt(KEY_INDEX, 0);
+        }
 
         // Ef engin notandi er skráður in þá er sent notanda á login síðuna
         SharedPreferences sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
@@ -328,4 +334,9 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt(KEY_INDEX, mCurrWeekNr);
+    }
 }
