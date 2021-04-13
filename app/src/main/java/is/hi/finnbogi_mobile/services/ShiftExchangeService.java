@@ -174,7 +174,6 @@ public class ShiftExchangeService {
                         endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        Log.e(TAG, String.valueOf(R.string.service_error));
                     }
 
                     int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
@@ -222,7 +221,6 @@ public class ShiftExchangeService {
                         endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        Log.e(TAG, String.valueOf(R.string.service_error));
                     }
 
                     int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
@@ -271,7 +269,6 @@ public class ShiftExchangeService {
                         endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        Log.e(TAG, String.valueOf(R.string.service_error));
                     }
 
                     int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
@@ -323,7 +320,6 @@ public class ShiftExchangeService {
                     endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    Log.e(TAG, String.valueOf(R.string.service_error));
                 }
 
                 // Make shift to return
@@ -376,7 +372,6 @@ public class ShiftExchangeService {
                         endTime = parsedEnd.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     } catch (ParseException e) {
                         e.printStackTrace();
-                        Log.e(TAG, String.valueOf(R.string.service_error));
                     }
 
                     int userId = ((Double)((LinkedTreeMap)jsonArray.get(i)).get("userid")).intValue();
@@ -431,7 +426,7 @@ public class ShiftExchangeService {
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                callback.onSuccess(String.valueOf(R.string.service_success));
+                callback.onSuccess(result);
             }
 
             @Override
@@ -454,7 +449,7 @@ public class ShiftExchangeService {
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                callback.onSuccess(String.valueOf(R.string.service_success));
+                callback.onSuccess(result);
             }
 
             @Override
@@ -477,7 +472,7 @@ public class ShiftExchangeService {
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                callback.onSuccess(String.valueOf(R.string.service_success));
+                callback.onSuccess(result);
             }
 
             @Override
@@ -522,12 +517,12 @@ public class ShiftExchangeService {
         mNetworkManager.PATCH(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                callback.onSuccess(String.valueOf(R.string.service_success));
+                callback.onSuccess(result);
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.service_error + " " + errorString);
+                Log.e(TAG, errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"shiftexchanges", "confirm", String.valueOf(shiftExchangeId)},
@@ -548,13 +543,13 @@ public class ShiftExchangeService {
         mNetworkManager.POST(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, String.valueOf(R.string.service_success));
+                Log.d(TAG, result);
                 callback.onSuccess(result);
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.service_error + " " + errorString);
+                Log.e(TAG, errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"notifications"}, new String[][][] {{{"title"}, {title}}, {{"text"}, {text}}, {{"userIds"}, userIds}});
