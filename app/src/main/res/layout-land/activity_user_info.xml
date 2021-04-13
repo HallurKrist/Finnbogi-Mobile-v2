@@ -80,8 +80,8 @@
                 android:layout_marginHorizontal="12dp"
                 android:background="@drawable/week_border"
                 android:gravity="center"
-                android:inputType="textEmailAddress"
-                android:hint="email123@email.com"/>
+                android:inputType="textPhonetic"
+                android:hint="7777777"/>
 
         </LinearLayout>
 
@@ -98,7 +98,8 @@
                 android:layout_marginHorizontal="12dp"
                 android:background="@drawable/week_border"
                 android:gravity="center"
-                android:hint="Notandanafn"/>
+                android:inputType="textEmailAddress"
+                android:hint="email123@email.com"/>
 
             <TextView
                 android:id="@+id/user_info_ssn"
