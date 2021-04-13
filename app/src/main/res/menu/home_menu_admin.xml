@@ -4,42 +4,42 @@
 
     <item
         android:id="@+id/menu_notifications"
-        android:title="Notifications"
+        android:title="@string/menu_notifications"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_shift_list"
-        android:title="Shift List"
+        android:title="@string/menu_shiftlist"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_make_shift"
-        android:title="Make Shift"
+        android:title="@string/menu_makeshift"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_user_list"
-        android:title="User List"
+        android:title="@string/menu_userlist"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_user_info"
-        android:title="My Info"
+        android:title="@string/menu_myinfo"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_make_user"
-        android:title="Make New User"
+        android:title="@string/menu_makeuser"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_shiftexchange_list"
-        android:title="Shift Exchange List"
+        android:title="@string/menu_shiftexchangelist"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_logout"
-        android:title="Log out"
+        android:title="@string/menu_logout"
         app:showAsAction="never" />
 
 </menu>

@@ -82,4 +82,12 @@
     <string name="shiftexchange_activity_notification_confirmable_fail_text">Vaktaskiptunum var hafnað. Ef þú þarft ennþá að losna við þessa vakt þá geturu prufað að bjóða vaktina aftur lausa til skiptana.</string>
     <string name="shiftexchange_activity_notification_confirmable_success_title">Vaktaskipti samþykkt</string>
     <string name="shiftexchange_activity_notification_confirmable_success_text">Vaktaskiptin voru samþykkt. Þú getur nú séð nýju vaktina þína á vaktaplaninu.</string>
+    <string name="menu_notifications">Tilkynningar</string>
+    <string name="menu_shiftlist">Vaktalisti</string>
+    <string name="menu_makeshift">Búa til vakt</string>
+    <string name="menu_userlist">Notendalisti</string>
+    <string name="menu_myinfo">Mínar upplýsingar</string>
+    <string name="menu_makeuser">Búa til nýjan notanda</string>
+    <string name="menu_shiftexchangelist">Vaktaskiptalisti</string>
+    <string name="menu_logout">Skrá mig út</string>
 </resources>
