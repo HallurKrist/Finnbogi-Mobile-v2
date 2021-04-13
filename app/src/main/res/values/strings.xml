@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Finnbogi</string>
-    <string name="button_week_last">Last Week</string>
-    <string name="button_week_next">Next Week</string>
-    <string name="app_description">Vaktaskipurlags kerfi</string>
+    <string name="button_week_last">Síðasta vika</string>
+    <string name="button_week_next">Næsta vika</string>
+    <string name="app_description">Vaktaskipulags kerfi</string>
     <string name="login_username">Notandanafn</string>
     <string name="login_password">Lykilorð</string>
     <string name="login_submit">Innskrá</string>
@@ -51,8 +51,8 @@
     <string name="service_error">Service error</string>
     <string name="service_success">Service success</string>
     <string name="login_activity_wrong_name_or_password">Notendanafn eða lykilorð rangt</string>
-    <string name="makeuser_activity_success">Tókst að búa til user</string>
-    <string name="makeuser_activity_fail">Ekki tókst að búa til user</string>
+    <string name="makeuser_activity_success">Tókst að búa til notanda</string>
+    <string name="makeuser_activity_fail">Ekki tókst að búa til notanda</string>
     <string name="shiftexchange_activity_offer_success">Tókst að bjóða vakt á móti</string>
     <string name="shiftexchange_activity_offer_fail">Ekki gekk að bjóða vakt á móti</string>
     <string name="shiftexchange_activity_offer_declined_success">Boði hafnað</string>
@@ -64,13 +64,13 @@
     <string name="shiftexchange_activity_confirm_success">Vaktaskipti samþykkt</string>
     <string name="shiftexchange_activity_confirm_fail">Ekki gekk að samþykkja vaktaskipti</string>
     <string name="shiftexchangelist_activity_pending">Búið hefur verið að bjóða vakt á móti þessari vakt</string>
-    <string name="shiftexchangelist_activity_different_role">Þú hefur ekki sama role og þessi vakt</string>
+    <string name="shiftexchangelist_activity_different_role">Þú getur ekki tekið þessa vakt</string>
     <string name="shift_activity_createexchange_success">Tókst að búa til vaktaskipti</string>
     <string name="shift_activity_createexchange_fail">Ekki tókst að búa til vaktaskipti</string>
     <string name="user_list_delete">Eyða</string>
     <string name="shift_activity_notification_title">Vakt laus til skiptana</string>
     <string name="shift_activity_notification_text">Ný vakt hefur verið boðin til skiptana sem þú gætir átt möguleika á að taka</string>
-    <string name="shiftexchange_list_activity_still_upforgrab">Enginn hefur boðið vakt á móti ennþá</string>
+    <string name="shiftexchange_list_activity_still_upforgrab">Enginn hefur boðið þér vakt á móti ennþá</string>
     <string name="shiftexchange_list_activity_still_confirmable">Beðið eftir svari frá stjórnanda</string>
     <string name="shiftexchange_activity_notification_offered_title">Þér hefur verið boðið vakt á móti til skiptana</string>
     <string name="shiftexchange_activity_notification_offered_text">Þér hefur verið boðið vakt til skiptana við þína vakt</string>
