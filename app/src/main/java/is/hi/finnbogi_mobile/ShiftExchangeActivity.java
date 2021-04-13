@@ -209,8 +209,10 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_success), Toast.LENGTH_SHORT).show();
-                            String[] userId = new String[1];
-                            userId[0] = String.valueOf(mShiftForExchange.getUserId());
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForExchange.getUserId());
+                            // Skítafix - 500 error ef userId er bara 1 stak
+                            userIds[1] = null;
                             String title = getString(R.string.shiftexchange_activity_notification_offered_title);
                             String text = getString(R.string.shiftexchange_activity_notification_offered_text);
                             shiftExchangeService.createNotification(new NetworkCallback<String>() {
@@ -225,7 +227,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                                 public void onFailure(String errorString) {
                                     Log.e(TAG, errorString);
                                 }
-                            }, title, text, userId);
+                            }, title, text, userIds);
                         }
 
                         @Override
@@ -324,8 +326,10 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_declined_success), Toast.LENGTH_SHORT).show();
-                            String[] userId = new String[1];
-                            userId[0] = String.valueOf(mShiftForOffer.getUserId());
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForOffer.getUserId());
+                            // Skítafix - 500 error ef userId er bara 1 stak
+                            userIds[1] = null;
                             String title = getString(R.string.shiftexchange_activity_notification_pending_fail_title);
                             String text = getString(R.string.shiftexchange_activity_notification_pending_fail_text);
                             shiftExchangeService.createNotification(new NetworkCallback<String>() {
@@ -340,7 +344,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                                 public void onFailure(String errorString) {
                                     Log.e(TAG, errorString);
                                 }
-                            }, title, text, userId);
+                            }, title, text, userIds);
                         }
 
                         @Override
@@ -364,8 +368,10 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_accept_success), Toast.LENGTH_SHORT).show();
-                            String[] userId = new String[1];
-                            userId[0] = String.valueOf(mShiftForOffer.getUserId());
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForOffer.getUserId());
+                            // Skítafix - 500 error ef userId er bara 1 stak
+                            userIds[1] = null;
                             String title = getString(R.string.shiftexchange_activity_notification_pending_success_title);
                             String text = getString(R.string.shiftexchange_activity_notification_pending_success_text);
                             shiftExchangeService.createNotification(new NetworkCallback<String>() {
@@ -380,7 +386,7 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                                 public void onFailure(String errorString) {
                                     Log.e(TAG, errorString);
                                 }
-                            }, title, text, userId);
+                            }, title, text, userIds);
                         }
 
                         @Override
