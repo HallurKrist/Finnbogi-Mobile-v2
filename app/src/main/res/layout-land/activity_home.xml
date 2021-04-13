@@ -27,7 +27,7 @@
 
         <LinearLayout
             android:id="@+id/monday"
-            android:layout_width="80dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/week_border"
@@ -62,7 +62,7 @@
 
         <LinearLayout
             android:id="@+id/tuesday"
-            android:layout_width="80dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/week_border"
@@ -98,7 +98,7 @@
 
         <LinearLayout
             android:id="@+id/wednesday"
-            android:layout_width="80dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/week_border"
@@ -134,7 +134,7 @@
 
         <LinearLayout
             android:id="@+id/thursday"
-            android:layout_width="80dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/week_border"
@@ -170,7 +170,7 @@
 
         <LinearLayout
             android:id="@+id/friday"
-            android:layout_width="80dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/week_border"
@@ -206,7 +206,7 @@
 
         <LinearLayout
             android:id="@+id/saturday"
-            android:layout_width="80dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/week_border"
@@ -242,7 +242,7 @@
 
         <LinearLayout
             android:id="@+id/sunday"
-            android:layout_width="80dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/week_border"
