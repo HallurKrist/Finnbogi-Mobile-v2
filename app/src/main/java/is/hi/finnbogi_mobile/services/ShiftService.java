@@ -230,6 +230,12 @@ public class ShiftService {
      * @param userIds Id á þeim notendum sem eiga að fá notification.
      */
     public void createNotification(NetworkCallback<String> callback, String title, String text, String[] userIds) {
+
+        if (userIds.length == 1) {
+            String[] tmp = {userIds[0], ""};
+            userIds = tmp;
+        }
+
         mNetworkManager.POST(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {

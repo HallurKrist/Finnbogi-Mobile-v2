@@ -115,7 +115,7 @@ public class NetworkManager {
      *
      * @param callback callback sem skilar response
      * @param path String[] {path1, path2} = /path1/path2
-     * @param requestBody String[][][] {{{key1} , {value1}}, {{key2}, {value2, value3}} = key1=value1&key2=value2&key2=value3
+     * @param requestBody String[][][] {{{key1} , {value1}}, {{key2}, {value2, value3}}} = key1=value1&key2=value2&key2=value3
      */
     public void POST(final NetworkCallback<String> callback, String[] path, String[][][] requestBody) {
 
@@ -134,10 +134,10 @@ public class NetworkManager {
             for (int i = 0; i < requestBody.length; i++) {
                 if (i == 0) {
                     for (int j = 0; j < requestBody[i][1].length; j++) {
-                        if (j > 0) {
-                            requestBodyString = requestBodyString + "&" + requestBody[i][0][0] + "=" + requestBody[i][1][j];
-                        } else {
+                        if (j == 0) {
                             requestBodyString = requestBodyString + requestBody[i][0][0] + "=" + requestBody[i][1][j];
+                        } else {
+                            requestBodyString = requestBodyString + "&" + requestBody[i][0][0] + "=" + requestBody[i][1][j];
                         }
                     }
                 } else {

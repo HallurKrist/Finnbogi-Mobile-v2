@@ -20,7 +20,8 @@
         <activity android:name=".UserListActivity" />
         <activity android:name=".MakeShiftActivity" />
         <activity android:name=".ShiftActivity" />
-        <activity android:name=".NotificationsActivity" />
+        <activity android:name=".NotificationsActivity"
+            android:parentActivityName=".HomeActivity"/>
         <activity android:name=".LoginActivity" />
         <activity android:name=".HomeActivity">
             <intent-filter>
@@ -29,6 +30,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".NotificationSpecifics.NotificationReciever"
+            android:process=":remote" >
+        </receiver>
+
+        <service
+            android:name=".NotificationSpecifics.NotificationIntentService"
+            android:exported="false" />
     </application>
 
 </manifest>

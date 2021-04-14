@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,12 +19,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import java.time.LocalDateTime;
 
+import is.hi.finnbogi_mobile.NotificationSpecifics.NotificationReciever;
 import is.hi.finnbogi_mobile.entities.Shift;
 import is.hi.finnbogi_mobile.entities.User;
 import is.hi.finnbogi_mobile.networking.NetworkCallback;
@@ -91,12 +93,16 @@ public class HomeActivity extends AppCompatActivity {
         Log.d(TAG, "checking if logged in: " + sharedPref.contains("userId"));
         if (!sharedPref.contains("userId")) {
             Log.d(TAG, "No user logged in");
+            cancelNotificationSchedule();
             Intent loginIntent = LoginActivity.newIntent(HomeActivity.this);
             startActivity(loginIntent);
             return;
         }
 
         setContentView(R.layout.activity_home);
+
+        // Starta notification updater-inn sem athugar á 15min fresti hvort nýtt notification sé fyrir notanda
+        scheduleNotification(sharedPref);
 
         // Búa til HomeService hlut
         NetworkManager networkManager = NetworkManager.getInstance(this);
@@ -128,6 +134,34 @@ public class HomeActivity extends AppCompatActivity {
                 Log.e(TAG, "Error in finding signed inn user");
             }
         }, sharedPref.getInt("userId", -1));
+    }
+
+    /**
+     * kickstartar sceduler sem athugar á 15min fresti hvort nýtt notification sé fyrir notanda
+     */
+    private void scheduleNotification(SharedPreferences sharedPref) {
+        // Construct an intent that will execute the AlarmReceiver
+        Intent intent = new Intent(getApplicationContext(), NotificationReciever.class);
+        // Set extra
+        intent.putExtra(NotificationReciever.USERID_ID, sharedPref.getInt("userId", -1));
+        // Create a PendingIntent to be triggered when the alarm goes off
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, NotificationReciever.REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Setup periodic alarm every every half hour from this point onwards
+        long firstMillis = System.currentTimeMillis(); // alarm is set right away
+        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        // First parameter is the type: ELAPSED_REALTIME, ELAPSED_REALTIME_WAKEUP, RTC_WAKEUP
+        // Interval can be INTERVAL_FIFTEEN_MINUTES, INTERVAL_HALF_HOUR, INTERVAL_HOUR, INTERVAL_DAY
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pIntent);
+    }
+
+    public void cancelNotificationSchedule() {
+        Intent intent = new Intent(getApplicationContext(), NotificationReciever.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, NotificationReciever.REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pIntent);
     }
 
     /**

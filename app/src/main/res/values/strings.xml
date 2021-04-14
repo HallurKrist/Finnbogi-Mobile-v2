@@ -90,4 +90,6 @@
     <string name="menu_makeuser">Búa til nýjan notanda</string>
     <string name="menu_shiftexchangelist">Vaktaskiptalisti</string>
     <string name="menu_logout">Skrá mig út</string>
+    <string name="channel_name">FinnbogiChannel</string>
+    <string name="channel_description">Notification channel for finnbogi app</string>
 </resources>

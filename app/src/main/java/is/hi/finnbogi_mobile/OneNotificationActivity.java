@@ -61,7 +61,7 @@ public class OneNotificationActivity extends AppCompatActivity {
         int notificationId = getIntent().getIntExtra(NOTIFICATION_KEY, -1);
 
         /**
-         * Nær í ShiftExchange hlutinn sem á að skoða og setur viðmótshluti.
+         * Nær í Notification hlutinn sem á að skoða og setur viðmótshluti.
          *
          */
         notificationsService.getNotificationById(new NetworkCallback<Notification>() {
