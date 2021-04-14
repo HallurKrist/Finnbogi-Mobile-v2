@@ -115,7 +115,7 @@ public class ShiftActivity extends AppCompatActivity {
                 mShiftService.createShiftExchange(new NetworkCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
-                        Toast.makeText(ShiftActivity.this, getString(R.string.shift_activity_createexchange_success), Toast.LENGTH_SHORT).show();
+
                         // Búa til Notification og senda út á þá notendur sem eiga að fá tilkynningu
                         mShiftService.getAllUsersWithSameRole(new NetworkCallback<List<User>>() {
                             @Override
@@ -132,6 +132,7 @@ public class ShiftActivity extends AppCompatActivity {
                                 mShiftService.createNotification(new NetworkCallback<String>() {
                                     @Override
                                     public void onSuccess(String result) {
+                                        Toast.makeText(ShiftActivity.this, getString(R.string.shift_activity_createexchange_success), Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
 
