@@ -13,37 +13,35 @@
         android:id="@+id/logged_in_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="logged in user"
-        android:layout_weight="0.2"
+        tools:text="Logged in user"
         android:textSize="32dp"
-        android:layout_margin="24dp"/>
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginVertical="12dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_weight="0.7"
-        android:gravity="center_vertical">
+        android:gravity="center">
 
         <LinearLayout
             android:id="@+id/monday"
-            android:layout_width="match_parent"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/week_border"
-            android:padding="10dp"
-            android:layout_marginHorizontal="24dp"
+            android:padding="8dp"
+            android:layout_marginHorizontal="8dp"
             android:layout_marginVertical="8dp"
             android:gravity="center">
-
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/mon_date"
                 tools:text="1.jan.21'"
-                android:gravity="left"
-                android:layout_weight="1"/>
+                android:gravity="top"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -51,26 +49,25 @@
                 android:id="@+id/mon_time"
                 tools:text="08:00 - 16:00"
                 android:gravity="center"
-                android:layout_weight="1"/>
+                android:layout_marginVertical="24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/mon_role"
                 tools:text="Waiter"
-                android:gravity="right"
-                android:layout_weight="1"/>
+                android:gravity="bottom" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/tuesday"
-            android:layout_width="match_parent"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/week_border"
-            android:padding="10dp"
-            android:layout_marginHorizontal="24dp"
+            android:padding="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginVertical="8dp"
             android:gravity="center">
 
@@ -80,8 +77,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tue_date"
                 tools:text="1.jan.21'"
-                android:gravity="left"
-                android:layout_weight="1"/>
+                android:gravity="top"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -89,26 +85,25 @@
                 android:id="@+id/tue_time"
                 tools:text="08:00 - 16:00"
                 android:gravity="center"
-                android:layout_weight="1"/>
+                android:layout_marginVertical="24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tue_role"
                 tools:text="Waiter"
-                android:gravity="right"
-                android:layout_weight="1"/>
+                android:gravity="bottom" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/wednesday"
-            android:layout_width="match_parent"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/week_border"
-            android:padding="10dp"
-            android:layout_marginHorizontal="24dp"
+            android:padding="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginVertical="8dp"
             android:gravity="center">
 
@@ -118,8 +113,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wed_date"
                 tools:text="1.jan.21'"
-                android:gravity="left"
-                android:layout_weight="1"/>
+                android:gravity="top"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -127,27 +121,26 @@
                 android:id="@+id/wed_time"
                 tools:text="08:00 - 16:00"
                 android:gravity="center"
-                android:layout_weight="1"/>
+                android:layout_marginVertical="24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/wed_role"
                 tools:text="Waiter"
-                android:gravity="right"
-                android:layout_weight="1"/>
+                android:gravity="bottom" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/thursday"
-            android:layout_width="match_parent"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/week_border"
-            android:padding="10dp"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginVertical="2dp"
+            android:padding="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginVertical="8dp"
             android:gravity="center">
 
 
@@ -156,8 +149,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/thu_date"
                 tools:text="1.jan.21'"
-                android:gravity="left"
-                android:layout_weight="1"/>
+                android:gravity="top"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -165,26 +157,25 @@
                 android:id="@+id/thu_time"
                 tools:text="08:00 - 16:00"
                 android:gravity="center"
-                android:layout_weight="1"/>
+                android:layout_marginVertical="24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/thu_role"
                 tools:text="Waiter"
-                android:gravity="right"
-                android:layout_weight="1"/>
+                android:gravity="bottom" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/friday"
-            android:layout_width="match_parent"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/week_border"
-            android:padding="10dp"
-            android:layout_marginHorizontal="24dp"
+            android:padding="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginVertical="8dp"
             android:gravity="center">
 
@@ -194,8 +185,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/fri_date"
                 tools:text="1.jan.21'"
-                android:gravity="left"
-                android:layout_weight="1"/>
+                android:gravity="top"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -203,26 +193,25 @@
                 android:id="@+id/fri_time"
                 tools:text="08:00 - 16:00"
                 android:gravity="center"
-                android:layout_weight="1"/>
+                android:layout_marginVertical="24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/fri_role"
                 tools:text="Waiter"
-                android:gravity="right"
-                android:layout_weight="1"/>
+                android:gravity="bottom" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/saturday"
-            android:layout_width="match_parent"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/week_border"
-            android:padding="10dp"
-            android:layout_marginHorizontal="24dp"
+            android:padding="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginVertical="8dp"
             android:gravity="center">
 
@@ -232,8 +221,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/sat_date"
                 tools:text="1.jan.21'"
-                android:gravity="left"
-                android:layout_weight="1"/>
+                android:gravity="top"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -241,37 +229,34 @@
                 android:id="@+id/sat_time"
                 tools:text="08:00 - 16:00"
                 android:gravity="center"
-                android:layout_weight="1"/>
+                android:layout_marginVertical="24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/sat_role"
                 tools:text="Waiter"
-                android:gravity="right"
-                android:layout_weight="1"/>
+                android:gravity="bottom" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/sunday"
-            android:layout_width="match_parent"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/week_border"
-            android:padding="10dp"
-            android:layout_marginHorizontal="24dp"
+            android:padding="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginVertical="8dp"
             android:gravity="center">
-
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/sun_date"
                 tools:text="1.jan.21'"
-                android:gravity="left"
-                android:layout_weight="1"/>
+                android:gravity="top"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -279,15 +264,14 @@
                 android:id="@+id/sun_time"
                 tools:text="08:00 - 16:00"
                 android:gravity="center"
-                android:layout_weight="1"/>
+                android:layout_marginVertical="24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/sun_role"
                 tools:text="Waiter"
-                android:gravity="right"
-                android:layout_weight="1"/>
+                android:gravity="bottom" />
 
         </LinearLayout>
 
@@ -297,14 +281,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:gravity="bottom"
-        android:layout_weight="0.1">
+        android:gravity="bottom">
 
         <Button
             android:id="@+id/button_week_last"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginHorizontal="30dp"
             android:text="@string/button_week_last" />
@@ -312,7 +294,7 @@
         <Button
             android:id="@+id/button_week_next"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/button_week_next"
             android:layout_marginHorizontal="30dp"
             android:layout_gravity="right"/>

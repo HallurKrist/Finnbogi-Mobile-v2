@@ -209,7 +209,25 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_success), Toast.LENGTH_SHORT).show();
-                            finish();
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForExchange.getUserId());
+                            // Skítafix - 500 error ef userId er bara 1 stak
+                            userIds[1] = null;
+                            String title = getString(R.string.shiftexchange_activity_notification_offered_title);
+                            String text = getString(R.string.shiftexchange_activity_notification_offered_text);
+                            shiftExchangeService.createNotification(new NetworkCallback<String>() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(String errorString) {
+                                    Log.e(TAG, errorString);
+                                }
+                            }, title, text, userIds);
                         }
 
                         @Override
@@ -308,7 +326,25 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_declined_success), Toast.LENGTH_SHORT).show();
-                            finish();
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForOffer.getUserId());
+                            // Skítafix - 500 error ef userId er bara 1 stak
+                            userIds[1] = null;
+                            String title = getString(R.string.shiftexchange_activity_notification_pending_fail_title);
+                            String text = getString(R.string.shiftexchange_activity_notification_pending_fail_text);
+                            shiftExchangeService.createNotification(new NetworkCallback<String>() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(String errorString) {
+                                    Log.e(TAG, errorString);
+                                }
+                            }, title, text, userIds);
                         }
 
                         @Override
@@ -332,7 +368,25 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_offer_accept_success), Toast.LENGTH_SHORT).show();
-                            finish();
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForOffer.getUserId());
+                            // Skítafix - 500 error ef userId er bara 1 stak
+                            userIds[1] = null;
+                            String title = getString(R.string.shiftexchange_activity_notification_pending_success_title);
+                            String text = getString(R.string.shiftexchange_activity_notification_pending_success_text);
+                            shiftExchangeService.createNotification(new NetworkCallback<String>() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(String errorString) {
+                                    Log.e(TAG, errorString);
+                                }
+                            }, title, text, userIds);
                         }
 
                         @Override
@@ -431,7 +485,24 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_declined_success), Toast.LENGTH_SHORT).show();
-                            finish();
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForExchange.getUserId());
+                            userIds[1] = String.valueOf(mShiftForOffer.getUserId());
+                            String title = getString(R.string.shiftexchange_activity_notification_confirmable_fail_title);
+                            String text = getString(R.string.shiftexchange_activity_notification_confirmable_fail_text);
+                            shiftExchangeService.createNotification(new NetworkCallback<String>() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(String errorString) {
+                                    Log.e(TAG, errorString);
+                                }
+                            }, title, text, userIds);
                         }
 
                         @Override
@@ -455,7 +526,24 @@ public class ShiftExchangeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             Toast.makeText(ShiftExchangeActivity.this, getString(R.string.shiftexchange_activity_confirm_success), Toast.LENGTH_SHORT).show();
-                            finish();
+                            String[] userIds = new String[2];
+                            userIds[0] = String.valueOf(mShiftForExchange.getUserId());
+                            userIds[1] = String.valueOf(mShiftForOffer.getUserId());
+                            String title = getString(R.string.shiftexchange_activity_notification_confirmable_success_title);
+                            String text = getString(R.string.shiftexchange_activity_notification_confirmable_success_text);
+                            shiftExchangeService.createNotification(new NetworkCallback<String>() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    Intent intent = ShiftExchangeListActivity.newIntent(ShiftExchangeActivity.this);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(String errorString) {
+                                    Log.e(TAG, errorString);
+                                }
+                            }, title, text, userIds);
                         }
 
                         @Override

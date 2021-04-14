@@ -1,5 +1,6 @@
 package is.hi.finnbogi_mobile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -124,6 +125,5 @@ public class MakeUserActivity extends AppCompatActivity {
                 }, mUserName, mRole, mPassword, mSsn, mIsAdmin);
             }
         });
-
     }
 }

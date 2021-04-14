@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.time.format.DateTimeFormatter;
@@ -39,6 +40,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
     private ListView mListAdmin;
     private LinearLayout mAdminTitle;
     private LinearLayout mAdminLinear;
+    private TextView mTextViewTitle;
 
     // Aðrar global breytur
     private List<ShiftExchange> mShiftExchangesListUser;
@@ -48,6 +50,17 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
     private List<Shift> mShiftsAll;
     private List<Shift> mShiftsAdmin;
     private User mUser;
+
+    /**
+     * Aðferð fyrir aðra klasa að búa til nýtt intent fyrir þetta activity.
+     *
+     * @param packageContext Gamli activity klasinn.
+     * @return intent
+     */
+    public static Intent newIntent(Context packageContext) {
+        Intent intent = new Intent(packageContext, ShiftExchangeListActivity.class);
+        return intent;
+    }
 
     /**
      * Upphafsstillir alla viðmótshluti, nær í gögn og setur hlustara.
@@ -65,6 +78,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
         mListAdmin = (ListView) findViewById(R.id.shiftexchange_list_adminlist);
         mAdminTitle = (LinearLayout) findViewById(R.id.shiftexchange_list_admintitle);
         mAdminLinear = (LinearLayout) findViewById(R.id.shiftexchange_list_adminlinear);
+        mTextViewTitle = (TextView) findViewById(R.id.shiftexchange_list_text_admintitle);
 
         NetworkManager networkManager = NetworkManager.getInstance(this);
         ShiftExchangeService shiftExchangeService = new ShiftExchangeService(networkManager);
@@ -85,6 +99,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 if (mUser.getAdmin()) {
                     mAdminTitle.setVisibility(View.VISIBLE);
                     mAdminLinear.setVisibility(View.VISIBLE);
+                    mTextViewTitle.setVisibility(View.VISIBLE);
                     /**
                      * Nær í öll confirmable shiftExchange og setur lista með þeim.
                      *
@@ -126,6 +141,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                                             ShiftExchange shiftExchange = mShiftExchangesListAdmin.get(position);
                                             Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                                             startActivity(intent);
+                                            finish();
                                         }
                                     });
                                 }
@@ -255,6 +271,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 if (shiftExchange.getStatus().equals("pending")) {
                     Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                     startActivity(intent);
+                    finish();
                 } else if (shiftExchange.getStatus().equals("upforgrabs")) {
                     Toast.makeText(ShiftExchangeListActivity.this, getString(R.string.shiftexchange_list_activity_still_upforgrab), Toast.LENGTH_SHORT).show();
                 } else {
@@ -278,6 +295,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                 if (mUser.getAdmin()) {
                     Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                     startActivity(intent);
+                    finish();
                 }
                 // Aðrir geta bara opnað þau sem eru upforgrabs og hafa sama role og notandi
                 else {
@@ -289,6 +307,7 @@ public class ShiftExchangeListActivity extends AppCompatActivity {
                         } else {
                             Intent intent = ShiftExchangeActivity.newIntent(ShiftExchangeListActivity.this, shiftExchange.getShiftExchangeId(), shiftExchange.getStatus());
                             startActivity(intent);
+                            finish();
                         }
                     }
                 }

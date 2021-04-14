@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String errorString) {
-                        Toast.makeText(LoginActivity.this, String.valueOf(R.string.login_activity_wrong_name_or_password), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, getString(R.string.login_activity_wrong_name_or_password), Toast.LENGTH_SHORT).show();
                         Log.e(TAG, errorString);
                     }
                 }, mUserName, mPassword);

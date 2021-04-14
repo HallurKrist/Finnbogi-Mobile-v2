@@ -173,7 +173,6 @@ public class ShiftService {
         mNetworkManager.GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, String.valueOf(R.string.service_success));
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<User>>(){}.getType();
                 List<User> allUsers = gson.fromJson(result, listType);
@@ -188,7 +187,7 @@ public class ShiftService {
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.service_error + " " + errorString);
+                Log.e(TAG, errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"users"});
@@ -234,13 +233,13 @@ public class ShiftService {
         mNetworkManager.POST(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.d(TAG, String.valueOf(R.string.service_success));
+                Log.d(TAG, result);
                 callback.onSuccess(result);
             }
 
             @Override
             public void onFailure(String errorString) {
-                Log.e(TAG, R.string.service_error + " " + errorString);
+                Log.e(TAG, errorString);
                 callback.onFailure(errorString);
             }
         }, new String[] {"notifications"}, new String[][][] {{{"title"}, {title}}, {{"text"}, {text}}, {{"userIds"}, userIds}});
