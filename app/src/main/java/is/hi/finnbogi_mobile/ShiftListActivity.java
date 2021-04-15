@@ -25,7 +25,6 @@ import is.hi.finnbogi_mobile.services.ShiftListService;
 import is.hi.finnbogi_mobile.services.UserListService;
 
 public class ShiftListActivity extends AppCompatActivity {
-    //TODO: this class
     private static final String TAG = "ShiftListActivity";
 
     private ListView mList;
@@ -37,18 +36,22 @@ public class ShiftListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift_list);
 
+        // init networkmanager and service
         NetworkManager networkManager = NetworkManager.getInstance(ShiftListActivity.this);
         mShiftListService = new ShiftListService(networkManager);
 
+        // get all shiftIds, shift dateTimes (with dte, startTime and endTime) and shift roles from service
         mShiftListService.getIdNDateTimeNRole(new NetworkCallback<String[][]>() {
+            // String[][] result -> {{...shiftIds...}{..shiftDateTimes...}{...shiftRoles...}}
             @Override
             public void onSuccess(String[][] result) {
                 int[] shiftIds;
                 shiftIds = new int[result[0].length];
-
                 for (int i = 0; i < result[0].length; i++) {
                     shiftIds[i] = (int) Double.parseDouble(result[0][i]);
                 }
+
+                // make adapter that handles onclicks
                 ShiftListAdapter adapter = new ShiftListAdapter(ShiftListActivity.this, mShiftListService, shiftIds, result[1], result[2]);
 
                 mList = (ListView) findViewById(R.id.shift_list);
@@ -60,6 +63,5 @@ public class ShiftListActivity extends AppCompatActivity {
                 Log.e(TAG, "Error while filling out userList " + errorString);
             }
         });
-
     }
 }

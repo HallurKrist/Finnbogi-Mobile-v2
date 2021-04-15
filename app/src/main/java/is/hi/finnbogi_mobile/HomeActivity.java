@@ -156,6 +156,9 @@ public class HomeActivity extends AppCompatActivity {
                 AlarmManager.INTERVAL_FIFTEEN_MINUTES, pIntent);
     }
 
+    /**
+     * Slekkur á scheduler sem athugar hvort það séu ný notificatuion
+     */
     public void cancelNotificationSchedule() {
         Intent intent = new Intent(getApplicationContext(), NotificationReciever.class);
         final PendingIntent pIntent = PendingIntent.getBroadcast(this, NotificationReciever.REQUEST_CODE,
@@ -362,12 +365,17 @@ public class HomeActivity extends AppCompatActivity {
                 editor.clear();
                 editor.commit();
                 Intent logoutIntent = LoginActivity.newIntent(HomeActivity.this);
+                cancelNotificationSchedule();
                 startActivity(logoutIntent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * geymir savedIstanceState þegar það er lokað appinu
+     * @param savedInstanceState
+     */
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);

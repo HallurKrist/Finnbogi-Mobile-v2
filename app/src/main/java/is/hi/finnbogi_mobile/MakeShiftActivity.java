@@ -51,6 +51,7 @@ public class MakeShiftActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_shift);
 
+        // init networkmanager and service
         NetworkManager networkManager = NetworkManager.getInstance(this);
         MakeShiftService makeShiftService = new MakeShiftService(networkManager);
 
@@ -89,13 +90,13 @@ public class MakeShiftActivity extends AppCompatActivity {
         });
 
         // Setja selectlist fyrir roles
-        // TODO: Maybe enum for roles
-        String[] roles = new String[]{"Chef", "Bartender", "Waiter", "Busboy", "ShiftManager", "Employer"};
+        String[] roles = new String[]{"Chef", "Bartender", "Waiter", "Busboy", "ShiftManager", "Employer"}; // Harðkóðað fyrir þetta verkefni
         ArrayAdapter<String> rolesAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, roles);
         rolesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mRoles.setAdapter(rolesAdapter);
 
+        // onclick til að velja dagsetningu vaktar
         mDateEditText.setInputType(InputType.TYPE_NULL);
         mDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +117,7 @@ public class MakeShiftActivity extends AppCompatActivity {
             }
         });
 
+        // onclick til að velja upphafstíma vaktar
         mStartTimeEditText.setInputType(InputType.TYPE_NULL);
         mStartTimeEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +137,7 @@ public class MakeShiftActivity extends AppCompatActivity {
             }
         });
 
+        // onclick til að velja lokatíma vaktar
         mEndTimeEditText.setInputType(InputType.TYPE_NULL);
         mEndTimeEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,6 +204,7 @@ public class MakeShiftActivity extends AppCompatActivity {
                         0,
                         0);
 
+                // sækja alla notendur til að finna notendalykilinn hans
                 makeShiftService.getAllUsers(new NetworkCallback<List<User>>() {
                     @Override
                     public void onSuccess(List<User> result) {
@@ -213,15 +217,14 @@ public class MakeShiftActivity extends AppCompatActivity {
                             }
                         }
 
+                        // nota notendalykilinn til að búa til nýa vakt
                         makeShiftService.createShift(new NetworkCallback<Shift>() {
                             @Override
                             public void onSuccess(Shift result) {
-
                                 Toast.makeText(MakeShiftActivity.this, "Tókst að búa til vakt", Toast.LENGTH_SHORT).show();
                                 mDateEditText.setText("");
                                 mStartTimeEditText.setText("");
                                 mEndTimeEditText.setText("");
-
                             }
 
                             @Override
@@ -230,7 +233,6 @@ public class MakeShiftActivity extends AppCompatActivity {
                                 Log.e(TAG, "Failed to create shift: " + errorString);
                             }
                         }, startTime, endTime, userId, role);
-
                     }
 
                     @Override
