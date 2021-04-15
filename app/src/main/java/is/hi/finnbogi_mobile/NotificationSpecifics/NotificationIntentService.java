@@ -33,32 +33,49 @@ public class NotificationIntentService extends IntentService {
     public static final String CHANNEL_ID = "NotificationIntentService";
     public static final String USERID_ID = "NotificationIntentService_userid";
 
+    /**
+     * constructor
+     */
     public NotificationIntentService() {
         super("NotificationIntentService");
     }
 
+    /**
+     * For other classes to make an intent to call this class
+     * @param packageContext
+     * @param userId
+     * @return Intent used to call this activity
+     */
     public static Intent newIntent(Context packageContext, int userId) {
         Intent intent = new Intent(packageContext, NotificationIntentService.class);
         intent.putExtra(USERID_ID, userId);
         return intent;
     }
 
+    /**
+     * event that checks with the API if any notifications are not read and notifies logged in user of them
+     * @param intent
+     */
     @Override
     protected void onHandleIntent(Intent intent) {
+        // cretes channel for notifications in android device
         createNotificationChannel();
 
+        // Get all notifications for user from intent
         NetworkManager.getInstance(this).GET(new NetworkCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                // MAke list of notifications from result string
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<is.hi.finnbogi_mobile.entities.Notification>>(){}.getType();
                 List<is.hi.finnbogi_mobile.entities.Notification> allNotifications = gson.fromJson(result, listType);
 
+                // Go through all notifications
                 for (int i = 0; i < allNotifications.size(); i++) {
                     is.hi.finnbogi_mobile.entities.Notification notif = allNotifications.get(i);
 
+                    // If notification is not read, make notification for it
                     if (!notif.getRead()) {
-
                         Intent notifIntent = new Intent(NotificationIntentService.this, NotificationsActivity.class);
                         TaskStackBuilder stackBuilder = TaskStackBuilder.create(NotificationIntentService.this);
                         stackBuilder.addNextIntentWithParentStack(notifIntent);
@@ -66,6 +83,7 @@ public class NotificationIntentService extends IntentService {
                         PendingIntent pendingIntent =
                                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
+                        // MAke notification
                         Notification notification = new NotificationCompat.Builder(NotificationIntentService.this, CHANNEL_ID)
                                 .setSmallIcon(R.mipmap.sm_icon_foreground)
                                 .setContentTitle(notif.getTitle())
@@ -75,11 +93,10 @@ public class NotificationIntentService extends IntentService {
                                 .setAutoCancel(true)
                                 .build();
 
+                        // Send notification to device
                         NotificationManagerCompat.from(getApplicationContext()).notify(notif.getNotificationId(), notification);
                     }
-
                 }
-
                 Log.i(TAG, "All new notifications sent to phone");
             }
 
@@ -92,6 +109,9 @@ public class NotificationIntentService extends IntentService {
         Log.i(TAG, "Notification Intent Service running");
     }
 
+    /**
+     * creates channel for notifications in android device
+     */
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
