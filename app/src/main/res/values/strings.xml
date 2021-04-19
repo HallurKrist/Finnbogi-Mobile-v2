@@ -92,4 +92,5 @@
     <string name="menu_logout">Skrá mig út</string>
     <string name="channel_name">FinnbogiChannel</string>
     <string name="channel_description">Notification channel for finnbogi app</string>
+    <string name="userinfo_submit_success">Tókst að uppfæra upplýsingar</string>
 </resources>

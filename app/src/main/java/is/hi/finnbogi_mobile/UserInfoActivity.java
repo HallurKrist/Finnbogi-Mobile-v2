@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -73,6 +74,7 @@ public class UserInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 changesSubmited();
+                Toast.makeText(UserInfoActivity.this, R.string.userinfo_submit_success, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -124,5 +126,6 @@ public class UserInfoActivity extends AppCompatActivity {
 
         //update API
         mUserInfoService.patchUserInfo(info);
+
     }
 }
