@@ -4,7 +4,10 @@ Finnbogi Vaktaskipulagskerfi fyrir vinnustaði.
 
 Í appinu eru 2 mismunandi viðmót eftir því hvort þú sért admin eða ekki.  
 Admin aðgangur er: username-admin, password-123  
-Almennur aðgangur er : username-???, password-123  
+Almennir aðgangar eru td:  
+username-Fyrstur, password-12345  
+username-Annar, password-12345  
+
 
 Hér er GitHub repository fyrir bakendann: https://github.com/GaddiSunshine/Finnbogi-API  
 Bakendinn er keyrandi hér: https://finnbogi-api.herokuapp.com/  
